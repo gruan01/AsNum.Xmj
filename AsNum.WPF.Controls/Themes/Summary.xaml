@@ -1,0 +1,116 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:local="clr-namespace:AsNum.WPF.Controls"
+                    >
+
+
+    <DataTemplate x:Key="SummaryTitleTemplate">
+        <TextBlock Text="{Binding}" Foreground="White" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="SummaryValueTemplate">
+        <Border HorizontalAlignment="Right" Background="#FF535C7B" CornerRadius="10">
+            <TextBlock Text="{Binding}" Padding="8,3" Foreground="White" />
+        </Border>
+    </DataTemplate>
+
+
+    <Style TargetType="{x:Type local:Summary}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:Summary}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            >
+
+                        <!--<StackPanel Height="auto">-->
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            
+                            <Border Grid.Row="0" Grid.RowSpan="2" Margin="-1" CornerRadius="5" BorderThickness="1" BorderBrush="Black">
+                                <Border.Effect>
+                                    <BlurEffect />
+                                </Border.Effect>
+                            </Border>
+                            
+                            <Border Grid.Row="0" Padding="20,5" CornerRadius="5,5,0,0" Background="#10a8ab">
+                                <TextBlock Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:Summary}}, Path=Title}" FontSize="18.667" Foreground="White" HorizontalAlignment="Center" />
+                            </Border>
+                            <Border Grid.Row="1" Background="#FF394165" CornerRadius="0,0,3,3" Padding="5">
+                                <ItemsPresenter />
+                            </Border>
+                        </Grid>
+                        <!--</StackPanel>-->
+
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type local:SummaryItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:SummaryItem}">
+                    <Border x:Name="Item"
+                            Padding="3"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+
+
+                        <Border.Background>
+                            <SolidColorBrush />
+                        </Border.Background>
+
+                        <StackPanel>
+                            <DockPanel>
+                                <ContentControl x:Name="PART_Title" 
+                                                Content="{TemplateBinding Title}" 
+                                                ContentTemplate="{StaticResource SummaryTitleTemplate}"
+                                                />
+
+                                <ContentControl x:Name="PART_Value" 
+                                                Content="{TemplateBinding Value}" 
+                                                ContentTemplate="{StaticResource SummaryValueTemplate}" 
+                                                Width="auto"
+                                                DockPanel.Dock="Right"
+                                                HorizontalAlignment="Right"
+                                                />
+
+                            </DockPanel>
+                            <ContentControl Margin="0,2,0,2" x:Name="PART_Detail" ContentTemplate="{TemplateBinding DetailTemplate}" />
+                        </StackPanel>
+
+                        <Border.Triggers>
+                            <EventTrigger RoutedEvent="Border.MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation To="#FF535C7B" Duration="0:0:0.500"
+                                                    Storyboard.TargetName="Item"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Border.MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation To="Transparent" Duration="0:0:0.500"
+                                                    Storyboard.TargetName="Item"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Border.Triggers>
+
+
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="AsNum.Xmj.EFLogger.Views.SQLLoggerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <i:Interaction.Behaviors>
+            <ab:UnifiedPaddingBeahavior Padding="2" />
+        </i:Interaction.Behaviors>
+
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <Button x:Name="Start" Content="开始" />
+            <Button x:Name="Stop" Content="停止" />
+            <Button x:Name="Clear" Content="清空" />
+        </StackPanel>
+
+        <DataGrid x:Name="CMDS" CurrentItem="{Binding CurrCmd, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" IsReadOnly="True" AutoGenerateColumns="False" RowHeight="60">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding CommandText}" Header="CommandText" Width="100">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding CommandType}" Header="CommandType" />
+            </DataGrid.Columns>
+            
+            <i:Interaction.Behaviors>
+                <ab:DataGridRowIndexBehavior />
+            </i:Interaction.Behaviors>
+        </DataGrid>
+        <GridSplitter ShowsPreview="True" Width="5" Grid.Row="1" Grid.Column="1" ResizeBehavior="PreviousAndNext" />
+        <TextBox x:Name="CmdText" Grid.Row="1" Grid.Column="1" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+    </Grid>
+</UserControl>

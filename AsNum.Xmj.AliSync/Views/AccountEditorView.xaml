@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="AsNum.Xmj.AliSync.Views.AccountEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ac="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF"
+             xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <Grid Style="{StaticResource SettingGrid}">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0"> 账户设置</TextBlock>
+
+        <DataGrid ItemsSource="{Binding SettingItem.Value}"
+                  AutoGenerateColumns="False" Grid.Row="1">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="账户" Binding="{Binding User}" />
+                <DataGridTemplateColumn Header="密码">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="密码不显示" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Pwd,Mode=OneWayToSource}" BorderThickness="0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="删除" cal:Message.Attach="Delete($dataContext)" />
+                            <!-- action http://caliburnmicro.codeplex.com/wikipage?title=All%20About%20Actions-->
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+            <i:Interaction.Behaviors>
+                <ab:DataGridBehavior />
+            </i:Interaction.Behaviors>
+
+            <DataGrid.RowValidationRules>
+                
+                <ac:RowDataInfoValidationRule ValidationStep="UpdatedValue" />
+            </DataGrid.RowValidationRules>
+        </DataGrid>
+    </Grid>
+</UserControl>

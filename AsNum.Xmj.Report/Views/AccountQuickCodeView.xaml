@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="AsNum.Xmj.Report.Views.AccountQuickCodeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+             xmlns:ac="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <i:Interaction.Behaviors>
+            <ab:UnifiedPaddingBeahavior Padding="2" />
+        </i:Interaction.Behaviors>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Button x:Name="Save" Content="保存" />
+        </StackPanel>
+
+        <DataGrid x:Name="Owners" Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  SelectionUnit="CellOrRowHeader"
+                  CanUserAddRows="False" CanUserDeleteRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="账户" Binding="{Binding Account}" IsReadOnly="True" />
+                <DataGridTextColumn Header="识别码" Binding="{Binding QuickCode, ValidatesOnDataErrors=True, UpdateSourceTrigger=LostFocus}" />
+
+                <DataGridTextColumn Header="发货人姓名" Binding="{Binding SenderName}" />
+                <DataGridTextColumn Header="手机" Binding="{Binding SenderMobi}" />
+                <DataGridTextColumn Header="电话" Binding="{Binding SenderPhone}" />
+                <DataGridTextColumn Header="传真" Binding="{Binding SenderFax}" />
+                <DataGridTextColumn Header="省" Binding="{Binding SenderProvince}" />
+                <DataGridTextColumn Header="城市" Binding="{Binding SenderCity}" />
+                <DataGridTextColumn Header="地址" Binding="{Binding SenderAddress}" />
+                <DataGridTextColumn Header="邮编" Binding="{Binding SenderPostCode}" />
+
+
+                <DataGridTextColumn Header="姓名(揽收)" Binding="{Binding PickupName}" />
+                <DataGridTextColumn Header="手机(揽收)" Binding="{Binding PickupMobi}" />
+                <DataGridTextColumn Header="电话(揽收)" Binding="{Binding PickupPhone}" />
+                <DataGridTextColumn Header="传真(揽收)" Binding="{Binding PickupFax}" />
+                <DataGridTextColumn Header="省(揽收)" Binding="{Binding PickupProvince}" />
+                <DataGridTextColumn Header="城市(揽收)" Binding="{Binding PickupCity}" />
+                <DataGridTextColumn Header="县区(揽收)" Binding="{Binding PickupCounty}" />
+                <DataGridTextColumn Header="地址(揽收)" Binding="{Binding PickupAddress}" />
+                <DataGridTextColumn Header="邮编(揽收)" Binding="{Binding PickupPostCode}" />
+
+            </DataGrid.Columns>
+
+            <DataGrid.RowValidationRules>
+                <ac:RowDataInfoValidationRule ValidationStep="UpdatedValue" />
+            </DataGrid.RowValidationRules>
+
+            <i:Interaction.Behaviors>
+                <ab:DataGridPasteBehavior />
+            </i:Interaction.Behaviors>
+        </DataGrid>
+    </Grid>
+</UserControl>

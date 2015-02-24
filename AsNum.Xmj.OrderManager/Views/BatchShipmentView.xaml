@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="AsNum.Xmj.OrderManager.Views.BatchShipmentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cm="http://www.caliburnproject.org"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+             xmlns:ac="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
+             xmlns:vm="clr-namespace:AsNum.Xmj.OrderManager.ViewModels"
+             xmlns:acc="clr-namespace:AsNum.WPF.Controls;assembly=AsNum.WPF.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ac:EnumDescriptionConverter x:Key="Enum" />
+
+        <Style x:Key="ReadonlyColumn" TargetType="{x:Type DataGridCell}">
+            <Setter Property="Background" Value="#dddddd"/>
+            <Setter Property="Foreground" Value="Gray" />
+        </Style>
+
+        <Style x:Key="allowWrap" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid acc:Busy.MaskType="Window" acc:Busy.Show="{Binding IsBusy}" acc:Busy.Text="正在声明发货">
+
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <i:Interaction.Behaviors>
+            <ab:UnifiedPaddingBeahavior Padding="2" />
+        </i:Interaction.Behaviors>
+
+        <DataGrid Grid.Row="0"
+                  x:Name="Items"
+                  ItemsSource="{Binding Items, NotifyOnSourceUpdated=True}"
+                  SelectedItem="{Binding CurrItem}"
+                  CurrentItem="{Binding CurrItem}"
+                  AutoGenerateColumns="False"
+                  SelectionUnit="CellOrRowHeader"
+                  >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="状态" 
+                                    Binding="{Binding Status, Converter={StaticResource Enum}}" 
+                                    IsReadOnly="True">
+                    <DataGridTextColumn.CellStyle>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Status}" Value="Warning">
+                                    <Setter Property="TextBlock.Foreground" Value="Yellow" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Status}" Value="Error">
+                                    <Setter Property="TextBlock.Foreground" Value="Red" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Status}" Value="Success">
+                                    <Setter Property="TextBlock.Foreground" Value="Green" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="订单号" Width="200" Binding="{Binding OrderNO, UpdateSourceTrigger=LostFocus}" />
+                <DataGridComboBoxColumn Header="发货方式" SelectedItemBinding="{Binding SendType, Converter={StaticResource Enum}, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Static vm:BatchShipmentViewModel.SendTypes}" />
+                <DataGridComboBoxColumn Header="物流方式" SelectedItemBinding="{Binding LogisticsType, Converter={StaticResource Enum}, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Static vm:BatchShipmentViewModel.LogisticsTypes}" />
+                <DataGridTextColumn Header="跟踪单号" Width="200" Binding="{Binding TrackNO, UpdateSourceTrigger=LostFocus}" />
+                <DataGridTextColumn Header="重量" Width="200" Binding="{Binding Weight}" />
+                <DataGridTextColumn Header="费用" Width="200" Binding="{Binding Fee}" />
+                <DataGridTextColumn Header="订单状态" Binding="{Binding OrderStatus, Converter={StaticResource Enum}}" IsReadOnly="True"  CellStyle="{StaticResource ReadonlyColumn}" />
+                <DataGridTextColumn Header="账户" Binding="{Binding Account}" IsReadOnly="True"  CellStyle="{StaticResource ReadonlyColumn}" />
+                <DataGridTextColumn Header="采购备注" Binding="{Binding Note}" IsReadOnly="True"  CellStyle="{StaticResource ReadonlyColumn}" />
+                <DataGridTextColumn Header="目的国家" Binding="{Binding Country}" IsReadOnly="True" CellStyle="{StaticResource ReadonlyColumn}" />
+                <DataGridTextColumn Header="信息" Width="300" Binding="{Binding Info}" IsReadOnly="True" CellStyle="{StaticResource ReadonlyColumn}" ElementStyle="{StaticResource allowWrap}" />
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu />
+            </DataGrid.ContextMenu>
+            <i:Interaction.Behaviors>
+                <ab:DataGridRowIndexBehavior />
+                <ab:DataGridPasteBehavior />
+                <ab:DataGridScrollIntoViewBehavior />
+            </i:Interaction.Behaviors>
+        </DataGrid>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <i:Interaction.Behaviors>
+                <ab:UnifiedPaddingBeahavior Padding="2" />
+            </i:Interaction.Behaviors>
+            <Button x:Name="Shipment" Content="确认发货" IsEnabled="{Binding CanShipment}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

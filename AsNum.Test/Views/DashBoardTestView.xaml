@@ -1,0 +1,14 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+            xmlns:cal="http://www.caliburnproject.org"
+            xmlns:s="clr-namespace:AsNum.Xmj.Common;assembly=AsNum.Xmj.Common"
+             x:Class="AsNum.Test.Views.DashBoardTestView"
+             mc:Ignorable="d" >
+    <StackPanel>
+        <ComboBox ItemsSource="{Binding Modes}" SelectedValue="{Binding Source={x:Static s:GlobalData.Instance}, Path=ViewMode, Mode=TwoWay}" />
+    </StackPanel>
+
+</UserControl>

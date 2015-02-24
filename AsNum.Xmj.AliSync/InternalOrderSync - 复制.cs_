@@ -1,0 +1,380 @@
+﻿using AsNum.Xmj.API;
+using AsNum.Xmj.API.Entity;
+using AsNum.Xmj.API.Methods;
+using AsNum.Xmj.Common;
+using AsNum.Xmj.Data.Repositories;
+using AsNum.Common.Extends;
+using AsNum.Xmj.AliSync.Settings;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using AE = AsNum.Xmj.Entity;
+using AsNum.Xmj.IBiz;
+
+namespace AsNum.Xmj.AliSync {
+
+    internal class OrderDealedEventArgs : EventArgs {
+
+        public string Account {
+            get;
+            set;
+        }
+
+        public OrderStatus Status {
+            get;
+            set;
+        }
+
+        public string OrderNO {
+            get;
+            set;
+        }
+
+        public bool IsSuccess {
+            get;
+            set;
+        }
+
+    }
+
+    internal class OrderListEventArgs : EventArgs {
+
+        public string Account {
+            get;
+            set;
+        }
+
+        public List<SuccinctOrder> Orders {
+            get;
+            set;
+        }
+        public int Page {
+            get;
+            set;
+        }
+
+        public int Total {
+            get;
+            set;
+        }
+
+        public OrderStatus Status {
+            get;
+            set;
+        }
+
+        public bool Smart {
+            get;
+            set;
+        }
+    }
+
+    internal class InternalOrderSync {
+
+        private API.APIClient Api;
+
+        public event EventHandler<OrderListEventArgs> OrderListReturned;
+        public event EventHandler<OrderDealedEventArgs> OrderDealed;
+
+        [Import]
+        private Lazy<LogObserverable> LogObserverable = new Lazy<LogObserverable>(LazyThreadSafetyMode.ExecutionAndPublication);
+
+        [Import]
+        public IOrder OrderBiz { get; set; }
+
+        public InternalOrderSync(string user, string pwd) {
+            //
+            GlobalData.MefContainer.ComposeParts(this);
+
+            this.Api = new API.APIClient(user, pwd);
+            this.OrderListReturned += OrderSync_OrderListReturned;
+        }
+
+        private void OrderSync_OrderListReturned(object sender, OrderListEventArgs e) {
+            e.Orders.ForEach(o => {
+                Task.Factory.StartNew(oo => {
+                    var order = (SuccinctOrder)oo;
+                    order.Account = e.Account;
+                    this.DealOrder(order, e.Smart);
+
+                    if (this.OrderDealed != null)
+                        this.OrderDealed.Invoke(this, new OrderDealedEventArgs() {
+                            Account = order.Account,
+                            OrderNO = order.OrderID,
+                            Status = order.OrderStatus,
+                            IsSuccess = true
+                        });
+
+                }, o, TaskCreationOptions.AttachedToParent)
+                .ContinueWith(t => {
+                    var order = (SuccinctOrder)t.AsyncState;
+                    //TASK Exception 未抛出
+                    this.LogObserverable.Value.Notify(string.Format("处理订单 ： {0} ({1}) 时发生错误！", order.OrderID, order.Account), false);
+                    this.LogObserverable.Value.Notify(t.Exception);
+
+                    if (this.OrderDealed != null)
+                        this.OrderDealed.Invoke(this, new OrderDealedEventArgs() {
+                            Account = order.Account,
+                            OrderNO = order.OrderID,
+                            Status = order.OrderStatus,
+                            IsSuccess = false
+                        });
+
+                }, TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.AttachedToParent);
+            });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="order"></param>
+        /// <param name="smart"></param>
+        private void DealOrder(SuccinctOrder order, bool smart) {
+            using (var unitOfWork = GlobalData.GetInstance<IUnitOfWork>()) {
+                var rep = unitOfWork.GetRepository<AsNum.Xmj.Entity.Order>();
+                //var eo = rep.Find(o => string.Equals(o.OrderNO, order.OrderID));
+                var eo = this.OrderBiz.GetOrder(order.OrderID);
+                if (!smart || (eo == null || (
+                    (byte)eo.Status != (byte)order.OrderStatus)
+                    || eo.InIssue != order.InIssue
+                    )) {
+                    this.LogObserverable.Value.Notify(string.Format("更新订单 {0}", order.OrderID), true);
+                    var od = this.GetOrderDetail(order.OrderID);
+                    //转换为数据库实体
+                    var o = this.CombineOrderData(unitOfWork, rep, od, order);
+                    rep.AddOrUpdate(o);
+
+                    unitOfWork.GetRepository<AE.Receiver>().AddOrUpdate(o.OrgReceiver);
+                    unitOfWork.GetRepository<AE.OrdeLogistic>().AddOrUpdate(o.Logistics);
+
+                    var errs = unitOfWork.ValidationErrors;
+                    if (errs.Count() == 0) {
+                        unitOfWork.Commit();
+                    } else {
+                        this.LogObserverable.Value.Notify(string.Format("订单 {0} : {1}", o.OrderNO, string.Join(";", errs.SelectMany(e => e.ValidationErrors.Select(vv => vv.ErrorMessage)))), false);
+                    }
+                } else {
+                    this.LogObserverable.Value.Notify(string.Format("订单 {0} 未发生变化，跳过", order.OrderID), true);
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// 合并两个接口返回的订单数据
+        /// </summary>
+        /// <param name="unitOfWork"></param>
+        /// <param name="rep"></param>
+        /// <param name="dOrder"></param>
+        /// <param name="sOrder"></param>
+        /// <returns></returns>
+        private AE.Order CombineOrderData(IUnitOfWork unitOfWork, IRepository<AE.Order> rep, DetailOrder dOrder, SuccinctOrder sOrder) {
+
+            //var ao = unitOfWork.GetRepository<AE.Order>().Create();
+            var ao = rep.Create();
+            //var ao = new AE.Order() {
+            ao.InIssue = sOrder.InIssue;
+            //dOrder 的 Amount 不是调整后的价格.
+            ao.Amount = sOrder.Amount.Total;// dOrder.OrderAmount.Total;
+            ao.CreteOn = dOrder.CreateOn;
+            ao.Currency = dOrder.OrderAmount.Currency.CurrencyCode;
+            ao.Details = dOrder.ChildOrders.Select(d => {
+                var sDetail = sOrder.Products.Find(so => so.ChildID.Equals(d.ID));
+                return new AE.OrderDetail() {
+                    ProductPrice = sDetail.UnitPrice.Total,
+                    DeliveryTime = sDetail.DeliveryTime,
+                    Image = sDetail.Image,//dOrder 里没有这个数据
+                    LotNum = d.LotNum,
+                    OrderNO = sOrder.OrderID,
+                    PrepareDays = sDetail.PrepareDays,
+                    ProductID = d.ProductID,
+                    ProductName = d.ProductName,
+                    Remark = sDetail.OrderMessage,
+                    SKUCode = d.SKUCode,
+                    SnapURL = sDetail.SnapURL,
+                    SubOrderNO = d.ID,
+                    Unit = d.Unit,
+                    UnitQty = d.Count,
+                    LogisticsType = sDetail.LogisticsType,
+                    //老订单返回的没有 LogisticsAmount
+                    LogisticAmount = sDetail.LogisticsAmount == null ? 0 : sDetail.LogisticsAmount.Total,
+                    Attrs = d.Attributes.SKU.Select(s => {
+                        return new AE.OrderDetailAttribute() {
+                            Order = s.Order,
+                            OrderNO = dOrder.OrderNO,
+                            SubOrderNO = d.ID,
+                            AttrStr = string.IsNullOrWhiteSpace(s.CustomValue) ? string.Format("{0}: {1}", s.Name, s.Value) : s.CustomValue,
+                            CompatibleStr = s.CompatibleStr
+                        };
+                    }).ToList()
+                };
+            }
+            ).ToList();
+
+            ao.OrderNO = dOrder.OrderNO;
+            ao.PaymentOn = dOrder.PaymentOn;
+            ao.PaymentType = sOrder.PaymentType;
+            ao.Status = ((byte)dOrder.Status).ToEnum<AE.OrderStatus>();
+            ao.OffTime = DateTime.Now.Add(sOrder.OutLeftTime);
+            //ao.Receiver = new AE.Receiver() {
+            ao.OrgReceiver = unitOfWork.GetRepository<AE.Receiver>().Create();
+            ao.OrgReceiver.OrderNO = dOrder.OrderNO;
+            ao.OrgReceiver.Address = string.IsNullOrWhiteSpace(dOrder.Receiver.Address2) ? dOrder.Receiver.Address : string.Format("{0} , {1}", dOrder.Receiver.Address, dOrder.Receiver.Address2);
+            ao.OrgReceiver.City = dOrder.Receiver.City;
+            ao.OrgReceiver.CountryCode = dOrder.Receiver.CountryCode;
+            ao.OrgReceiver.Mobi = dOrder.Receiver.Mobi;
+            ao.OrgReceiver.Name = dOrder.Receiver.ContactPerson;
+            ao.OrgReceiver.Phone = string.Join("-", new string[] { dOrder.Receiver.PhoneCountry, dOrder.Receiver.PhoneArea, dOrder.Receiver.Phone }.Where(s => !string.IsNullOrWhiteSpace(s)));
+            ao.OrgReceiver.PhoneArea = dOrder.Receiver.PhoneArea;
+            ao.OrgReceiver.Province = dOrder.Receiver.Province;
+            ao.OrgReceiver.ZipCode = dOrder.Receiver.ZipCode;
+            //};
+            //};
+
+            ao.Logistics = dOrder.LogisticInfos.Where(l => l.SendOn.HasValue).Select(l => {
+                var lo = unitOfWork.GetRepository<AE.OrdeLogistic>().Create();
+                lo.SendOn = l.SendOn;
+                lo.TrackNO = l.TrackingNo;
+                lo.LogisticsType = l.TypeCode.ToEnum<AE.LogisticsTypes>();
+                lo.OrderNO = sOrder.OrderID;
+
+                return lo;
+            }).ToList();
+
+            var ownerRep = unitOfWork.GetRepository<AE.Owner>();
+            var owner = ownerRep.Find(o => o.Account == sOrder.Account);
+            if (owner == null) {
+                owner = new AE.Owner() {
+                    Account = sOrder.Account,
+                    AccountType = AE.AccountTypes.Ali
+                };
+            }
+            ao.Account = owner.Account;
+            ao.AccountOf = owner;
+
+            var buyerRep = unitOfWork.GetRepository<AE.Buyer>();
+            //某些订单，在订单列表里，是没有BuyerID 的，导至保存失败
+            //var buyer = buyerRep.Find(b => b.BuyerID == sOrder.BuyerID);
+            var buyer = buyerRep.Find(b => b.BuyerID == dOrder.Customer.LoginID);
+            if (buyer == null) {
+                buyer = new AE.Buyer() {
+                    BuyerID = dOrder.Customer.LoginID,
+                    CountryCode = dOrder.Customer.CountryCode,
+                    Email = dOrder.Customer.Email,
+                    Name = string.Format("{0} {1}", dOrder.Customer.FirstName, dOrder.Customer.LastName)
+                };
+            }
+            ao.BuyerID = buyer.BuyerID;
+            ao.Buyer = buyer;
+
+            return ao;
+        }
+
+        /// <summary>
+        /// 获取订单详细信息
+        /// </summary>
+        /// <param name="orderID"></param>
+        /// <returns></returns>
+        private DetailOrder GetOrderDetail(string orderID) {
+            var method = new OrderFindByID();
+            method.OrderID = orderID;
+            return this.Api.Execute(method);
+        }
+
+        /// <summary>
+        /// 由于API白限制,该方法只更新已存在的订单:
+        /// </summary>
+        /// <param name="orderID"></param>
+        public void Sync(string orderID) {
+            DateTime time = DateTime.Now;
+            var order = this.OrderBiz.GetOrder(orderID);
+
+            if (order == null)
+                return;
+            //太平洋时间,-8区,不直接减8是因为有夏令时
+            //订单数据里的时间以经在同步的时候转换为了UTC时间
+            time = TimeZoneInfo.ConvertTimeFromUtc(order.CreteOn, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+
+            Task.Factory.StartNew(() => {
+                this.SyncByStatus(OrderStatus.UNKNOW, false, time, time);
+            }, TaskCreationOptions.AttachedToParent);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="smart"></param>
+        public void Sync(OrderStatus status = OrderStatus.UNKNOW, bool smart = true) {
+
+            var days = new SmartSyncDays().Value;
+            DateTime? start = null;
+            DateTime? end = null;
+            if (days > 0) {
+                start = DateTime.Now.AddDays(-days);
+                end = DateTime.Now.AddDays(1);
+            }
+
+            if (status == OrderStatus.UNKNOW) {
+                //按状态更新,否则不知道各状态下面有多少条数据
+                Enum.GetNames(typeof(OrderStatus))
+                    .Select(s => s.ToEnum<OrderStatus>())
+                    .Where(s => s != OrderStatus.UNKNOW)
+                    .ToList()
+                    .ForEach(s => {
+                        Task.Factory.StartNew(() => {
+                            this.SyncByStatus(s, smart, start, end);
+                        }, TaskCreationOptions.AttachedToParent);
+                    });
+            } else {
+                Task.Factory.StartNew(() => {
+                    this.SyncByStatus(status, smart, start, end);
+                }, TaskCreationOptions.AttachedToParent)
+                .ContinueWith((t, o) => {
+                    this.LogObserverable.Value.Notify(string.Format("状态为 ： {0} 的订单同步完成！", EnumHelper.GetDescription(status)), true);
+                }, TaskContinuationOptions.AttachedToParent);
+            }
+        }
+
+        private void SyncByStatus(OrderStatus status, bool smart, DateTime? start, DateTime? end, int page = 1, int? total = null) {
+
+            var method = new OrderQueryList();
+            method.PageSize = 50;
+            method.Page = page;
+            //UNKNOW不是具体的状态状态,只是一个辅助
+            if (status != OrderStatus.UNKNOW)
+                method.Status = status;
+
+            if (start.HasValue)
+                method.CreateBegin = start;
+            if (end.HasValue)
+                method.CreateEnd = end;
+
+            var orderList = this.Api.Execute(method);
+
+            if (this.OrderListReturned != null)
+                this.OrderListReturned.Invoke(this, new OrderListEventArgs() {
+                    Account = this.Api.AuthUser,
+                    Orders = orderList.Orders,
+                    Page = page,
+                    Total = orderList.Count,
+                    Status = status,
+                    Smart = smart
+                });
+
+            total = total.HasValue ? total : orderList.Count;
+
+            if (total > page * method.PageSize && page == 1) {
+                var totalPage = (int)Math.Ceiling((double)total / method.PageSize);
+
+                for (var i = 2; i <= totalPage; i++)
+                    Task.Factory.StartNew((p) => {
+                        this.SyncByStatus(status, smart, start, end, (int)p, orderList.Count);
+                    }, i, TaskCreationOptions.AttachedToParent);
+            }
+        }
+    }
+}

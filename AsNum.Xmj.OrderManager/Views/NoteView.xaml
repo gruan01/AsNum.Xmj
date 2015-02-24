@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="AsNum.Xmj.OrderManager.Views.NoteView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AsNum.Xmj.OrderManager"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+             xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+             xmlns:ap="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF"
+             xmlns:ac="clr-namespace:AsNum.WPF.Controls;assembly=AsNum.WPF.Controls"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:aac="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <aac:BindingProxy x:Key="Proxy" Data="{Binding}" />
+    </UserControl.Resources>
+
+    <Grid ac:Busy.MaskType="Adorned"
+          ac:Busy.Show="{Binding IsBusy, Mode=TwoWay}" 
+          ac:Busy.Text="{Binding BusyText, Mode=TwoWay}"
+          >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="100" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <i:Interaction.Behaviors>
+            <ab:UnifiedPaddingBeahavior Padding="3" />
+        </i:Interaction.Behaviors>
+
+        <ac:StyleDialog Title="{Binding OrderNO, StringFormat={}发送留言、站内信 {0}}" ShowMask="True" Show="{Binding IsShowWriteDialog, Mode=TwoWay}" Width="500" Height="300">
+            <ac:StyleDialog.Content>
+                <ContentControl cal:View.Model="{Binding Source={StaticResource Proxy}, Path=Data.MsgVM}" />
+            </ac:StyleDialog.Content>
+        </ac:StyleDialog>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <i:Interaction.Behaviors>
+                <ab:UnifiedPaddingBeahavior Padding="3" />
+            </i:Interaction.Behaviors>
+            <Button x:Name="Sync" Content="同步订单留言" />
+            <Button x:Name="SavePurchaseNote" Content="保存采购备注" />
+            <Button x:Name="WriteMsg" Content="写留言/站内信" />
+            <!--<Button x:Name="WriteMsg" Content="留言" />-->
+        </StackPanel>
+
+        <TextBox Text="{Binding OrderNote.Note}" Grid.Row="1" HorizontalAlignment="Stretch"
+                 TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
+                 />
+
+        <ItemsControl x:Name="Msgs" Grid.Row="2">
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer>
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+            <ItemsControl.ItemTemplateSelector>
+                <local:MessageTemplateSelector>
+                    <local:MessageTemplateSelector.LeftTemplate>
+                        <DataTemplate>
+                            <Border HorizontalAlignment="Left" BorderBrush="Green" BorderThickness="1" Margin="5"
+                                    CornerRadius="0"
+                                    Background="White"
+                                    >
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#cccccc" />
+                                </Border.Effect>
+                                <StackPanel>
+                                    <DockPanel Background="Green" ap:UniPadding.Padding="3" LastChildFill="False">
+                                        <TextBlock Text="{Binding Sender}" FontSize="10" Foreground="White" />
+                                        <TextBlock Text="{Binding CreateOn}" FontSize="10" Foreground="White" DockPanel.Dock="Right" />
+                                    </DockPanel>
+                                    <TextBox Padding="5" Text="{Binding Content}" IsReadOnly="True" Style="{StaticResource SelectableTextBlock}" TextWrapping="WrapWithOverflow" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </local:MessageTemplateSelector.LeftTemplate>
+                    <local:MessageTemplateSelector.RightTemplate>
+                        <DataTemplate>
+                            <Border HorizontalAlignment="Right" BorderBrush="Brown" 
+                                    BorderThickness="1" Margin="5"
+                                    Background="White"
+                                    >
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#cccccc" />
+                                </Border.Effect>
+                                <StackPanel>
+                                    <DockPanel Background="Brown" ap:UniPadding.Padding="3" LastChildFill="False">
+                                        <TextBlock Text="{Binding Sender}" FontSize="10" Foreground="White" />
+                                        <TextBlock Text="{Binding CreateOn}" FontSize="10" Foreground="White" DockPanel.Dock="Right" />
+                                    </DockPanel>
+                                    <TextBox Padding="5" Text="{Binding Content}" IsReadOnly="True" Style="{StaticResource SelectableTextBlock}" TextWrapping="WrapWithOverflow" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </local:MessageTemplateSelector.RightTemplate>
+                </local:MessageTemplateSelector>
+            </ItemsControl.ItemTemplateSelector>
+        </ItemsControl>
+    </Grid>
+</UserControl>

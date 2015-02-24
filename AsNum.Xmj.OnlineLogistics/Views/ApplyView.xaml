@@ -1,0 +1,183 @@
+﻿<UserControl x:Class="AsNum.Xmj.OnlineLogistics.Views.ApplyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="clr-namespace:AsNum.Xmj.OnlineLogistics"
+             xmlns:a="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
+             xmlns:ac="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+
+        <l:ExistsLogisticInfoConverter x:Key="Exists" />
+        <l:BoolToVisibilityConverter x:Key="boolToVisibility" />
+        <a:EnumDescriptionConverter x:Key="Enum" />
+
+        <DataTemplate x:Key="ServiceTpl" DataTemplate.DataType="ComboBoxItem">
+            <StackPanel>
+                <!--<StackPanel Orientation="Horizontal" ac:UniPadding.Padding="2">
+                    <TextBlock FontWeight="Bold" Text="{Binding ServiceName}" />
+                    <TextBlock Text="{Binding Fee}" />
+                </StackPanel>-->
+                <TextBlock FontWeight="Bold" Text="{Binding ServiceName}" />
+                <ContentControl Content="{Binding DeliveryAddress}">
+                    <ContentControl.ContentTemplateSelector>
+                        <l:LocSelector>
+                            <l:LocSelector.DefaultTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding .}" />
+                                </DataTemplate>
+                            </l:LocSelector.DefaultTemplate>
+                            <l:LocSelector.NearLocTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding .}" Foreground="Red" />
+                                </DataTemplate>
+                            </l:LocSelector.NearLocTemplate>
+                        </l:LocSelector>
+                    </ContentControl.ContentTemplateSelector>
+                </ContentControl>
+
+            </StackPanel>
+        </DataTemplate>
+        <Style x:Key="OrderInfo" Style.TargetType="{x:Type DataGridCell}">
+            <Setter Setter.Property="Control.Background" Setter.Value="#9906CDFD" />
+        </Style>
+        <Style x:Key="PickupInfo" Style.TargetType="{x:Type DataGridCell}">
+            <Setter Setter.Property="Control.Background" Setter.Value="#99C808F8" />
+        </Style>
+        <Style x:Key="SenderInfo" Style.TargetType="{x:Type DataGridCell}">
+            <Setter Setter.Property="Control.Background" Setter.Value="#998C72F9" />
+        </Style>
+        <Style x:Key="ReceiverInfo" Style.TargetType="{x:Type DataGridCell}">
+            <Setter Setter.Property="Control.Background" Setter.Value="#9990FC04" />
+        </Style>
+        <Style x:Key="DeclareInfo" Style.TargetType="{x:Type DataGridCell}">
+            <Setter Setter.Property="Control.Background" Setter.Value="#99FCAD04" />
+        </Style>
+
+    </UserControl.Resources>
+    <Grid ac:UniPadding.Padding="2" ap:Busy.MaskType="Window" ap:Busy.Show="{Binding IsShowBusy}" ap:Busy.Text="{Binding BusyText}" xmlns:ap="clr-namespace:AsNum.WPF.Controls;assembly=AsNum.WPF.Controls" xmlns:ac="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition RowDefinition.Height="auto" />
+        </Grid.RowDefinitions>
+        <DataGrid DataGrid.Name="Datas" Grid.Row="0" DataGrid.AutoGenerateColumns="False" DataGrid.SelectionUnit="CellOrRowHeader" DataGrid.FrozenColumnCount="6">
+            <DataGrid.RowStyle>
+                <Style Style.TargetType="{x:Type DataGridRow}">
+                    <Setter Setter.Property="DataGridRow.DetailsVisibility" Setter.Value="{Binding IsSummary,Mode=OneWay,Converter={StaticResource boolToVisibility}}" />
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="订单号" DataGridBoundColumn.Binding="{Binding OrderNO,UpdateSourceTrigger=LostFocus}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="订单状态" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding Status,Converter={StaticResource Enum}}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="账户" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding Account}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="订单备注" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding OrderNote}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="Log" DataGridColumn.IsReadOnly="True" DataGridColumn.MaxWidth="200" DataGridBoundColumn.Binding="{Binding Info}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="配送方式" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding LogisticType}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="已申请单号" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding ExistsLogisticInfos,Converter={StaticResource Exists}}" />
+                <DataGridComboBoxColumn DataGridComboBoxColumn.SelectedValuePath="ServiceID" DataGridColumn.Header="发货方式/仓库" DataGridComboBoxColumn.SelectedValueBinding="{Binding Service}">
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style Style.TargetType="{x:Type ComboBox}">
+                            <Setter Setter.Property="ItemsControl.ItemsSource" Setter.Value="{Binding Path=Services}" />
+                            <Setter Setter.Property="ItemsControl.DisplayMemberPath" Setter.Value="ServiceName" />
+                            <Setter Setter.Property="ItemsControl.ItemTemplate" Setter.Value="{StaticResource ServiceTpl}" />
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style Style.TargetType="{x:Type ComboBox}">
+                            <Setter Setter.Property="ItemsControl.ItemsSource" Setter.Value="{Binding Path=Services}" />
+                            <Setter Setter.Property="ItemsControl.DisplayMemberPath" Setter.Value="ServiceName" />
+                            <Setter Setter.Property="ItemsControl.ItemTemplate" Setter.Value="{StaticResource ServiceTpl}" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                </DataGridComboBoxColumn>
+                <DataGridComboBoxColumn DataGridComboBoxColumn.SelectedValuePath="ID" DataGridColumn.Header="国内快递公司" DataGridComboBoxColumn.SelectedValueBinding="{Binding LocalLogisticCompany}">
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style Style.TargetType="{x:Type ComboBox}">
+                            <Setter Setter.Property="ItemsControl.ItemsSource" Setter.Value="{Binding Path=LogisticsCompanies}" />
+                            <Setter Setter.Property="ItemsControl.DisplayMemberPath" Setter.Value="Name" />
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style Style.TargetType="{x:Type ComboBox}">
+                            <Setter Setter.Property="ItemsControl.ItemsSource" Setter.Value="{Binding Path=LogisticsCompanies}" />
+                            <Setter Setter.Property="ItemsControl.DisplayMemberPath" Setter.Value="Name" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                </DataGridComboBoxColumn>
+                <DataGridTextColumn DataGridColumn.Header="国内快递单号" DataGridBoundColumn.Binding="{Binding LocalTrackNO}" />
+
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货人姓名" DataGridBoundColumn.Binding="{Binding Receiver.Name}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货国家" DataGridBoundColumn.Binding="{Binding Receiver.CountryCode}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货人州省" DataGridBoundColumn.Binding="{Binding Receiver.Province}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货人城市" DataGridBoundColumn.Binding="{Binding Receiver.City}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货人地址" DataGridBoundColumn.Binding="{Binding Receiver.Address}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货人邮编" DataGridBoundColumn.Binding="{Binding Receiver.PostCode}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货人电话" DataGridBoundColumn.Binding="{Binding Receiver.Phone}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货人手机" DataGridBoundColumn.Binding="{Binding Receiver.Mobile}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource DeclareInfo}" DataGridColumn.Header="产品ID" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding Declares[0].ProductID}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource DeclareInfo}" DataGridColumn.Header="中文描述" DataGridBoundColumn.Binding="{Binding Declares[0].DescCn}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource DeclareInfo}" DataGridColumn.Header="英文描述" DataGridBoundColumn.Binding="{Binding Declares[0].DescEn}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource DeclareInfo}" DataGridColumn.Header="数量" DataGridBoundColumn.Binding="{Binding Declares[0].Count}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource DeclareInfo}" DataGridColumn.Header="重量" DataGridBoundColumn.Binding="{Binding Declares[0].Weight}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource DeclareInfo}" DataGridColumn.Header="申报价值" DataGridBoundColumn.Binding="{Binding Declares[0].Amount}" />
+                <DataGridCheckBoxColumn DataGridColumn.CellStyle="{StaticResource DeclareInfo}" DataGridColumn.Header="带电池" DataGridBoundColumn.Binding="{Binding Declares[0].WithBattery}" />
+                <DataGridCheckBoxColumn DataGridColumn.CellStyle="{StaticResource DeclareInfo}" DataGridColumn.Header="简略" DataGridBoundColumn.Binding="{Binding IsSummary,UpdateSourceTrigger=PropertyChanged}" />
+
+
+                <DataGridCheckBoxColumn DataGridColumn.CellStyle="{StaticResource PickupInfo}" DataGridColumn.Header="上门揽收" DataGridBoundColumn.Binding="{Binding NeedPickup}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource PickupInfo}" DataGridColumn.Header="姓名(揽收)" DataGridBoundColumn.Binding="{Binding Pickup.Name}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource PickupInfo}" DataGridColumn.Header="国家(揽收)" DataGridBoundColumn.Binding="{Binding Pickup.CountryCode}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource PickupInfo}" DataGridColumn.Header="省(揽收)" DataGridBoundColumn.Binding="{Binding Pickup.Province}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource PickupInfo}" DataGridColumn.Header="城市(揽收)" DataGridBoundColumn.Binding="{Binding Pickup.City}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource PickupInfo}" DataGridColumn.Header="县区(揽收)" DataGridBoundColumn.Binding="{Binding Pickup.County}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource PickupInfo}" DataGridColumn.Header="地址(揽收)" DataGridBoundColumn.Binding="{Binding Pickup.Address}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource PickupInfo}" DataGridColumn.Header="邮编(揽收)" DataGridBoundColumn.Binding="{Binding Pickup.PostCode}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource PickupInfo}" DataGridColumn.Header="电话(揽收)" DataGridBoundColumn.Binding="{Binding Pickup.Phone}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource PickupInfo}" DataGridColumn.Header="手机(揽收)" DataGridBoundColumn.Binding="{Binding Pickup.Mobile}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource SenderInfo}" DataGridColumn.Header="发货人姓名" DataGridBoundColumn.Binding="{Binding Sender.Name}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource SenderInfo}" DataGridColumn.Header="发货国家" DataGridBoundColumn.Binding="{Binding Sender.CountryCode}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource SenderInfo}" DataGridColumn.Header="发货人州省" DataGridBoundColumn.Binding="{Binding Sender.Province}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource SenderInfo}" DataGridColumn.Header="发货人城市" DataGridBoundColumn.Binding="{Binding Sender.City}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource SenderInfo}" DataGridColumn.Header="发货人地址" DataGridBoundColumn.Binding="{Binding Sender.Address}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource SenderInfo}" DataGridColumn.Header="发货人邮编" DataGridBoundColumn.Binding="{Binding Sender.PostCode}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource SenderInfo}" DataGridColumn.Header="发货人电话" DataGridBoundColumn.Binding="{Binding Sender.Phone}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource SenderInfo}" DataGridColumn.Header="发货人手机" DataGridBoundColumn.Binding="{Binding Sender.Mobile}" />
+
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <DataGrid FrameworkElement.Margin="30,10,10,10" DataGrid.AutoGenerateColumns="False" DataGrid.SelectionUnit="CellOrRowHeader" ItemsControl.ItemsSource="{Binding Declares}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn DataGridColumn.Header="产品ID" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding ProductID}" />
+                            <DataGridTextColumn DataGridColumn.Header="中文描述" DataGridBoundColumn.Binding="{Binding DescCn}" />
+                            <DataGridTextColumn DataGridColumn.Header="中文描述" DataGridBoundColumn.Binding="{Binding DescEn}" />
+                            <DataGridTextColumn DataGridColumn.Header="数量" DataGridBoundColumn.Binding="{Binding Count}" />
+                            <DataGridTextColumn DataGridColumn.Header="重量" DataGridBoundColumn.Binding="{Binding Weight}" />
+                            <DataGridTextColumn DataGridColumn.Header="申报价值" DataGridBoundColumn.Binding="{Binding Amount}" />
+                            <DataGridCheckBoxColumn DataGridColumn.Header="带电池" DataGridBoundColumn.Binding="{Binding WithBattery}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+
+            <i:Interaction.Behaviors>
+                <ab:DataGridRowIndexBehavior xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF" />
+                <ab:DataGridPasteBehavior xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF" />
+                <ab:DataGridScrollIntoViewBehavior xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF" />
+            </i:Interaction.Behaviors>
+        </DataGrid>
+        <DockPanel Grid.Row="1" DockPanel.LastChildFill="False" ac:UniPadding.Padding="2">
+            <Button Button.Name="Remove" ContentControl.Content="待发货" DockPanel.Dock="Left" />
+            <Button Button.Name="RemoveRepeated" ContentControl.Content="去重复" DockPanel.Dock="Left" />
+            <StackPanel DockPanel.Dock="Right" StackPanel.Orientation="Horizontal">
+                <Button Button.Name="Apply" ContentControl.Content="申请线上发货" Control.Background="#FFFF0000" />
+                <Button Button.Name="Refresh" ContentControl.Content="刷新申请单" />
+                <Button Button.Name="Download" ContentControl.Content="下载" />
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</UserControl>

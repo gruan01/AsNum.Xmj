@@ -1,0 +1,128 @@
+﻿<UserControl x:Class="AsNum.Xmj.OrderManager.Views.SummaryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ac="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
+             xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:local="clr-namespace:AsNum.Xmj.OrderManager"
+             xmlns:acc="clr-namespace:AsNum.WPF.Controls;assembly=AsNum.WPF.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ac:EnumDescriptionConverter x:Key="Enum" />
+
+        <Style x:Key="HyperlinkButton" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+    <Grid Width="180">
+        <acc:Summary ItemsSource="{Binding Summaries}" Title="订单状态汇总">
+            <acc:Summary.ItemTitleTemplate>
+                <DataTemplate>
+                    <TextBlock Foreground="White" Text="{Binding Title, Converter={StaticResource Enum}}" />
+                </DataTemplate>
+            </acc:Summary.ItemTitleTemplate>
+            
+            <acc:Summary.ItemValueTemplate>
+                <DataTemplate>
+                    <!--<TextBlock Text="{Binding Count}" Foreground="White" />-->
+
+                    <ContentControl Foreground="White">
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Loaded}" Value="True">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+
+                                                <Button Style="{StaticResource HyperlinkButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" cal:Message.Attach="View($this)" Cursor="Hand" >
+                                                    <Border CornerRadius="5" Background="#4f577b" Padding="5,3">
+                                                        <TextBlock Text="{Binding Count}" Foreground="White" />
+                                                    </Border>
+                                                </Button>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Loaded}" Value="False">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <local:Loading />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+
+                </DataTemplate>
+            </acc:Summary.ItemValueTemplate>
+        </acc:Summary>
+        
+        <!--<StackPanel>
+            <ItemsControl ItemsSource="{Binding Summaries}" Foreground="White">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <DockPanel Margin="10,3" d:DesignWidth="274" d:DesignHeight="31">
+                                <i:Interaction.Behaviors>
+                                    <ab:UnifiedPaddingBeahavior Padding="5,3" />
+                                </i:Interaction.Behaviors>
+
+                                <TextBlock Text="{Binding Title, Converter={StaticResource Enum}}" />
+                                <ContentControl DockPanel.Dock="Right" Foreground="White">
+                                    <ContentControl.Style>
+                                        <Style TargetType="ContentControl">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Loaded}" Value="True">
+                                                    <Setter Property="Content">
+                                                        <Setter.Value>
+
+                                                            <Button Style="{StaticResource HyperlinkButton}" DockPanel.Dock="Right" HorizontalAlignment="Right" cal:Message.Attach="View($this)" Cursor="Hand" >
+                                                                <Border CornerRadius="5" Background="#4f577b" Padding="5,3">
+                                                                    <TextBlock Text="{Binding Count}" Foreground="White" />
+                                                                </Border>
+                                                            </Button>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Loaded}" Value="False">
+                                                    <Setter Property="Content">
+                                                        <Setter.Value>
+                                                            <local:Loading />
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentControl.Style>
+                                </ContentControl>
+                            </DockPanel>
+                            <Separator x:Name="Seperator" />
+                        </StackPanel>
+                        --><!--<DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}" Value="{x:Null}">
+                                <Setter Property="Visibility" TargetName="Seperator" Value="Collapsed"/>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>--><!--
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>-->
+    </Grid>
+</UserControl>

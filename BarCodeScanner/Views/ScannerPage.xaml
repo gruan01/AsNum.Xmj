@@ -1,0 +1,69 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="BarCodeScanner.Views.ScannerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:cal="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro"
+    xmlns:es="clr-namespace:Microsoft.Expression.Shapes;assembly=Microsoft.Expression.Drawing"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <phone:PhoneApplicationPage.Resources>
+        <Style x:Key="btn" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid>
+                            <es:RegularPolygon 
+                                Fill="#3300FF00" HorizontalAlignment="Left" Height="200" InnerRadius="1" PointCount="6" Stretch="Fill" UseLayoutRounding="False" VerticalAlignment="Top" Width="180" RenderTransformOrigin="0.5,0.5">
+                                <es:RegularPolygon.RenderTransform>
+                                    <CompositeTransform Rotation="90"/>
+                                </es:RegularPolygon.RenderTransform>
+                            </es:RegularPolygon>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </phone:PhoneApplicationPage.Resources>    
+    
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar>
+            <!--<shell:ApplicationBarIconButton x:Name="Home" IconUri="/Imgs/home.png" Text="主页" />-->
+            <cal:AppBarButton x:Name="Home" Message="Home()" IconUri="/Imgs/home.png" Text="主页" />
+            <!--<shell:ApplicationBarIconButton x:Name="Flash" IconUri="/Imgs/flash.png" Text="闪光灯" Click="Flash_Click" />-->
+            <cal:AppBarButton x:Name="Flash" Message="SwitchFlash()" IconUri="/Imgs/flash.png" Text="闪光灯" />
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Rectangle Fill="{Binding VBrush}">
+            <!--<Rectangle.Fill>
+                <VideoBrush x:Name="vb" SourceName="">
+                    <VideoBrush.RelativeTransform>
+                        <CompositeTransform CenterX=".5" CenterY=".5" Rotation="90" />
+                    </VideoBrush.RelativeTransform>
+                </VideoBrush>
+            </Rectangle.Fill>-->
+        </Rectangle>
+
+        <Rectangle Height="{Binding RangeHeight}" Width="{Binding RangeWidth}" Margin="{Binding RangeMargin}" VerticalAlignment="Top" HorizontalAlignment="Left" x:Name="Range">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="#3334fe05" />
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <TextBlock Text="{Binding Tip}" Height="40" Margin="0,110" VerticalAlignment="Top" Padding="10,0" Foreground="Red" FontSize="25" />
+
+        <Button x:Name="SetFocus" Content="扫描" Height="200" Margin="39,361,223,80" Width="180" Style="{StaticResource btn}" Visibility="{Binding ScanBtnVisibility}" />
+    </Grid>
+
+</phone:PhoneApplicationPage>

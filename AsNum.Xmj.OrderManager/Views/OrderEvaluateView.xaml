@@ -1,0 +1,143 @@
+﻿<UserControl x:Class="AsNum.Xmj.OrderManager.Views.OrderEvaluateView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:Entity="clr-namespace:AsNum.Xmj.Entity;assembly=AsNum.Xmj.Entity"
+             xmlns:ac="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
+             xmlns:local="clr-namespace:AsNum.Xmj.OrderManager"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ac:EnumDescriptionConverter x:Key="Enum" />
+        <ac:SerialNumberConverter x:Key="SerialNumber" />
+        <ac:OffTimeConverter x:Key="OffTime" />
+        <local:AttrConverter x:Key="Attrs" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <i:Interaction.Behaviors>
+            <ab:UnifiedPaddingBeahavior Padding="2" />
+        </i:Interaction.Behaviors>
+
+        <DataGrid x:Name="Orders" Grid.Column="0" 
+                  Grid.Row="0"
+                  Grid.RowSpan="2"
+                  AutoGenerateColumns="False" 
+                  SelectedItem="{Binding CurrOrder}"
+                  CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+                  cal:Message.Attach="[Event RowDetailsVisibilityChanged] = [Action ShowDetailVM($this, $eventArgs)]">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="订单号码" Binding="{Binding OrderNO}" />
+                <DataGridTextColumn Header="账户" Binding="{Binding Account}" />
+                <DataGridTextColumn Header="客人" Binding="{Binding Buyer.Name}" />
+                <DataGridTextColumn Header="采购备注" Binding="{Binding Note.Note}" />
+                <DataGridTextColumn Header="订单金额" Binding="{Binding Amount}" />
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <ContentControl x:Name="detailView" />
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+        </DataGrid>
+        <GridSplitter />
+        <DataGrid Grid.Column="1" Grid.Row="0" x:Name="SubOrders" IsReadOnly="True">
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="图片">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Image}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="订购数量">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Background="Brown" CornerRadius="10" Padding="5">
+                                        <TextBlock Text="{Binding Qty}"  FontSize="18" Foreground="White" />
+                                    </Border>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding UnitQty}" />
+                                    <TextBlock Text="{Binding Unit}" />
+                                    <TextBlock Text=" x " />
+                                    <TextBlock Text="{Binding LotNum}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="属性">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Attrs, Converter={StaticResource Attrs}}" />
+                                <Button Content="属性挂靠" cal:Message.Attach="[Event Click] = [Action EditSKUMap($this)]" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="单价" Binding="{Binding ProductPrice}" />
+
+                <DataGridTemplateColumn Header="产品名" Width="180">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding ProductName}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="运送方式" Binding="{Binding LogisticsType, Converter={StaticResource Enum}, ConverterParameter={x:Type Entity:LogisticsTypes}}" />
+                <DataGridTemplateColumn Header="产品ID">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding ProductID}" />
+                                <Button Content="当前产品" cal:Message.Attach="[Event Click] = [Action OpenProduct($this)]" />
+                                <Button Content="订单镜像产品" cal:Message.Attach="[Event Click] = [Action OpenSnap($this)]" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="3">
+                        <TextBox Text="{Binding Remark}" IsReadOnly="True" Style="{StaticResource SelectableTextBlock}" />
+                    </StackPanel>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+
+        </DataGrid>
+
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <StackPanel Orientation="Horizontal">
+                <i:Interaction.Behaviors>
+                    <ab:UnifiedPaddingBeahavior Padding="2" />
+                </i:Interaction.Behaviors>
+                <Label Content="打分" />
+                <ComboBox x:Name="Stars" SelectedValue="{Binding Star, Mode=OneWayToSource}" Width="auto" SelectedIndex="0" />
+                <Button x:Name="Send" Content="提交评价" Width="auto" />
+            </StackPanel>
+            <TextBox x:Name="Ctx" AcceptsReturn="True" Height="50" />
+        </StackPanel>
+    </Grid>
+</UserControl>

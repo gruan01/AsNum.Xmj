@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{28564AC8-4410-4797-B868-360C43C66560}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AsNum.Common</RootNamespace>
+    <AssemblyName>AsNum.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Fizzler, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Fizzler.0.9.3\lib\net35\Fizzler.dll</HintPath>
+    </Reference>
+    <Reference Include="Fizzler.Sandbox">
+      <HintPath>..\packages\Fizzler.0.9.3\lib\net35\Fizzler.Sandbox.dll</HintPath>
+    </Reference>
+    <Reference Include="Fizzler.Systems.HtmlAgilityPack">
+      <HintPath>..\packages\Fizzler.0.9.3\lib\net35\Fizzler.Systems.HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net40\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Linq.Dynamic">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.4\lib\net40\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Annoations\Order.cs" />
+    <Compile Include="AppSettingItemBase.cs" />
+    <Compile Include="Attributes\MapToAttribute.cs" />
+    <Compile Include="BaseQuery.cs" />
+    <Compile Include="Extends\ByteHelper.cs" />
+    <Compile Include="Extends\FileHelper.cs" />
+    <Compile Include="Extends\FuncHelper.cs" />
+    <Compile Include="Extends\HtmlHelper.cs" />
+    <Compile Include="Extends\PersistFileHelper.cs" />
+    <Compile Include="Extends\XElementHelper.cs" />
+    <Compile Include="MefHelper.cs" />
+    <Compile Include="Net\PostFileItem.cs" />
+    <Compile Include="Pager.cs" />
+    <Compile Include="PredicateBuilder.cs" />
+    <Compile Include="Extends\AppSettingHelper.cs" />
+    <Compile Include="Extends\ConfigurationHelper.cs" />
+    <Compile Include="Extends\StreamHelper.cs" />
+    <Compile Include="Extends\TypeDescriptorHelper.cs" />
+    <Compile Include="QueryEx.cs" />
+    <Compile Include="Security\AESHelper.cs" />
+    <Compile Include="Security\DESHelper.cs" />
+    <Compile Include="Security\MD5Helper.cs" />
+    <Compile Include="TypeBuilderHelper.cs" />
+    <Compile Include="TypeDescriptors\AdditionalPropertyDescriptor.cs" />
+    <Compile Include="TypeDescriptors\AdditionalPropertyTypeDescriptor.cs" />
+    <Compile Include="TypeDescriptors\AdditionPropertyTypeDescriptorProvider.cs" />
+    <Compile Include="TypeDescriptors\RuntimeAttributeTypeDescriptor.cs" />
+    <Compile Include="TypeDescriptors\RuntimeAttributeTypeDescriptorProvider.cs" />
+    <Compile Include="TypeDescriptors\SubLevelCustomTypeDescriptor.cs" />
+    <Compile Include="Extends\ResourceManagerHelper.cs" />
+    <Compile Include="LimitedConcurrencyLevelTaskScheduler.cs" />
+    <Compile Include="Extends\DynamicCopy.cs" />
+    <Compile Include="Extends\CollectionHelper.cs" />
+    <Compile Include="Extends\EnumHelper.cs" />
+    <Compile Include="Extends\QueryHelper.cs" />
+    <Compile Include="Extends\StringHelper.cs" />
+    <Compile Include="TypeDescriptors\SubLevelTypeDescriptionProvider.cs" />
+    <Compile Include="Net\HttpWebRequestHeaderBuilder.cs" />
+    <Compile Include="Net\RequestHelper.cs" />
+    <Compile Include="Extends\ObjectHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SortableBindingList.cs" />
+    <Compile Include="TypeDescriptors\SubLevelPropertyDescriptor.cs" />
+    <Compile Include="TypeDescriptors\DisplayPropertyCustomTypeDescriptor.cs" />
+    <Compile Include="TypeDescriptors\DisplayPropertyTypeDescriptionProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

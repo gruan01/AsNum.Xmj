@@ -1,0 +1,116 @@
+﻿<UserControl x:Class="AsNum.Xmj.Report.Views.AddressExportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:xe="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:ac="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
+             xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ac:EnumDescriptionConverter x:Key="Enum" />
+        <ac:OffTimeConverter x:Key="OffTime" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Grid.Column="0" Margin="5">
+
+                <i:Interaction.Behaviors>
+                    <ab:UnifiedPaddingBeahavior Padding="2,5" />
+                </i:Interaction.Behaviors>
+
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox x:Name="WaitSend" Content="全部待发货" IsChecked="True" />
+                    <CheckBox x:Name="RiskControl" Content="资金未到账" />
+                    <CheckBox x:Name="PartSend" Content="部分发货" IsChecked="True" />
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="包含以下订单,每行一个" />
+                    <TextBox x:Name="Includes" VerticalScrollBarVisibility="Auto" Height="200" AcceptsReturn="True" />
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="排除以下订单,每行一个" />
+                    <TextBox x:Name="Excepts" VerticalScrollBarVisibility="Auto" Height="200" AcceptsReturn="True" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="包含" />
+                    <xe:IntegerUpDown Text="{Binding OffTimeHour}" />
+                    <TextBlock Text="小时内通过审核的订单" />
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="包含以下账户" />
+
+                    <xe:CheckListBox x:Name="Owners" Height="200"
+                                 DisplayMemberPath="Account"
+                                 ValueMemberPath="Account"
+                                 SelectedValue="{Binding SelectedAccounts}"
+                                 >
+
+                    </xe:CheckListBox>
+                </StackPanel>
+
+                <StackPanel>
+                    <CheckBox Content="每个账户一个标签页" x:Name="MultiSheet" />
+                    <CheckBox Content="按采购备注排序导出" x:Name="SortByNote" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="查看" x:Name="View" />
+                    <Button Content="导出" x:Name="Export" />
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <DataGrid Grid.Column="1" x:Name="Orders" 
+                  AutoGenerateColumns="False" IsReadOnly="True" FrozenColumnCount="2"
+                   SelectionUnit="CellOrRowHeader"
+                  cal:Message.Attach="
+                  [Event LoadingRow] = [Action SetSameAddressCellColor($eventArgs)] ; 
+                  [Event SelectionChanged] = [Action SetSelectedOrder($eventArgs)];
+                  [Event SelectedCellsChanged] = [Action SetSelectedOrder2($eventArgs)]
+                  "
+                  >
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding OrderNO}" Header="订单号" />
+                <DataGridTextColumn Binding="{Binding Account}" Header="账户" />
+                <DataGridTextColumn Binding="{Binding Note.Note}" Header="发货备注" />
+                <DataGridTextColumn Binding="{Binding Receiver.Name}" Header="收件人" />
+                <DataGridTextColumn Binding="{Binding Receiver.FullAddress}" Header="地址" />
+                <DataGridTextColumn Binding="{Binding Receiver.ZipCode}" Header="邮编" />
+                <DataGridTextColumn Binding="{Binding Receiver.Phone}" Header="电话" />
+                <DataGridTextColumn Binding="{Binding Receiver.Mobi}" Header="手机" />
+                <DataGridTextColumn Binding="{Binding Receiver.Country.CountryCode}" Header="国家代码" />
+                <DataGridTextColumn Binding="{Binding Receiver.Country.ZhName}" Header="国家" />
+                <DataGridTextColumn Binding="{Binding Receiver.Country.EnName}" Header="国家" />
+                <DataGridTextColumn Binding="{Binding Receiver.City}" Header="城市" />
+                <DataGridTextColumn Binding="{Binding Receiver.Province}" Header="州省" />
+                <DataGridTextColumn Binding="{Binding Status, Converter={StaticResource Enum}}" Header="状态" />
+                <DataGridTextColumn Binding="{Binding OffTime, Converter={StaticResource OffTime}}" Header="截止" />
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="编辑选中的订单" cal:Message.Attach="[Event Click]=[Action EditOrders()]" />
+                    <MenuItem Header="排除选中的订单" cal:Message.Attach="ExceptOrders()" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <i:Interaction.Behaviors>
+                <ab:DataGridRowIndexBehavior />
+                <!--<ab:DataGridMutiSelectBehavior SelectedItems="{Binding SelectedOrders}" />-->
+            </i:Interaction.Behaviors>
+        </DataGrid>
+    </Grid>
+</UserControl>

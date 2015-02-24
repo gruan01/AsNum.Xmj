@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="AsNum.Xmj.OrderManager.Loading"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <Grid   Width="1"
+        Height="1"
+        >
+
+        <Grid.RenderTransform>
+            <TransformGroup>
+
+                <RotateTransform x:Name="angle" Angle="0" CenterX="0.5" CenterY="0.5"/>
+
+                <!-- Ideally remove the translation and scale from here
+                 and let the container apply them instead -->
+
+                <TranslateTransform X="-0.5" Y="-0.5"/>
+                <ScaleTransform ScaleX="14" ScaleY="14"/>
+
+            </TransformGroup>
+        </Grid.RenderTransform>
+
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="Canvas.Loaded">
+                <BeginStoryboard>
+                    <Storyboard x:Name="rotation">
+                        <DoubleAnimation To="1" Duration="0:0:2" AutoReverse="True" RepeatBehavior="Forever"
+                                                    Storyboard.TargetName="content"
+                                                    Storyboard.TargetProperty="Opacity"/>
+                        <DoubleAnimation From="0" To="359" Duration="0:0:1" RepeatBehavior="Forever"
+                                                    Storyboard.TargetName="angle"
+                                                    Storyboard.TargetProperty="Angle"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Grid.Triggers>
+
+        <Canvas Name="content" Opacity="0" Width="10" Height="1">
+
+            <Path Width="1" Height="1" Stretch="Fill" Stroke="Green" StrokeThickness="0.1" StrokeStartLineCap="Round">
+                <Path.Data>
+                    <PathGeometry>
+                        <PathFigure StartPoint="1,0">
+                            <ArcSegment Point="0,-1" RotationAngle="90" SweepDirection="Clockwise" IsLargeArc="True" Size="1,1"/>
+                        </PathFigure>
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
+
+            <Path Canvas.Left="0.49" Canvas.Top="-0.05" Width="0.2" Height="0.2" Stretch="Fill" Fill="Green">
+                <Path.Data>
+                    <PathGeometry>
+                        <PathFigure StartPoint="0,-1.1">
+                            <LineSegment Point="0.1,-1" />
+                            <LineSegment Point="0,-0.9" />
+                        </PathFigure>
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
+
+        </Canvas>
+
+    </Grid>
+
+    <!--<Grid>
+        <Rectangle Fill="Yellow" Width="16" Height="16">
+            <Rectangle.RenderTransform>
+                <RotateTransform x:Name="aa" Angle="0" CenterX="8" CenterY="8" />
+            </Rectangle.RenderTransform>
+            <Rectangle.Triggers>
+                <EventTrigger RoutedEvent="UserControl.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard RepeatBehavior="Forever" AutoReverse="False">
+                            <DoubleAnimation 
+                                Storyboard.TargetName="aa"
+                                Storyboard.TargetProperty="Angle"
+                                From="0" To="360" Duration="0:0:2" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Rectangle.Triggers>
+        </Rectangle>
+    </Grid>-->
+</UserControl>

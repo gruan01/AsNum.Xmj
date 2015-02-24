@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D7C258D4-3EE9-4A70-AA35-A587DA1621B7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AsNum.Xmj.API</RootNamespace>
+    <AssemblyName>AsNum.Xmj.API</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
+      <HintPath>..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.PolicyInjection">
+      <HintPath>..\packages\EnterpriseLibrary.PolicyInjection.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.PolicyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\DLL\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.3.0.1304.1\lib\Net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception">
+      <HintPath>..\packages\Unity.Interception.3.0.1304.0\lib\Net45\Microsoft.Practices.Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception.Configuration">
+      <HintPath>..\packages\Unity.Interception.3.0.1304.0\lib\Net45\Microsoft.Practices.Unity.Interception.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="APIClient.cs" />
+    <Compile Include="Attributes\DateTimeParam.cs" />
+    <Compile Include="Attributes\AliDateTimeParamFormatter.cs" />
+    <Compile Include="Attributes\EnumNameParamAttribute.cs" />
+    <Compile Include="Attributes\EnumValueParamAttribute.cs" />
+    <Compile Include="Attributes\FlattenParamAttribute.cs" />
+    <Compile Include="Attributes\JsonParam.cs" />
+    <Compile Include="Attributes\ParamFormaterAttribute.cs" />
+    <Compile Include="Attributes\SpecifyValueAttribute.cs" />
+    <Compile Include="Auth.cs" />
+    <Compile Include="Attributes\NeedAuthAttribute.cs" />
+    <Compile Include="Attributes\ParamAttribute.cs" />
+    <Compile Include="Attributes\SaveAuthDataAttribute.cs" />
+    <Compile Include="AuthHelper.cs" />
+    <Compile Include="ConstValue.cs" />
+    <Compile Include="Converter\AliChildOrderAttributesConverter.cs" />
+    <Compile Include="Converter\AliDateTimeConverter.cs" />
+    <Compile Include="Converter\IssueConverter.cs" />
+    <Compile Include="Entity\Amount.cs" />
+    <Compile Include="Entity\ChildOrderDetail.cs" />
+    <Compile Include="Entity\Currency.cs" />
+    <Compile Include="Entity\Customer.cs" />
+    <Compile Include="Entity\FreightTemplateListResult.cs" />
+    <Compile Include="Entity\FrightTemplate.cs" />
+    <Compile Include="Entity\LocalLogisticsCompany.cs" />
+    <Compile Include="Entity\LogisticsServiceResult.cs" />
+    <Compile Include="Entity\LogisticsTypes.cs" />
+    <Compile Include="Entity\Message.cs" />
+    <Compile Include="Entity\Message2.cs" />
+    <Compile Include="Entity\NormalResult.cs" />
+    <Compile Include="Entity\OnlineLogisticsContacts.cs" />
+    <Compile Include="Entity\OnlineLogisticsDeclare.cs" />
+    <Compile Include="Entity\OnlineLogisticsInfo.cs" />
+    <Compile Include="Entity\OnlineLogisticStatus.cs" />
+    <Compile Include="Entity\Paged.cs" />
+    <Compile Include="Entity\PhotoBankUploadTempImageResult.cs" />
+    <Compile Include="Entity\LogisticInfo.cs" />
+    <Compile Include="Entity\ProductGroup2.cs" />
+    <Compile Include="Entity\ProductOfflineReasons.cs" />
+    <Compile Include="Entity\ProductStatus.cs" />
+    <Compile Include="Entity\Result.cs" />
+    <Compile Include="Entity\ShipmentSendTypes.cs" />
+    <Compile Include="Entity\SuccinctOrder.cs" />
+    <Compile Include="Entity\DetailOrder.cs" />
+    <Compile Include="Entity\OrderList.cs" />
+    <Compile Include="Entity\OrderProduct.cs" />
+    <Compile Include="Entity\OrderStatus.cs" />
+    <Compile Include="Entity\PhotoBankUploadResult.cs" />
+    <Compile Include="Entity\Product.cs" />
+    <Compile Include="Entity\ProductAttributes.cs" />
+    <Compile Include="Entity\ProductGroup.cs" />
+    <Compile Include="Entity\ProductGroupResult.cs" />
+    <Compile Include="Entity\ProductNewProductResult.cs" />
+    <Compile Include="Entity\ProductProperty.cs" />
+    <Compile Include="Entity\ProductSKU.cs" />
+    <Compile Include="Entity\ProductSKUProperty.cs" />
+    <Compile Include="Entity\ProductUnit.cs" />
+    <Compile Include="Entity\SKU.cs" />
+    <Compile Include="Entity\Receiver.cs" />
+    <Compile Include="Entity\SuccinctProduct.cs" />
+    <Compile Include="Entity\Token.cs" />
+    <Compile Include="Handlers\NeedAuthHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Handlers\SaveAuthDataHandler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MethodBase.cs" />
+    <Compile Include="Methods\FreightTemplateList.cs" />
+    <Compile Include="Methods\LogisticsCreateOnlineLogisticsNO.cs" />
+    <Compile Include="Methods\LogisticsGetLocalCompanies.cs" />
+    <Compile Include="Methods\LogisticsGetOnlineLogisticsInfo.cs" />
+    <Compile Include="Methods\LogisticsOnlineLogisticsPrintInfo.cs" />
+    <Compile Include="Methods\LogisticsServiceByOrderID.cs" />
+    <Compile Include="Methods\LogisticsServiceList.cs" />
+    <Compile Include="Methods\MessageQuery.cs" />
+    <Compile Include="Methods\OrderEvaluate.cs" />
+    <Compile Include="Methods\OrderMsgList.cs" />
+    <Compile Include="Methods\OrderNewMsg.cs" />
+    <Compile Include="Methods\OrderShipment.cs" />
+    <Compile Include="Methods\OrderWaitingEvaluateList.cs" />
+    <Compile Include="Methods\PhotoBankGroupList.cs" />
+    <Compile Include="Methods\PhotoBankUploadImage.cs" />
+    <Compile Include="Methods\OrderFindByID.cs" />
+    <Compile Include="Entity\ProductBatchEditFields.cs" />
+    <Compile Include="Methods\ProductEditField.cs" />
+    <Compile Include="Methods\ProductFindById.cs" />
+    <Compile Include="Methods\OrderMsgListByOrderId.cs" />
+    <Compile Include="Methods\OrderQueryList.cs" />
+    <Compile Include="Methods\PhotoBankUploadTempImage.cs" />
+    <Compile Include="Methods\ProductGetProductGroup.cs" />
+    <Compile Include="Methods\ProductGroupList.cs" />
+    <Compile Include="Methods\ProductNewProduct.cs" />
+    <Compile Include="Methods\ProductOffline.cs" />
+    <Compile Include="Methods\ProductQuery.cs" />
+    <Compile Include="Methods\MessageSend.cs" />
+    <Compile Include="Methods\Tracking.cs" />
+    <Compile Include="ParamHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AuthDataPersistence.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AsNum.Common\AsNum.Common.csproj">
+      <Project>{28564ac8-4410-4797-b868-360c43c66560}</Project>
+      <Name>AsNum.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

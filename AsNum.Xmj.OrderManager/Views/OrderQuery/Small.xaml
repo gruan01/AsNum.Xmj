@@ -1,0 +1,385 @@
+﻿<UserControl x:Class="AsNum.Xmj.OrderManager.Views.OrderQuery.Small"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+			 xmlns:ac="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
+			 xmlns:acm="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF"
+			 xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+			 xmlns:local="clr-namespace:AsNum.Xmj.OrderManager"
+			 xmlns:model="clr-namespace:AsNum.Xmj.OrderManager.ViewModels"
+			 xmlns:cal="http://www.caliburnproject.org"
+			 xmlns:lv="clr-namespace:AsNum.Xmj.OrderManager.ViewModels"
+			 xmlns:Entity="clr-namespace:AsNum.Xmj.Entity;assembly=AsNum.Xmj.Entity"
+			 xmlns:xe="http://schemas.xceed.com/wpf/xaml/toolkit"
+			 xmlns:input="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+			 xmlns:acc="clr-namespace:AsNum.WPF.Controls;assembly=AsNum.WPF.Controls"
+			 mc:Ignorable="d" 
+			 d:DesignHeight="419.334" d:DesignWidth="742">
+    <UserControl.Resources>
+        <ac:EnumDescriptionConverter x:Key="EnumDesc" />
+        <ac:SerialNumberConverter x:Key="SerialNumber" />
+        <ac:OffTimeConverter x:Key="OffTime" />
+        <local:AttrConverter x:Key="Attrs" />
+        <ac:CanNullConverter x:Key="CanNull" />
+        <acm:BindingProxy x:Key="Proxy" Data="{Binding}" />
+        <local:ProductImageConverter x:Key="ImgPath" />
+
+        <Style x:Key="allowWrap" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="150"/>                    
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <i:Interaction.Behaviors>
+                    <ab:UnifiedPaddingBeahavior Padding="2" />
+                </i:Interaction.Behaviors>
+
+                <TextBlock Text="订单号" VerticalAlignment="Center" />
+                <!--<TextBox x:Name="OrderNO" Grid.Column="1" />-->
+                <xe:WatermarkTextBox Text="{Binding Cond.OrderNO}" Grid.Column="1">
+                    <xe:WatermarkTextBox.Watermark>
+                        <TextBlock Text="完整或部分" />
+                    </xe:WatermarkTextBox.Watermark>
+                </xe:WatermarkTextBox>
+
+                <TextBlock Text="收件人" VerticalAlignment="Center" Grid.Column="2" />
+                <TextBox Text="{Binding Cond.ReceiverName}" Grid.Column="3" />
+
+                <TextBlock Grid.Row="1" Text="跟踪单号" />
+                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Cond.TrackNO}" x:Name="TrackNO" />
+
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="客人" />
+                <TextBox Grid.Column="3" Grid.Row="1" Text="{Binding Cond.CustomerName}" />
+
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="账号" VerticalAlignment="Center" />
+                <ComboBox Grid.Column="3" Grid.Row="2" x:Name="Accounts" SelectedItem="{Binding Cond.Account}" />
+
+                <TextBlock Grid.Column="4" Text="国家"/>
+                <!--这里必须是TwoWay,要不然取不到值-->
+                <input:AutoCompleteBox Text="{Binding Cond.ReceiverCountryCode, Mode=TwoWay}"
+									   ItemsSource="{Binding Countries}"
+									   FilterMode="Custom"
+									   ItemFilter="{Binding CountryFilter}"
+									   ValueMemberPath="CountryCode"
+									   Grid.Column="5" Grid.Row="0">
+                    <input:AutoCompleteBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding CountryCode}" Margin="5,2" />
+                                <TextBlock Text="{Binding ZhName}" Margin="5,2" />
+                                <TextBlock Text="{Binding EnName}" Margin="5,2" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </input:AutoCompleteBox.ItemTemplate>
+                </input:AutoCompleteBox>
+
+                <TextBlock Grid.Column="4" Grid.Row="1" Text="发货方式" />
+
+                <!--<ComboBox Grid.Row="1" Grid.Column="5" ItemsSource="{Binding Source={x:Static model:OrderQueryViewModel.DeliveryTypes}}" SelectedItem="{Binding SelectedDeliveryType,Mode=TwoWay}">
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+								<TextBlock Text="{Binding . , Converter={StaticResource EnumDesc}, ConverterParameter='a'}" />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>-->
+
+                <ComboBox Grid.Row="1" Grid.Column="5" SelectedItem="{Binding Cond.LogisticsType, Converter={StaticResource CanNull}}">
+                    <ComboBox.ItemsSource>
+                        <CompositeCollection>
+                            <ComboBoxItem Content="" />
+                            <CollectionContainer Collection="{Binding Source={x:Static model:OrderQueryViewModel.DeliveryTypes}}" />
+                        </CompositeCollection>
+                    </ComboBox.ItemsSource>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding . , Converter={StaticResource EnumDesc}, FallbackValue=''}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="产品ID" />
+                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Cond.ProductID}" />
+
+                <TextBlock Grid.Column="4" Grid.Row="2" Text="备注内容" />
+                <xe:WatermarkTextBox Text="{Binding Cond.Note}" Grid.Column="5" Grid.Row="2" >
+                    <xe:WatermarkTextBox.Watermark>
+                        <TextBlock Text="模糊查找" />
+                    </xe:WatermarkTextBox.Watermark>
+                </xe:WatermarkTextBox>
+                <Label Content="时间类型" Grid.Column="6" />
+                <Label Content="起始" Grid.Column="6" Grid.Row="1" />
+                <Label Content="结束" Grid.Column="6" Grid.Row="2" />
+
+                <ComboBox Grid.Row="0" Grid.Column="7" SelectedItem="{Binding Cond.TimesType, Converter={StaticResource CanNull}}">
+                    <ComboBox.ItemsSource>
+                        <CompositeCollection>
+                            <ComboBoxItem Content="" />
+                            <CollectionContainer Collection="{Binding Source={x:Static model:OrderQueryViewModel.TimesTypes}}" />
+                        </CompositeCollection>
+                    </ComboBox.ItemsSource>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding . , Converter={StaticResource EnumDesc}, FallbackValue=''}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <DatePicker SelectedDate="{Binding Cond.BeginAt}" Grid.Column="7" Grid.Row="1" />
+                <DatePicker SelectedDate="{Binding Cond.EndAt}" Grid.Column="7" Grid.Row="2" />                
+            </Grid>
+
+            <StackPanel Orientation="Vertical">
+                <i:Interaction.Behaviors>
+                    <ab:UnifiedPaddingBeahavior Padding="2" />
+                </i:Interaction.Behaviors>
+
+                <Button x:Name="SearchAll" Content="全部" 
+											acc:Busy.Show="{Binding IsBusy, Mode=TwoWay}" 
+					acc:Busy.MaskType="Window" 
+					acc:Busy.Text="正在查询..."
+						/>
+                <Button x:Name="SearchWS" Content="待发货" />
+                <Button x:Name="SearchWSR" Content="待发货及资金未到账" />
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical">
+                <CheckBox x:Name="HighlightMoreThan1" IsChecked="True" Content="突出采购大于1件的订单" />
+                <CheckBox x:Name="IsOpenPropup" IsChecked="True" Content="显示/关闭快捷工具" />
+                <CheckBox x:Name="FreeSelection" IsChecked="False" Content="自由选择模式">
+                    <!--<CheckBox.Triggers>
+						<Trigger Property="IsChecked" Value="True">
+							<Setter TargetName="QueryResult" Property="SelectionUnit" Value="CellOrRowHeader" />
+						</Trigger>
+						<Trigger Property="IsChecked" Value="False">
+							<Setter TargetName="QueryResult" Property="SelectionUnit" Value="FullRow" />
+						</Trigger>
+					</CheckBox.Triggers>-->
+                </CheckBox>
+            </StackPanel>
+
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                <DataGrid Grid.Row="0" x:Name="QueryResult" AutoGenerateColumns="False" FrozenColumnCount="3"
+					  IsReadOnly="True"
+					  SelectedItem="{Binding CurrOrder, Mode=TwoWay}"
+					  SelectedIndex="{Binding CurrIndex}"
+					  RowDetailsVisibilityMode="VisibleWhenSelected"
+						cal:Message.Attach="
+                          [Event LoadingRowDetails]=[Action LoadingRowDetails($eventArgs)]; 
+                          [Event UnloadingRowDetails]=[Action UnLoadingRowDetails($eventArgs)];
+                          [Event LoadingRow] = [Action SetBackground($eventArgs)]"
+				  >
+
+                    <!--CurrentCell="{Binding CurrCell , Mode=TwoWay}"-->
+                    <!--cal:Message.Attach="[Event RowDetailsVisibilityChanged] = [Action ShowDetailVM($eventArgs)]"-->
+
+                    <DataGrid.Style>
+                        <Style TargetType="{x:Type DataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}">
+                            <Setter Property="SelectionUnit" Value="FullRow" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsChecked, ElementName=FreeSelection}" Value="true">
+                                    <Setter Property="SelectionUnit" Value="CellOrRowHeader" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Style>
+
+                    <i:Interaction.Behaviors>
+                        <ab:DataGridRowIndexBehavior />
+                    </i:Interaction.Behaviors>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding OrderNO}" Header="订单号" Width="50" />
+                        <DataGridTextColumn Binding="{Binding Account}" Header="账号" Width="50" />
+                        <DataGridTextColumn Binding="{Binding Status, Converter={StaticResource EnumDesc}}" Header="状态" Width="50"/>
+                        <DataGridTextColumn Binding="{Binding Buyer.Name}" Header="客人" />
+                        <DataGridTextColumn Binding="{Binding Note.Note}" Header="采购备注" />
+                        <DataGridTextColumn Binding="{Binding Amount}" Header="订单金额" />
+                        <!--http://msdn.microsoft.com/en-us/library/ee372287(v=vs.110).aspx-->
+                        <DataGridTextColumn Binding="{Binding OffTime, Converter={StaticResource OffTime}, StringFormat='d\'天\'h\'小时\'m\'分\''}" Header="截止" />
+                        <DataGridTextColumn Binding="{Binding Receiver.Country.ZhName}" Header="收件国家" />
+                    </DataGrid.Columns>
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <!--<ContentControl cal:View.Model="{Binding Source={StaticResource Proxy}, Path=Data.DetailVM}" />-->
+                            <ContentControl x:Name="cnt" />
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
+
+                </DataGrid>
+                <ContentControl Grid.Row="1" x:Name="PaginationVM" />
+            </Grid>
+
+            <GridSplitter ShowsPreview="True" Width="5" Grid.Column="1" ResizeBehavior="PreviousAndNext" />
+
+            <Grid Grid.Column="2">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <DataGrid Grid.Row="0" x:Name="SubOrders" 
+					  IsReadOnly="True" AutoGenerateColumns="False"
+					  RowDetailsVisibilityMode="Visible">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="图片">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding Image, Converter={StaticResource ImgPath}}" MaxWidth="120" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="订购数量">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Background="Brown" CornerRadius="10" Padding="5">
+                                                <TextBlock Text="{Binding Qty}"  FontSize="18" Foreground="White" />
+                                            </Border>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding UnitQty}" />
+                                            <TextBlock Text="{Binding Unit}" />
+                                            <TextBlock Text=" x " />
+                                            <TextBlock Text="{Binding LotNum}" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="属性">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding Attrs, Converter={StaticResource Attrs}}" />
+                                        <Button Content="属性挂靠" cal:Message.Attach="[Event Click] = [Action EditSKUMap($this)]" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="单价" Binding="{Binding ProductPrice}" />
+                        <DataGridTextColumn Header="产品名" Width="150" Binding="{Binding ProductName}" ElementStyle="{StaticResource allowWrap}" />
+
+                        <DataGridTextColumn Header="运送方式" Binding="{Binding LogisticsType, Converter={StaticResource EnumDesc}, ConverterParameter={x:Type Entity:LogisticsTypes}}" />
+                        <DataGridTemplateColumn Header="产品ID">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Text="{Binding ProductID}" />
+                                        <Button Content="当前产品" cal:Message.Attach="[Event Click] = [Action OpenProduct($this)]" />
+                                        <Button Content="订单镜像产品" cal:Message.Attach="[Event Click] = [Action OpenSnap($this)]" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="3">
+                                <TextBox Text="{Binding Remark}" IsReadOnly="True" Style="{StaticResource SelectableTextBlock}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
+
+                    <i:Interaction.Behaviors>
+                        <ab:DataGridRowIndexBehavior />
+                    </i:Interaction.Behaviors>
+                </DataGrid>
+
+                <GridSplitter ShowsPreview="True" Height="3" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" ResizeBehavior="PreviousAndNext" />
+
+                <TabControl Grid.Row="2" ItemsSource="{Binding SubViews}" SelectedIndex="{Binding SelectedSubViewIndex,Mode=TwoWay}">
+                    <TabControl.ItemContainerStyle>
+                        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}">
+                            <Setter Property="Header" Value="{Binding Title}" />
+                        </Style>
+                    </TabControl.ItemContainerStyle>
+                    <TabControl.ContentTemplate>
+                        <DataTemplate>
+                            <ContentControl cal:View.Model="{Binding}" />
+                        </DataTemplate>
+                    </TabControl.ContentTemplate>
+                </TabControl>
+
+            </Grid>
+
+
+        </Grid>
+
+        <Popup IsOpen="{Binding ElementName=IsOpenPropup,Path=IsChecked}" StaysOpen="True"  Placement="Center">
+            <i:Interaction.Behaviors>
+                <ab:DragPopupBehavior />
+            </i:Interaction.Behaviors>
+            <Border BorderThickness="1" BorderBrush="Black" Background="#ffffff">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Background="Black" Height="10" Cursor="SizeAll"></StackPanel>
+
+                    <StackPanel Grid.Row="1">
+                        <i:Interaction.Behaviors>
+                            <ab:UnifiedPaddingBeahavior Padding="2" />
+                        </i:Interaction.Behaviors>
+                        <Button cal:Message.Attach="PreRecord()" Width="32" Height="32" ToolTip="上一张订单" Padding="0">
+                            <StackPanel>
+                                <Image Source="pack://application:,,,/AsNum.Xmj.OrderManager;Component/imgs/up.png" Stretch="UniformToFill" />
+                            </StackPanel>
+                        </Button>
+                        <Button cal:Message.Attach="NextRecord()" Width="32" Height="32" ToolTip="下一张订单" Padding="0">
+                            <StackPanel>
+                                <Image  Source="pack://application:,,,/AsNum.Xmj.OrderManager;Component/imgs/down.png" Stretch="UniformToFill" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Popup>
+    </Grid>
+
+</UserControl>

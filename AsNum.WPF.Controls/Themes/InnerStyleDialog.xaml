@@ -1,0 +1,184 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AsNum.WPF.Controls"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"                     
+                    >
+
+
+    <SolidColorBrush Color="#FF10a8ab" x:Key="StyleDialog.TitleBackground" />
+
+    <Style x:Key="WinMaxButton" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="MB" Background="Transparent">
+                        <Path SnapsToDevicePixels="True" 
+                              Data="F1M0,10L0,3 3,3 3,0 10,0 10,2 4,2 4,3 7,3 7,6 6,6 6,5 1,5 1,10z M1,10L7,10 7,7 10,7 10,2 9,2 9,6 6,6 6,9 1,9z" 
+                              Fill="White" 
+                              HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="MB" Value="#99333333"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="MB" Value="#FF333333"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="WinNormalButton" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="MB" Background="Transparent">
+                        <Path SnapsToDevicePixels="True" 
+                              Data="F1M0,0L0,9 9,9 9,0 0,0 0,3 8,3 8,8 1,8 1,3z" 
+                              Fill="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="MB" Value="#99333333"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="MB" Value="#FF333333"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CloseButton" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="MB">
+                        <Path Data="F1M0,0L2,0 5,3 8,0 10,0 6,4 10,8 8,8 5,5 2,8 0,8 4,4 0,0z"  
+                                   Fill="White" SnapsToDevicePixels="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" TargetName="MB" Value="#99333333"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" TargetName="MB" Value="#FF333333"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="MiniButton" TargetType="Button">
+        <Grid x:Name="MB" Background="Transparent">
+            <Path Data="F1M0,6L0,9 9,9 9,6 0,6z"  
+                  SnapsToDevicePixels="True"
+                  Fill="White" 
+                  HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" TargetName="MB" Value="#99333333"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" TargetName="MB" Value="#FF333333"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style TargetType="{x:Type local:InnerStyleDialog}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:InnerStyleDialog}">
+                    <Grid>
+                        <Border Name="MASK" Background="#66000000" />
+                        <Grid>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="-1" CornerRadius="5">
+                                <Border.Effect>
+                                    <BlurEffect />
+                                </Border.Effect>
+                            </Border>
+
+
+                            <!--<local:Resizer
+                                    Width="{TemplateBinding DWidth}"
+                                    Height="{TemplateBinding DHeight}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                >
+
+                                <i:Interaction.Behaviors>
+                                    <ei:MouseDragElementBehavior ConstrainToParentBounds="True" />
+                                </i:Interaction.Behaviors>-->
+
+                                <Border x:Name="OUTLINE" Background="{TemplateBinding Background}"
+                                        BorderBrush="#66333333"
+                                        BorderThickness="1"
+                                        CornerRadius="5"
+                                        Width="{TemplateBinding DWidth}"
+                                    Height="{TemplateBinding DHeight}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                        >
+
+                                    <i:Interaction.Behaviors>
+                                        <ei:MouseDragElementBehavior ConstrainToParentBounds="True" />
+                                    </i:Interaction.Behaviors>
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" Name="ROW0" />
+                                            <RowDefinition />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <Border Height="30" Grid.Row="0" Background="{StaticResource StyleDialog.TitleBackground}" CornerRadius="5,5,0,0">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Name="COLICON" Width="auto" />
+                                                    <ColumnDefinition Name="COLTITLE" />
+                                                    <ColumnDefinition Name="COLBTNS" Width="auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <!--<Image Source="{TemplateBinding Icon}" Grid.Column="0" />-->
+                                                <TextBlock Grid.Column="1" Text="{TemplateBinding Title}" Padding="5" Foreground="White" FontWeight="Bold" />
+                                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                                    <Button Name="BTNMIN" Width="30" Template="{StaticResource MiniButton}" />
+                                                    <Button Name="BTNMAX" Width="30" Style="{StaticResource WinNormalButton}" />
+                                                    <Button Name="BTNCLOSE" Width="30" Style="{StaticResource CloseButton}" Command="{x:Static local:DialogCommands.Close}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+
+                                        <Border Grid.Row="0" BorderThickness="0,0,0,1" BorderBrush="Black" CornerRadius="0,0,5,5">
+                                            <Border.Effect>
+                                                <BlurEffect />
+                                            </Border.Effect>
+                                        </Border>
+
+                                        <Border Grid.Row="1" Background="White" Padding="5">
+                                            <AdornerDecorator>
+                                                <ContentPresenter />
+                                            </AdornerDecorator>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+                            <!--</local:Resizer>-->
+
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style TargetType="{x:Type local:StyleDialog}">
+        <Setter Property="Visibility" Value="Collapsed" />
+    </Style>
+
+</ResourceDictionary>

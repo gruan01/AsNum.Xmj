@@ -1,0 +1,45 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="BarCodeScanner.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:es="clr-namespace:Microsoft.Expression.Shapes;assembly=Microsoft.Expression.Drawing"
+    xmlns:local="clr-namespace:BarCodeScanner"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <phone:PhoneApplicationPage.Resources>
+        <Style x:Key="btn" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid>
+                            <es:RegularPolygon 
+                                Fill="Green" HorizontalAlignment="Left" Height="255.338" InnerRadius="1" PointCount="6" Stretch="Fill" Stroke="Black" UseLayoutRounding="False" VerticalAlignment="Top" Width="217.83" RenderTransformOrigin="0.5,0.5">
+                                <es:RegularPolygon.RenderTransform>
+                                    <CompositeTransform Rotation="90"/>
+                                </es:RegularPolygon.RenderTransform>
+                            </es:RegularPolygon>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </phone:PhoneApplicationPage.Resources>
+
+    <Grid>
+        <Button Content="连接" Height="255.338" Margin="38,163,224,350" Width="217.83" Style="{StaticResource btn}" />
+        <Button Content="设置" Height="255.338" Margin="231,272,31,241" Width="217.83" Style="{StaticResource btn}"/>
+        <Button Content="扫码" x:Name="Scan"
+                Height="255.338" Margin="38,382,224,131" Width="217.83" Style="{StaticResource btn}"/>
+    </Grid>
+
+</phone:PhoneApplicationPage>

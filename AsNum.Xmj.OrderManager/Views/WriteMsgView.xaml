@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="AsNum.Xmj.OrderManager.Views.WriteMsgView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+             xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+             xmlns:ac="clr-namespace:AsNum.WPF.Controls;assembly=AsNum.WPF.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid ac:Busy.MaskType="Adorned"> <!--ac:Busy.Show="{Binding IsBusy}" ac:Busy.Text="正在发送...">-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <i:Interaction.Behaviors>
+            <ab:UnifiedPaddingBeahavior Padding="5" />
+        </i:Interaction.Behaviors>
+        <TextBox x:Name="Ctx" Grid.Row="1" AcceptsReturn="True" />
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <i:Interaction.Behaviors>
+                <ab:UnifiedPaddingBeahavior Padding="2" />
+            </i:Interaction.Behaviors>
+            <Button x:Name="SendOrderMessage" Content="发送订单留言" />
+            <Button x:Name="SendMessage" Content="发送站内信" />
+        </StackPanel>
+
+    </Grid>
+</UserControl>

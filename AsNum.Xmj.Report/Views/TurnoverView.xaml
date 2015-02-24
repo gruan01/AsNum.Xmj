@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="AsNum.Xmj.Report.Views.TurnoverView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:c="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <c:ClusteredColumnChart Grid.Row="0" Grid.ColumnSpan="2"
+            IsRowColumnSwitched="True"
+             ChartTitle="月销售额预览"
+            ChartSubTitle=" "
+              ChartLegendVisibility="Collapsed"
+            SelectedItem="{Binding Curr, Mode=TwoWay}"
+            >
+            <c:ClusteredColumnChart.Series>
+                <c:ChartSeries SeriesTitle="aa"
+                                   DisplayMember="Item1"
+                                   ValueMember="Item2"
+                                   ItemsSource="{Binding DatasByMonth}"
+                                   />
+            </c:ClusteredColumnChart.Series>
+        </c:ClusteredColumnChart>
+
+        <DockPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Button x:Name="Left" Content="&lt;-" />
+            <Button x:Name="Right" Content="-&gt;" />
+
+            <ComboBox ItemsSource="{Binding MCounts}" SelectedValue="{Binding MonthCount, Mode=TwoWay}" />
+
+            <Button x:Name="ReLoad" Content="重新加载" />
+        </DockPanel>
+
+        <c:DoughnutChart Grid.Row="1" Grid.Column="0" ChartTitle="占比预览" ChartSubTitle="{Binding CurrMonth}">
+            <c:DoughnutChart.Series>
+                <c:ChartSeries 
+                    SeriesTitle="bb"
+                    DisplayMember="Account" 
+                    ValueMember="TotalAmount" 
+                    ItemsSource="{Binding SelectedMonthData}" 
+                    />
+            </c:DoughnutChart.Series>
+        </c:DoughnutChart>
+
+        <c:DoughnutChart Grid.Row="1" Grid.Column="1" ChartTitle="30天内销售额" ChartSubTitle="各账户占比">
+            <c:DoughnutChart.Series>
+                <c:ChartSeries 
+                    SeriesTitle="bb"
+                    DisplayMember="Account" 
+                    ValueMember="TotalAmount" 
+                    ItemsSource="{Binding In30DaysData}" 
+                    />
+            </c:DoughnutChart.Series>
+        </c:DoughnutChart>
+
+    </Grid>
+</UserControl>

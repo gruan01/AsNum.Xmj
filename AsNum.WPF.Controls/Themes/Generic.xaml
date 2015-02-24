@@ -1,0 +1,14 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:AsNum.WPF.Controls"
+    >
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/AsNum.WPF.Controls;Component/Themes/StyleWindow.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/AsNum.WPF.Controls;Component/Themes/Summary.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/AsNum.WPF.Controls;Component/Themes/BusyIndicator.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/AsNum.WPF.Controls;Component/Themes/InnerStyleDialog.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/AsNum.WPF.Controls;Component/Themes/Resizer.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

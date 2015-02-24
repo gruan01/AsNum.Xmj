@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="AsNum.Xmj.OrderManager.Views.OrderDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:ac="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             mc:Ignorable="d"
+            d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ac:EnumDescriptionConverter x:Key="EnumDesc" />
+        <ac:SerialNumberConverter x:Key="SerialNumber" />
+    </UserControl.Resources>
+    <Grid>
+        <Border Margin="10" BorderThickness="3,0,3,3" BorderBrush="#FF00A2FF" Background="White" CornerRadius="5">
+            <StackPanel Orientation="Vertical">
+
+                <StackPanel Background="#FF00A2FF" Height="35" Orientation="Horizontal">
+                    <TextBox Text="{Binding Order.OrderNO, Converter={StaticResource SerialNumber}}" VerticalAlignment="Center" FontWeight="Bold" FontSize="18.667" IsReadOnly="True" Style="{StaticResource SelectableTextBlock}" Background="{x:Null}" Foreground="White" />
+                    <Button x:Name="CopyOrderNo" Width="24" Height="24" Padding="2" ToolTip="复制订单号">
+                        <StackPanel>
+                            <Image  Source="pack://application:,,,/AsNum.Xmj.OrderManager;Component/imgs/copy.png" Stretch="UniformToFill" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <StackPanel Orientation="Horizontal" Margin="3">
+                            <Button x:Name="OpenOrder" Width="32" Height="32" Padding="3" ToolTip="查看订单详情">
+                                <StackPanel>
+                                    <Image  Source="pack://application:,,,/AsNum.Xmj.OrderManager;Component/imgs/view.png" Stretch="Uniform" />
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="Update" Width="32" Height="32" Padding="3" ToolTip="同步该订单">
+                                <StackPanel>
+                                    <Image  Source="pack://application:,,,/AsNum.Xmj.OrderManager;Component/imgs/sync.png" Stretch="Uniform" />
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="HistoryOrder" Width="32" Height="32" Padding="3" ToolTip="查看该客人的历史订单">
+                                <StackPanel>
+                                    <Image  Source="pack://application:,,,/AsNum.Xmj.OrderManager;Component/imgs/history.png" Stretch="Uniform" />
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="MsgsList" Width="32" Height="32" Padding="3" ToolTip="查看站内信">
+                                <StackPanel>
+                                    <Image  Source="pack://application:,,,/AsNum.Xmj.OrderManager;Component/imgs/msg.png" Stretch="Uniform" />
+                                </StackPanel>
+                            </Button>                            
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="3">
+                            <TextBlock Text="下单时间:" />
+                            <TextBlock Text="{Binding Order.CreteOn,StringFormat='yyyy/MM/dd HH:mm:ss'}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="3">
+                            <TextBlock Text="付款时间:" />
+                            <TextBlock Text="{Binding Order.PaymentOn,StringFormat='yyyy/MM/dd HH:mm:ss'}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="3">
+                            <TextBlock Text="客人:" VerticalAlignment="Center" />
+                            <TextBox Text="{Binding Order.Buyer.Name}" IsReadOnly="True" Style="{StaticResource SelectableTextBlock}" />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <StackPanel Orientation="Horizontal" Margin="3">
+                            <TextBlock Text="目的国家:" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding Order.Receiver.Country.ZhName}" FontSize="18" Foreground="Red" />
+                            <Border BorderThickness="1" BorderBrush="Brown" CornerRadius="5" Background="Brown">
+                                <TextBlock Text="{Binding Order.Receiver.CountryCode}" Foreground="White" Padding="2"/>
+                            </Border>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="3">
+                            <TextBlock Text="配送方式:" VerticalAlignment="Center" />
+                            <TextBlock x:Name="LogisticsType" FontSize="18" Foreground="Red" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
