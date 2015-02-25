@@ -8,6 +8,7 @@
              xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
              xmlns:local="clr-namespace:AsNum.Xmj.OrderManager"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+             xmlns:acc="clr-namespace:AsNum.WPF.Controls;assembly=AsNum.WPF.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 
@@ -25,7 +26,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid acc:Busy.MaskType="Adorned" acc:Busy.Text="{Binding BusyText}" acc:Busy.Show="{Binding IsBusy}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition />
@@ -44,10 +45,14 @@
             <DatePicker SelectedDate="{Binding Cond.EndAt}" />
 
             <Button x:Name="Search" Content="查找" />
+            <Button x:Name="SyncMsg" Content="同步订单留言" />
+            <Button x:Name="Send" Content="发送催款留言" />
         </StackPanel>
 
         <DataGrid x:Name="Orders" 
                    SelectedItem="{Binding CurrOrder,Mode=TwoWay}"
+                  SelectionMode="Single"
+                  IsReadOnly="True"
                   Grid.Row="1" Grid.Column="0" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding OrderNO}" Header="订单号" />
@@ -58,6 +63,7 @@
                 <DataGridTextColumn Binding="{Binding CreteOn}" Header="下单时间" />
                 <DataGridTextColumn Binding="{Binding OffTime, Converter={StaticResource OffTime}, StringFormat='d\'天\'h\'小时\'m\'分\''}" Header="截止" />
                 <DataGridTextColumn Binding="{Binding Receiver.Country.ZhName}" Header="收件国家" />
+                <DataGridCheckBoxColumn Binding="{Binding IsRemindered, Mode=OneWay}" Header="是否已催款" />
             </DataGrid.Columns>
         </DataGrid>
 
@@ -78,11 +84,8 @@
                     <RowDefinition Height="100" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Button x:Name="Sync" Content="同步留言" Width="100" />
-                    <Button x:Name="Send" Content="发送催单信息" />
-                </StackPanel>
-                <TextBox Grid.Row="1" x:Name="Msg" HorizontalAlignment="Stretch"
+                <TextBlock Text="催单信息" Grid.Row="0" />
+                <TextBox Grid.Row="1" Text="{Binding CurrOrder.Msg}" HorizontalAlignment="Stretch"
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                  />
                 <ContentControl Grid.Row="2" x:Name="MsgVM" />
