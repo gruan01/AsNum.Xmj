@@ -169,6 +169,10 @@
       <Project>{142f0e8f-a50b-4c2a-8ac8-e96aa239c701}</Project>
       <Name>AsNum.WPF.Controls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AsNum.Xmj.BizEntity\AsNum.Xmj.BizEntity.csproj">
+      <Project>{c75373f8-d631-4fcf-bb1b-7b7dfd475c3c}</Project>
+      <Name>AsNum.Xmj.BizEntity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AsNum.Xmj.IBiz\AsNum.Xmj.IBiz.csproj">
       <Project>{3af977d1-79e3-4fa0-b1b1-9fb2c5e90a35}</Project>
       <Name>AsNum.Xmj.IBiz</Name>

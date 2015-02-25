@@ -2,6 +2,7 @@
 using AsNum.Xmj.AliSync.Settings;
 using AsNum.Xmj.API.Entity;
 using AsNum.Xmj.API.Methods;
+using AsNum.Xmj.BizEntity.Conditions;
 using AsNum.Xmj.Common;
 using AsNum.Xmj.IBiz;
 using System;
@@ -92,11 +93,20 @@ namespace AsNum.Xmj.AliSync {
         }
 
         private void OrderSync_OrderListReturned(object sender, OrderListEventArgs e) {
+            var biz = GlobalData.MefContainer.GetExportedValue<IOrder>();
+            var cond = new OrderSearchCondition() {
+                SpecifyOrders = e.Orders.Select(o => o.OrderID).ToList()
+            };
+            cond.Pager.AllowPage = false;
+            var exOrders = biz.Search(cond);
+
             e.Orders.ForEach(o => {
                 Task.Factory.StartNew(oo => {
+                    var exOrder = exOrders.FirstOrDefault(eo => o.OrderID == eo.OrderNO);
+
                     var order = (SuccinctOrder)oo;
                     order.Account = e.Account;
-                    this.DealOrder(order, e.Smart);
+                    this.DealOrder(order, exOrder, e.Smart);
 
                     if (this.OrderDealed != null)
                         this.OrderDealed.Invoke(this, new OrderDealedEventArgs() {
@@ -107,6 +117,9 @@ namespace AsNum.Xmj.AliSync {
                         });
 
                 }, o, TaskCreationOptions.AttachedToParent)
+                .ContinueWith(t => {
+                    t.Dispose();
+                }, TaskContinuationOptions.OnlyOnRanToCompletion | TaskContinuationOptions.AttachedToParent)
                 .ContinueWith(t => {
                     var order = (SuccinctOrder)t.AsyncState;
                     //TASK Exception 未抛出
@@ -121,6 +134,8 @@ namespace AsNum.Xmj.AliSync {
                             IsSuccess = false
                         });
 
+                    t.Dispose();
+
                 }, TaskContinuationOptions.OnlyOnFaulted | TaskContinuationOptions.AttachedToParent);
             });
         }
@@ -130,9 +145,9 @@ namespace AsNum.Xmj.AliSync {
         /// </summary>
         /// <param name="order"></param>
         /// <param name="smart"></param>
-        private void DealOrder(SuccinctOrder order, bool smart) {
-            var biz = GlobalData.MefContainer.GetExportedValue<IOrder>();
-            var eo = biz.GetOrder(order.OrderID, false);
+        private void DealOrder(SuccinctOrder order, AsNum.Xmj.Entity.Order eo, bool smart) {
+            //var eo = biz.GetOrder(order.OrderID, false);
+
             if (!smart || (eo == null || (
                 (byte)eo.Status != (byte)order.OrderStatus)
                 || eo.InIssue != order.InIssue
@@ -141,6 +156,8 @@ namespace AsNum.Xmj.AliSync {
                 var od = this.GetOrderDetail(order.OrderID);
                 //转换为数据库实体
                 var o = this.CombineOrderData(od, order);
+
+                var biz = GlobalData.MefContainer.GetExportedValue<IOrder>();
                 biz.AddOrEdit(o);
                 if (biz.HasError) {
                     var str = string.Join(";", biz.Errors.Select(kv => string.Join("{0} : {1}", kv.Key, kv.Value)));
@@ -276,7 +293,10 @@ namespace AsNum.Xmj.AliSync {
 
             Task.Factory.StartNew(() => {
                 this.SyncByStatus(OrderStatus.UNKNOW, false, time, time);
-            }, TaskCreationOptions.AttachedToParent);
+            }, TaskCreationOptions.AttachedToParent)
+            .ContinueWith(t => {
+                t.Dispose();
+            }, TaskContinuationOptions.AttachedToParent);
         }
 
         /// <summary>
@@ -303,7 +323,10 @@ namespace AsNum.Xmj.AliSync {
                     .ForEach(s => {
                         Task.Factory.StartNew(() => {
                             this.SyncByStatus(s, smart, start, end);
-                        }, TaskCreationOptions.AttachedToParent);
+                        }, TaskCreationOptions.AttachedToParent)
+                        .ContinueWith(t => {
+                            t.Dispose();
+                        }, TaskContinuationOptions.AttachedToParent);
                     });
             } else {
                 Task.Factory.StartNew(() => {
@@ -311,6 +334,7 @@ namespace AsNum.Xmj.AliSync {
                 }, TaskCreationOptions.AttachedToParent)
                 .ContinueWith((t, o) => {
                     this.LogObserverable.Value.Notify(string.Format("状态为 ： {0} 的订单同步完成！", EnumHelper.GetDescription(status)), true);
+                    t.Dispose();
                 }, TaskContinuationOptions.AttachedToParent);
             }
         }
@@ -349,7 +373,10 @@ namespace AsNum.Xmj.AliSync {
                 for (var i = 2; i <= totalPage; i++)
                     Task.Factory.StartNew((p) => {
                         this.SyncByStatus(status, smart, start, end, (int)p, orderList.Count);
-                    }, i, TaskCreationOptions.AttachedToParent);
+                    }, i, TaskCreationOptions.AttachedToParent)
+                    .ContinueWith(t => {
+                        t.Dispose();
+                    }, TaskContinuationOptions.AttachedToParent);
             }
         }
     }

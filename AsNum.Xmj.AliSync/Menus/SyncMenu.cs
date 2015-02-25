@@ -55,6 +55,7 @@ namespace AsNum.Xmj.AliSync.Menus {
                 this.ResultVM.CloseAble = true;
                 Running = false;
                 MessageBox.Show("全部同步完成");
+                t.Dispose();
             });
             this.Sheel.Show(this.ResultVM, true);
         }
