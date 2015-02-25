@@ -148,30 +148,11 @@ namespace AsNum.Xmj.Biz {
                 if (exa == null)
                     db.Owners.Add(order.AccountOf);
 
-
-                //db.Buyers.Attach(order.Buyer);
-                //db.Owners.Attach(order.AccountOf);
-                //db.Receivers.Attach(order.OrgReceiver);
-                //foreach (var lo in order.Logistics) {
-                //    db.OrderLogistics.Attach(lo);
-                //}
-                //foreach (var detail in order.Details) {
-                //    db.OrderDetails.Attach(detail);
-                //}
-
-                //var ex = db.Orders.FirstOrDefault(o => o.OrderNO == order.OrderNO);
-                //if (ex != null) {
-                //    order.CopyToExcept(ex, o => o.Messages, o => o.AdjReceiver, o => o.Note,
-                //        o => o.PurchasseDetail);
-                //} else {
-                //    order = db.Orders.Add(order);
-                //}
-
-                //db.Owners.AddOrUpdate(order.AccountOf);
-                //db.Buyers.AddOrUpdate(order.Buyer);
+                var isSamShipping = db.Orders.Where(o => o.OrderNO == order.OrderNO).Select(o => o.IsShamShipping).FirstOrDefault();
 
                 order.AccountOf = null;
                 order.Buyer = null;
+                order.IsShamShipping = isSamShipping;
                 db.Orders.AddOrUpdate(order);
                 db.OrderLogistics.AddOrUpdate(order.Logistics.ToArray());
 
