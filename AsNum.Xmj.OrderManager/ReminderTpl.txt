@@ -1,0 +1,6 @@
+﻿Dear {Name},
+
+You ordered all of the products are in stock.
+You can pay.
+We will send it out as quickly as will.
+Thanks.

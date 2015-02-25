@@ -25,10 +25,10 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         }
         private string Account = "";
 
-        public List<OrderMessageEx> Msgs {
-            get;
-            set;
-        }
+        //public List<OrderMessageEx> Msgs {
+        //    get;
+        //    set;
+        //}
 
         public OrderNote OrderNote {
             get;
@@ -45,12 +45,15 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             set;
         }
 
+        public OrderMessagesViewModel MsgListVM { get; set; }
+
         private Order Order = null;
 
         public IOrder OrderBiz { get; set; }
 
 
         public NoteViewModel() {
+            this.MsgListVM = new OrderMessagesViewModel();
             this.OrderBiz = GlobalData.MefContainer.GetExportedValue<IOrder>();
         }
 
@@ -60,9 +63,9 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
             this.OrderNO = order.OrderNO;
             this.Account = order.Account;
-            this.Msgs = this.DealMessage(order.Messages)
-                .OrderByDescending(m => m.CreateOn)
-                .ToList();
+            //this.Msgs = this.DealMessage(order.Messages)
+            //    .OrderByDescending(m => m.CreateOn)
+            //    .ToList();
 
             this.OrderNote = order.Note;
             if (this.OrderNote == null) {
@@ -72,27 +75,28 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             }
 
             this.NotifyOfPropertyChange(() => this.OrderNote);
-            this.NotifyOfPropertyChange(() => this.Msgs);
+            //this.NotifyOfPropertyChange(() => this.Msgs);
+            this.MsgListVM.Build(order);
         }
 
-        private List<OrderMessageEx> DealMessage(IEnumerable<OrderMessage> msgs) {
-            if (msgs == null || msgs.Count() == 0)
-                return new List<OrderMessageEx>();
+        //private List<OrderMessageEx> DealMessage(IEnumerable<OrderMessage> msgs) {
+        //    if (msgs == null || msgs.Count() == 0)
+        //        return new List<OrderMessageEx>();
 
-            var mes = msgs.Select(m => {
-                var me = new OrderMessageEx();
-                //DynamicCopy.CopyProperties(m, me);
-                DynamicCopy.CopyTo(m, me);
-                return me;
-            }).ToList();
+        //    var mes = msgs.Select(m => {
+        //        var me = new OrderMessageEx();
+        //        //DynamicCopy.CopyProperties(m, me);
+        //        DynamicCopy.CopyTo(m, me);
+        //        return me;
+        //    }).ToList();
 
-            var f = mes.First().Sender;
-            mes.ForEach(m => {
-                m.Left = m.Sender.Equals(f);
-            });
+        //    var f = mes.First().Sender;
+        //    mes.ForEach(m => {
+        //        m.Left = m.Sender.Equals(f);
+        //    });
 
-            return mes;
-        }
+        //    return mes;
+        //}
 
         public void Sync() {
 
@@ -111,12 +115,16 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
                 Sender = m.Sender,
                 CreateOn = m.CreateOn
             }).ToList();
-            this.Msgs = this.DealMessage(msgs1);
+            //this.Msgs = this.DealMessage(msgs1);
 
             this.NotifyOfPropertyChange("Msgs");
 
-            if (this.Msgs != null && this.Msgs.Count > 0)
+            //if (this.Msgs != null && this.Msgs.Count > 0)
+            if (msgs1 != null && msgs1.Count > 0) {
+                this.Order.Messages = msgs1;
+                this.Build(this.Order);
                 this.OrderBiz.SaveOrderMessage(msgs1);
+            }
             this.IsBusy = false;
             this.NotifyOfPropertyChange(() => this.IsBusy);
             this.NotifyOfPropertyChange(() => this.BusyText);

@@ -173,6 +173,7 @@ namespace AsNum.Xmj.Biz {
                 order.AccountOf = null;
                 order.Buyer = null;
                 db.Orders.AddOrUpdate(order);
+                db.OrderLogistics.AddOrUpdate(order.Logistics.ToArray());
 
                 this.Errors = db.GetErrors();
                 if (!this.HasError) {

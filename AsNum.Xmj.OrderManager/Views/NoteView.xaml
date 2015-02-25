@@ -51,56 +51,6 @@
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                  />
 
-        <ItemsControl x:Name="Msgs" Grid.Row="2">
-            <ItemsControl.Template>
-                <ControlTemplate>
-                    <ScrollViewer>
-                        <ItemsPresenter />
-                    </ScrollViewer>
-                </ControlTemplate>
-            </ItemsControl.Template>
-            <ItemsControl.ItemTemplateSelector>
-                <local:MessageTemplateSelector>
-                    <local:MessageTemplateSelector.LeftTemplate>
-                        <DataTemplate>
-                            <Border HorizontalAlignment="Left" BorderBrush="Green" BorderThickness="1" Margin="5"
-                                    CornerRadius="0"
-                                    Background="White"
-                                    >
-                                <Border.Effect>
-                                    <DropShadowEffect Color="#cccccc" />
-                                </Border.Effect>
-                                <StackPanel>
-                                    <DockPanel Background="Green" ap:UniPadding.Padding="3" LastChildFill="False">
-                                        <TextBlock Text="{Binding Sender}" FontSize="10" Foreground="White" />
-                                        <TextBlock Text="{Binding CreateOn}" FontSize="10" Foreground="White" DockPanel.Dock="Right" />
-                                    </DockPanel>
-                                    <TextBox Padding="5" Text="{Binding Content}" IsReadOnly="True" Style="{StaticResource SelectableTextBlock}" TextWrapping="WrapWithOverflow" />
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </local:MessageTemplateSelector.LeftTemplate>
-                    <local:MessageTemplateSelector.RightTemplate>
-                        <DataTemplate>
-                            <Border HorizontalAlignment="Right" BorderBrush="Brown" 
-                                    BorderThickness="1" Margin="5"
-                                    Background="White"
-                                    >
-                                <Border.Effect>
-                                    <DropShadowEffect Color="#cccccc" />
-                                </Border.Effect>
-                                <StackPanel>
-                                    <DockPanel Background="Brown" ap:UniPadding.Padding="3" LastChildFill="False">
-                                        <TextBlock Text="{Binding Sender}" FontSize="10" Foreground="White" />
-                                        <TextBlock Text="{Binding CreateOn}" FontSize="10" Foreground="White" DockPanel.Dock="Right" />
-                                    </DockPanel>
-                                    <TextBox Padding="5" Text="{Binding Content}" IsReadOnly="True" Style="{StaticResource SelectableTextBlock}" TextWrapping="WrapWithOverflow" />
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </local:MessageTemplateSelector.RightTemplate>
-                </local:MessageTemplateSelector>
-            </ItemsControl.ItemTemplateSelector>
-        </ItemsControl>
+        <ContentControl x:Name="MsgListVM" Grid.Row="2" />
     </Grid>
 </UserControl>
