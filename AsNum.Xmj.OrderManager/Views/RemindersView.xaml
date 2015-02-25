@@ -49,7 +49,7 @@
             <Button x:Name="Send" Content="发送催款留言" />
         </StackPanel>
 
-        <DataGrid x:Name="Orders" 
+        <DataGrid x:Name="Orders" acm:DataGridRowIndex.Show="True"
                    SelectedItem="{Binding CurrOrder,Mode=TwoWay}"
                   SelectionMode="Single"
                   IsReadOnly="True"

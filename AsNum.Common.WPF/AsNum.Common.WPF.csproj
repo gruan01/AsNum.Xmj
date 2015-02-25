@@ -34,7 +34,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x64\Debug\</OutputPath>
+    <OutputPath>..\Application\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -84,6 +84,7 @@
     <Compile Include="Behaviors\UnifiedPaddingBeahavior.cs" />
     <Compile Include="BindingProxy.cs" />
     <Compile Include="ClipboardHelper.cs" />
+    <Compile Include="DataGridRowIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RowDataInfoValidationRule.cs" />
     <Compile Include="UniPadding.cs" />

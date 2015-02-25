@@ -4,9 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="http://www.caliburnproject.org"
-             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
              xmlns:ac="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
-             xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+             xmlns:acm="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF"
              xmlns:local="clr-namespace:AsNum.Xmj.OrderManager"
              xmlns:Entity="clr-namespace:AsNum.Xmj.Entity;assembly=AsNum.Xmj.Entity"
              mc:Ignorable="d" 
@@ -22,7 +21,7 @@
         </Style>
     </UserControl.Resources>
 
-    <DataGrid x:Name="SubOrders" 
+    <DataGrid x:Name="SubOrders" acm:DataGridRowIndex.Show="True"
 					  IsReadOnly="True" AutoGenerateColumns="False"
 					  RowDetailsVisibilityMode="Visible">
         <DataGrid.Columns>
@@ -87,9 +86,5 @@
                 </StackPanel>
             </DataTemplate>
         </DataGrid.RowDetailsTemplate>
-
-        <i:Interaction.Behaviors>
-            <ab:DataGridRowIndexBehavior />
-        </i:Interaction.Behaviors>
     </DataGrid>
 </UserControl>
