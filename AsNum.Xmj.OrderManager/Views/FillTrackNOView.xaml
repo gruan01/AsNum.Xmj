@@ -63,8 +63,7 @@
 
         <StackPanel Grid.Row="3" Orientation="Horizontal">
             <TextBlock Text="跟踪单号 : " />
-            <TextBox x:Name="TrackNO" Width="150" />
-            <CheckBox x:Name="ReadFromImage" Width="50" Content="识图" />
+            <TextBox x:Name="TrackNO" Width="200" />
         </StackPanel>
 
         <StackPanel Grid.Row="4" Orientation="Horizontal">

@@ -16,7 +16,7 @@ using ZXing;
 using AE = AsNum.Xmj.API.Entity;
 
 namespace AsNum.Xmj.OrderManager.ViewModels {
-    public class FillTrackNOViewModel : VMScreenBase, IScreenShoterObserver {
+    public class FillTrackNOViewModel : VMScreenBase/*, IScreenShoterObserver*/ {
         public override string Title {
             get {
                 return "填写发货通知";
@@ -72,7 +72,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             set;
         }
 
-        public IScreenShoter Shoter;
+        //public IScreenShoter Shoter;
 
         public Action<string> OnSuccess;
 
@@ -86,7 +86,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             this.OrderNO = orderNO;
             this.Order = this.OrderBiz.GetOrder(orderNO);
 
-            this.Shoter = GlobalData.GetInstance<IScreenShoter>();
+            //this.Shoter = GlobalData.GetInstance<IScreenShoter>();
         }
 
         public void Confirm() {
@@ -138,50 +138,50 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         //    }
         //}
 
-        private bool readFromImage;
-        public bool ReadFromImage {
-            get {
-                return this.readFromImage;
-            }
-            set {
-                this.readFromImage = value;
-                if (this.Shoter != null) {
-                    if (value)
-                        this.Shoter.Attach(this);
-                    else
-                        this.Shoter.Detach(this);
-                }
-            }
-        }
+        //private bool readFromImage;
+        //public bool ReadFromImage {
+        //    get {
+        //        return this.readFromImage;
+        //    }
+        //    set {
+        //        this.readFromImage = value;
+        //        if (this.Shoter != null) {
+        //            if (value)
+        //                this.Shoter.Attach(this);
+        //            else
+        //                this.Shoter.Detach(this);
+        //        }
+        //    }
+        //}
 
-        public void Update(Bitmap img) {
-            img = ToGray(img);
-            var reader = new BarcodeReader();
-            reader.Options.TryHarder = true;
-            reader.AutoRotate = true;
-            reader.TryInverted = true;
-            //reader.Options.PureBarcode = true;
-            var result = reader.Decode(img);
-            if (result != null) {
-                this.TrackNO = result.Text;
-                this.NotifyOfPropertyChange(() => this.TrackNO);
-            } else {
-                MessageBox.Show("未识别,请重试");
-            }
-        }
+        //public void Update(Bitmap img) {
+        //    img = ToGray(img);
+        //    var reader = new BarcodeReader();
+        //    reader.Options.TryHarder = true;
+        //    reader.AutoRotate = true;
+        //    reader.TryInverted = true;
+        //    //reader.Options.PureBarcode = true;
+        //    var result = reader.Decode(img);
+        //    if (result != null) {
+        //        this.TrackNO = result.Text;
+        //        this.NotifyOfPropertyChange(() => this.TrackNO);
+        //    } else {
+        //        MessageBox.Show("未识别,请重试");
+        //    }
+        //}
 
-        private static Bitmap ToGray(Bitmap bmp) {
-            for (int i = 0; i < bmp.Width; i++) {
-                for (int j = 0; j < bmp.Height; j++) {
-                    //获取该点的像素的RGB的颜色
-                    Color color = bmp.GetPixel(i, j);
-                    //利用公式计算灰度值
-                    int gray = (int)(color.R * 0.3 + color.G * 0.59 + color.B * 0.11);
-                    Color newColor = Color.FromArgb(gray, gray, gray);
-                    bmp.SetPixel(i, j, newColor);
-                }
-            }
-            return bmp;
-        }
+        //private static Bitmap ToGray(Bitmap bmp) {
+        //    for (int i = 0; i < bmp.Width; i++) {
+        //        for (int j = 0; j < bmp.Height; j++) {
+        //            //获取该点的像素的RGB的颜色
+        //            Color color = bmp.GetPixel(i, j);
+        //            //利用公式计算灰度值
+        //            int gray = (int)(color.R * 0.3 + color.G * 0.59 + color.B * 0.11);
+        //            Color newColor = Color.FromArgb(gray, gray, gray);
+        //            bmp.SetPixel(i, j, newColor);
+        //        }
+        //    }
+        //    return bmp;
+        //}
     }
 }
