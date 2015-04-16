@@ -29,5 +29,8 @@ namespace AsNum.Xmj.API.Entity {
 
         [Param("aeopSKUProperty"), JsonProperty("aeopSKUProperty")]
         public List<ProductSKUProperty> Property { get; set; }
+
+        [Param("ipmSkuStock")]
+        public int StockCount { get; set; }
     }
 }

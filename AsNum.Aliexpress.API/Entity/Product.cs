@@ -76,9 +76,9 @@ namespace AsNum.Xmj.API.Entity {
                 return this.bulkOrder;
             }
             set {
-                if(value.HasValue && value <= 1)
+                if (value.HasValue && value <= 1)
                     this.bulkOrder = null;
-                else if(value.HasValue && value > 100000)
+                else if (value.HasValue && value > 100000)
                     this.bulkOrder = 100000;
                 else
                     this.bulkOrder = value;
@@ -95,7 +95,7 @@ namespace AsNum.Xmj.API.Entity {
                 return this.bulkDiscount;
             }
             set {
-                if(value.HasValue && (value > 99 || value < 1)) {
+                if (value.HasValue && (value > 99 || value < 1)) {
                     throw new ArgumentOutOfRangeException("BulkDiscount");
                 }
                 this.bulkDiscount = value;
@@ -146,5 +146,17 @@ namespace AsNum.Xmj.API.Entity {
         /// </summary>
         [Param("wsValidNum"), JsonProperty("wsValidNum")]
         public int PeriodOfValidity { get; set; }
+
+
+        private string src = "isv";
+        [Param("src"), JsonProperty("src")]
+        public string Src {
+            get {
+                return this.src;
+            }
+            set {
+                this.src = value;
+            }
+        }
     }
 }
