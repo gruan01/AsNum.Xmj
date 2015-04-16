@@ -157,14 +157,27 @@ namespace AsNum.Xmj.API {
 
             var rh = new RequestHelper(this.CookieContainer);
             //rh.RequestHeader = RequestHelper.CommonHeder;
+            //rh.RequestHeader.Add("Content-Type", "application/x-www-form-urlencoded");
             var ctx = rh.Get(url);
+            url = rh.ResponseUrl;
 
             var dic = ctx.CollectFormItems("login-form");
             dic.Set("account", user);
             dic.Set("password", pwd);
 
+            rh.RequestHeader = new Dictionary<string, string>() { 
+                {"Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"},
+                //{"Accept-Encoding","gzip, deflate"},
+                {"Accept-Language","zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4"},
+                {"Cache-Control","max-age=0"},
+                {"Connection","keep-alive"},
+                {"Content-Type","application/x-www-form-urlencoded"},
+                {"Referer","http://authhz.alibaba.com/auth/authorize.htm?client_id=1530643&site=aliexpress&redirect_uri=urn:ietf:wg:oauth:2.0:oob&_aop_signature=A6185B8F6332618CC157706C5FBDC275FC92258A"},
+                {"User-Agent","Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36"}            
+            };
+
             ctx = rh.Post(url, dic);
-            if (!rh.ResponseUrl.StartsWith("http://gw.api.alibaba.com/auth/authCode.htm", StringComparison.OrdinalIgnoreCase)) {
+            if (!rh.ResponseUrl.StartsWith("http://authhz.alibaba.com/auth/authCode.htm", StringComparison.OrdinalIgnoreCase)) {
                 //this.HaveAuthed = false;
                 throw new Exception(string.Format("授权失败，用户:{0},　请检查用户名密码是否正确.", user));
             } else {
