@@ -18,12 +18,12 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Application\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,7 +38,7 @@
     <OutputPath>..\Application\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -82,6 +82,10 @@
     <Compile Include="Migrations\201502211508229_LogisticFee.Designer.cs">
       <DependentUpon>201502211508229_LogisticFee.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505031411139_OrderMessageIDToLong.cs" />
+    <Compile Include="Migrations\201505031411139_OrderMessageIDToLong.Designer.cs">
+      <DependentUpon>201505031411139_OrderMessageIDToLong.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -105,6 +109,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502211508229_LogisticFee.resx">
       <DependentUpon>201502211508229_LogisticFee.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505031411139_OrderMessageIDToLong.resx">
+      <DependentUpon>201505031411139_OrderMessageIDToLong.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

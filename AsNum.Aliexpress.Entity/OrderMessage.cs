@@ -6,7 +6,7 @@ namespace AsNum.Xmj.Entity {
     public class OrderMessage {
 
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public int ID {
+        public long ID {
             get;
             set;
         }

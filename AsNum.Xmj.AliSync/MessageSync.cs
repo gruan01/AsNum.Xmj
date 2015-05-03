@@ -14,10 +14,13 @@ namespace AsNum.Xmj.AliSync {
             var ac = ast.Value.FirstOrDefault(a => a.User == account);
             if (ac != null) {
                 var api = new API.APIClient(ac.User, ac.Pwd);
-                var method = new OrderMsgListByOrderId() {
+                //var method = new OrderMsgListByOrderId() {
+                //    OrderID = orderNO
+                //};
+                var method = new OrderMsgList() {
                     OrderID = orderNO
                 };
-                return api.Execute(method);
+                return api.Execute(method).Results;
             } else {
                 return null;
             }
