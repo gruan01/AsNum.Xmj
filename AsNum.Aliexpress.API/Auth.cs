@@ -114,7 +114,7 @@ namespace AsNum.Xmj.API {
         }
 
         public string GetApiUrl(string opt) {
-            return string.Format("https://{0}/openapi/{1}/{2}/{3}/{4}/{5}",
+            var url = string.Format("https://{0}/openapi/{1}/{2}/{3}/{4}/{5}",
                             Domain,
                             DataProtocol,
                             Version,
@@ -123,6 +123,9 @@ namespace AsNum.Xmj.API {
                             AppKey)
                             .SetUrlKeyValue("access_token", this.AuthToken.AccessToken);
 
+            url = url.SetUrlKeyValue("_aop_signature", SIG(url));
+
+            return url;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
