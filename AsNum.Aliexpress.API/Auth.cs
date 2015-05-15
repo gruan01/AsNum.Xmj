@@ -11,6 +11,8 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
+using System.Windows.Controls;
 
 namespace AsNum.Xmj.API {
 
@@ -20,6 +22,8 @@ namespace AsNum.Xmj.API {
 
         public static readonly string AppKey = "";
         public static readonly string SECKey = "";
+
+        private object LockObj = null;
 
         /// <summary>
         /// API 版本
@@ -106,11 +110,13 @@ namespace AsNum.Xmj.API {
         public CookieContainer CookieContainer = new CookieContainer();
 
         public Auth() {
+            this.LockObj = new object();
         }
 
         public Auth(string user, string pwd) {
             this.User = user;
             this.Pwd = pwd;
+            this.LockObj = new object();
         }
 
         public string GetApiUrl(string opt) {
@@ -139,10 +145,41 @@ namespace AsNum.Xmj.API {
 
         public void DoAuth(string user, string pwd) {
             this.Code = this.GetAuthCode(user, pwd);
+            //this.Code = this.GetAuthCode2(user, pwd);
 
             if (this.AuthToken == null || this.AuthToken.IsInvalid)
                 this.GetAccessToken();
         }
+
+
+        private string GetAuthCode2(string user, string pwd) {
+
+            if (this.LockObj == null)
+                this.LockObj = new object();
+
+            var url = "http://gw.api.alibaba.com/auth/authorize.htm?client_id=&site=aliexpress&redirect_uri=urn:ietf:wg:oauth:2.0:oob";
+            url = url.SetUrlKeyValue("client_id", AppKey);
+            //SIG必须要把前面所有参数一起计算
+            url = url.SetUrlKeyValue("_aop_signature", SIG(url));
+
+            var code = "";
+            Monitor.Enter(this.LockObj);
+            var form = new AuthForm(url) {
+                Text = string.Format("请完成账户 {0} 的授权", user)
+            };
+
+            Action act = () => {
+                if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                    code = form.Code;
+                }
+            };
+
+            form.Invoke(act);
+            Monitor.Exit(this.LockObj);
+
+            return code;
+        }
+
 
         /// <summary>
         /// 获取授权临时码
@@ -164,6 +201,11 @@ namespace AsNum.Xmj.API {
             var ctx = rh.Get(url);
             url = rh.ResponseUrl;
 
+            //if (url.StartsWith("http://alisec.alibaba.com/checkcodev3.php")) {
+
+            //    return GetAuthCode(user, pwd);
+            //}
+
             var dic = ctx.CollectFormItems("login-form");
             dic.Set("account", user);
             dic.Set("password", pwd);
@@ -180,7 +222,8 @@ namespace AsNum.Xmj.API {
             };
 
             ctx = rh.Post(url, dic);
-            if (!rh.ResponseUrl.StartsWith("http://authhz.alibaba.com/auth/authCode.htm", StringComparison.OrdinalIgnoreCase)) {
+            //if (!rh.ResponseUrl.StartsWith("http://authhz.alibaba.com/auth/authCode.htm", StringComparison.OrdinalIgnoreCase)) {
+            if (!rh.ResponseUrl.StartsWith("http://gw.api.alibaba.com/auth/authCode.htm", StringComparison.OrdinalIgnoreCase)) {
                 //this.HaveAuthed = false;
                 throw new Exception(string.Format("授权失败，用户:{0},　请检查用户名密码是否正确.", user));
             } else {

@@ -40,6 +40,7 @@
             </StackPanel.Style>
             <CheckBox x:Name="IsShamShipping" VerticalAlignment="Center" IsEnabled="{Binding CanIsShamShipping}" Content="以填发货通知，但未发货" />
             <Button x:Name="Update" Content="更新已发未发状态" />
+            <Button x:Name="ExtendReceiveDays" Content="延长收货时间" />
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0">
@@ -91,7 +92,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <acc:StyleDialog Title="填写发货通知" ShowMask="True" Show="{Binding IsBusy, Mode=TwoWay}">
+        <acc:StyleDialog Title="{Binding Source={StaticResource Proxy}, Path=Data.FVM.Title}" ShowMask="True" Show="{Binding IsBusy, Mode=TwoWay}">
             <acc:StyleDialog.Content>
                 <ContentControl cm:View.Model="{Binding Source={StaticResource Proxy}, Path=Data.FVM}" />
             </acc:StyleDialog.Content>

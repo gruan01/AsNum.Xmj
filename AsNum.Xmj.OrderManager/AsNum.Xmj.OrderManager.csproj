@@ -132,6 +132,7 @@
     <Compile Include="USPS.cs" />
     <Compile Include="ViewModels\BatchShipmentViewModel.cs" />
     <Compile Include="ViewModels\BatchUpdateShamDeliveryOrderViewModel.cs" />
+    <Compile Include="ViewModels\ExtendReceiveDaysViewModel.cs" />
     <Compile Include="ViewModels\FillTrackNOViewModel.cs" />
     <Compile Include="ViewModels\LogisticViewModel.cs" />
     <Compile Include="ViewModels\LostOrderFinderViewModel.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="ViewModels\ReceiverViewModel.cs" />
     <Compile Include="ViewModels\RemindersViewModel.cs" />
     <Compile Include="ViewModels\SubOrderViewModel.cs" />
+    <Compile Include="ViewModels\SuccessCallbackScreen.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\WriteMsgViewModel.cs" />
     <Compile Include="Views\BatchShipmentView.xaml.cs">
@@ -154,6 +156,9 @@
     </Compile>
     <Compile Include="Views\BatchUpdateShamDeliveryOrderView.xaml.cs">
       <DependentUpon>BatchUpdateShamDeliveryOrderView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ExtendReceiveDaysView.xaml.cs">
+      <DependentUpon>ExtendReceiveDaysView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\FillTrackNOView.xaml.cs">
       <DependentUpon>FillTrackNOView.xaml</DependentUpon>
@@ -259,6 +264,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\BatchUpdateShamDeliveryOrderView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ExtendReceiveDaysView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

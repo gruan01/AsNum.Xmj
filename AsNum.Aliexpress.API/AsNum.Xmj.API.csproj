@@ -108,6 +108,12 @@
     <Compile Include="Attributes\NeedAuthAttribute.cs" />
     <Compile Include="Attributes\ParamAttribute.cs" />
     <Compile Include="Attributes\SaveAuthDataAttribute.cs" />
+    <Compile Include="AuthForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AuthForm.Designer.cs">
+      <DependentUpon>AuthForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="AuthHelper.cs" />
     <Compile Include="ConstValue.cs" />
     <Compile Include="Converter\AliChildOrderAttributesConverter.cs" />
@@ -172,6 +178,7 @@
     <Compile Include="Methods\LogisticsServiceList.cs" />
     <Compile Include="Methods\MessageQuery.cs" />
     <Compile Include="Methods\OrderEvaluate.cs" />
+    <Compile Include="Methods\OrderExtendReceiveTime.cs" />
     <Compile Include="Methods\OrderMsgList.cs" />
     <Compile Include="Methods\OrderNewMsg.cs" />
     <Compile Include="Methods\OrderShipment.cs" />
@@ -204,6 +211,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AuthForm.resx">
+      <DependentUpon>AuthForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

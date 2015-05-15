@@ -9,7 +9,7 @@ namespace AsNum.Xmj.API.Entity {
     public class Message2 {
 
         [JsonProperty("id")]
-        public int ID {
+        public long ID {
             get;
             set;
         }

@@ -46,10 +46,12 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             set;
         }
 
-        public FillTrackNOViewModel FVM {
+        public SuccessCallbackScreen FVM {
             get;
             set;
         }
+
+
 
         public BindableCollection<IQuickTrackButton> TrackBtns {
             get;
@@ -117,6 +119,18 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
         public void Track(IQuickTrackButton tracker) {
             tracker.Track(this.Logistics.ToList());
+        }
+
+        public void ExtendReceiveDays() {
+            this.FVM = new ExtendReceiveDaysViewModel(this.OrderNO);
+            this.FVM.OnSuccess = o => {
+                this.IsBusy = false;
+                this.NotifyOfPropertyChange(() => this.IsBusy);
+            };
+            this.IsBusy = true;
+            this.NotifyOfPropertyChange(() => this.IsBusy);
+            this.NotifyOfPropertyChange(() => this.FVM);
+            DispatcherHelper.DoEvents();
         }
     }
 }

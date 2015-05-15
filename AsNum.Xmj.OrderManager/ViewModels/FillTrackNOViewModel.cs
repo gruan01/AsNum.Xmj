@@ -16,7 +16,7 @@ using ZXing;
 using AE = AsNum.Xmj.API.Entity;
 
 namespace AsNum.Xmj.OrderManager.ViewModels {
-    public class FillTrackNOViewModel : VMScreenBase/*, IScreenShoterObserver*/ {
+    public class FillTrackNOViewModel : SuccessCallbackScreen/*, IScreenShoterObserver*/ {
         public override string Title {
             get {
                 return "填写发货通知";
@@ -74,7 +74,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
         //public IScreenShoter Shoter;
 
-        public Action<string> OnSuccess;
+
 
         public IOrder OrderBiz { get; set; }
 
