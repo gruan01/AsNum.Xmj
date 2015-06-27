@@ -222,8 +222,11 @@ namespace AsNum.Xmj.API {
             };
 
             ctx = rh.Post(url, dic);
-            //if (!rh.ResponseUrl.StartsWith("http://authhz.alibaba.com/auth/authCode.htm", StringComparison.OrdinalIgnoreCase)) {
-            if (!rh.ResponseUrl.StartsWith("http://gw.api.alibaba.com/auth/authCode.htm", StringComparison.OrdinalIgnoreCase)) {
+
+            var uri = new Uri(rh.ResponseUrl, UriKind.Absolute);
+            if (!uri.Segments.Last().Equals("authCode.htm", StringComparison.OrdinalIgnoreCase)) {
+                //if (!rh.ResponseUrl.StartsWith("http://authhz.alibaba.com/auth/authCode.htm", StringComparison.OrdinalIgnoreCase)) {
+                //if (!rh.ResponseUrl.StartsWith("http://gw.api.alibaba.com/auth/authCode.htm", StringComparison.OrdinalIgnoreCase)) {
                 //this.HaveAuthed = false;
                 throw new Exception(string.Format("授权失败，用户:{0},　请检查用户名密码是否正确.", user));
             } else {
