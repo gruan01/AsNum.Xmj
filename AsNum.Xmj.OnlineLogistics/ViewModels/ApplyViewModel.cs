@@ -5,6 +5,7 @@ using AsNum.Xmj.API;
 using AsNum.Xmj.API.Entity;
 using AsNum.Xmj.API.Methods;
 using AsNum.Xmj.Common;
+using AsNum.Xmj.Entity;
 using AsNum.Xmj.IBiz;
 using Caliburn.Micro;
 using System;
@@ -64,7 +65,7 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
                 if (order != null) {
                     item.Account = order.Account;
                     item.Status = order.Status;
-                    item.OrderNote = order.Note.Note;
+                    item.OrderNote = (order.Note ?? new OrderNote() ).Note;
                     item.LogisticType = string.Join(",", order.Details.Select(s => EnumHelper.GetDescription(s.LogisticsType.ToEnum<AsNum.Xmj.Entity.LogisticsTypes>())));
 
                     item.Receiver = new Xmj.API.Entity.OnlineLogisticsContacts();
