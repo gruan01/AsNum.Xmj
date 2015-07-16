@@ -119,7 +119,7 @@ namespace AsNum.Xmj.API {
             this.LockObj = new object();
         }
 
-        public string GetApiUrl(string opt) {
+        public string GetApiUrl(string opt, Dictionary<string, string> dic) {
             var url = string.Format("https://{0}/openapi/{1}/{2}/{3}/{4}/{5}",
                             Domain,
                             DataProtocol,
@@ -129,7 +129,19 @@ namespace AsNum.Xmj.API {
                             AppKey)
                             .SetUrlKeyValue("access_token", this.AuthToken.AccessToken);
 
-            url = url.SetUrlKeyValue("_aop_signature", SIG(url));
+
+            if (dic != null) {
+                //foreach (var kv in dic) {
+                //    url = url.SetUrlKeyValue(kv.Key, kv.Value);
+                //}
+                //计算签名时,不能转码,
+                var ps = string.Join("&", dic.Select(kv => string.Format("{0}={1}", kv.Key, kv.Value)));
+                url = string.Format("{0}&{1}", url, ps);
+            }
+
+            url = url.SetUrlKeyValue("_aop_signature", SIG(url, true));
+
+            //var sig = SIG("https://gw.api.alibaba.com/openapi/param2/1/aliexpress.open/api.findOrderListSimpleQuery/1530643?page=1&pageSize=50&access_token=a82ec1ad-4c88-4a8c-b8c1-49d75f9bf43c&_aop_signature=D6B46D52175A7DF3821BBCCF56E082EF9CED111B", true);
 
             return url;
         }
@@ -152,33 +164,33 @@ namespace AsNum.Xmj.API {
         }
 
 
-        private string GetAuthCode2(string user, string pwd) {
+        //private string GetAuthCode2(string user, string pwd) {
 
-            if (this.LockObj == null)
-                this.LockObj = new object();
+        //    if (this.LockObj == null)
+        //        this.LockObj = new object();
 
-            var url = "http://gw.api.alibaba.com/auth/authorize.htm?client_id=&site=aliexpress&redirect_uri=urn:ietf:wg:oauth:2.0:oob";
-            url = url.SetUrlKeyValue("client_id", AppKey);
-            //SIG必须要把前面所有参数一起计算
-            url = url.SetUrlKeyValue("_aop_signature", SIG(url));
+        //    var url = "http://gw.api.alibaba.com/auth/authorize.htm?client_id=&site=aliexpress&redirect_uri=urn:ietf:wg:oauth:2.0:oob";
+        //    url = url.SetUrlKeyValue("client_id", AppKey);
+        //    //SIG必须要把前面所有参数一起计算
+        //    url = url.SetUrlKeyValue("_aop_signature", SIG(url));
 
-            var code = "";
-            Monitor.Enter(this.LockObj);
-            var form = new AuthForm(url) {
-                Text = string.Format("请完成账户 {0} 的授权", user)
-            };
+        //    var code = "";
+        //    Monitor.Enter(this.LockObj);
+        //    var form = new AuthForm(url) {
+        //        Text = string.Format("请完成账户 {0} 的授权", user)
+        //    };
 
-            Action act = () => {
-                if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                    code = form.Code;
-                }
-            };
+        //    Action act = () => {
+        //        if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+        //            code = form.Code;
+        //        }
+        //    };
 
-            form.Invoke(act);
-            Monitor.Exit(this.LockObj);
+        //    form.Invoke(act);
+        //    Monitor.Exit(this.LockObj);
 
-            return code;
-        }
+        //    return code;
+        //}
 
 
         /// <summary>
@@ -275,7 +287,14 @@ namespace AsNum.Xmj.API {
             }
         }
 
-        private static string SIG(string url) {
+        private static string SIG(string url, bool useUrlPath = false) {
+            string url2 = "";
+            if (useUrlPath) {
+                url2 = url.Replace("https://gw.api.alibaba.com/openapi/", "");
+                url2 = url2.Replace("https://gw.api.alibaba.com:443/openapi/", "");
+                url2 = url2.Split('?')[0];
+            }
+
             //取出url 中的参数的键值对，并排除 _aop_signature
             var dic = url.ParseString(false);
             var a = dic.Keys.Where(k => !string.Equals("_aop_signature", k))
@@ -283,6 +302,9 @@ namespace AsNum.Xmj.API {
                 .Select(k => string.Format("{0}{1}", k, dic[k]));
 
             var b = string.Join("", a);
+            if (useUrlPath) {
+                b = string.Format("{0}{1}", url2, b);
+            }
 
             using (var sec = new HMACSHA1(Encoding.UTF8.GetBytes(SECKey))) {
                 sec.ComputeHash(Encoding.UTF8.GetBytes(b));

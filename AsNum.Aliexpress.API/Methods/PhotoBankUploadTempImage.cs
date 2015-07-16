@@ -1,6 +1,7 @@
 ﻿using AsNum.Common.Extends;
 using AsNum.Xmj.API.Attributes;
 using AsNum.Xmj.API.Entity;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -19,7 +20,7 @@ namespace AsNum.Xmj.API.Methods {
             }
             set {
                 this.filePath = value;
-                if(File.Exists(value)) {
+                if (File.Exists(value)) {
                     //两线程同时读同一文件,会报 IOExcepton 的错
                     //this.UploadData = File.ReadAllBytes(value);
                     this.UploadData = value.ReadAllBytes();
@@ -35,12 +36,15 @@ namespace AsNum.Xmj.API.Methods {
 
         [NeedAuth]
         public override string GetResult(Auth auth) {
-            var url = auth.GetApiUrl(this.APIName).SetUrlKeyValue("srcFileName", this.FileName);
-            using(var client = new WebClient()) {
+            var url = auth.GetApiUrl(this.APIName, new Dictionary<string, string>() { 
+                {"srcFileName",this.FileName}
+            });
+
+            using (var client = new WebClient()) {
                 try {
                     var result = client.UploadData(url, this.UploadData);
                     return Encoding.UTF8.GetString(result);
-                } catch(WebException ex) {
+                } catch (WebException ex) {
                     return Encoding.UTF8.GetString(ex.Response.GetResponseStream().GetBytes());
                 }
             }

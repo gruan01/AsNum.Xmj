@@ -27,9 +27,9 @@ namespace AsNum.Xmj.API {
 
         [NeedAuth]
         public virtual string GetResult(Auth auth) {
-            var url = auth.GetApiUrl(this.APIName);
-
             var dic = ParamHelper.GetParams(this);
+
+            var url = auth.GetApiUrl(this.APIName, dic);
 
             var rh = new RequestHelper(auth.CookieContainer);
             this.ResultString = rh.Post(url, dic);

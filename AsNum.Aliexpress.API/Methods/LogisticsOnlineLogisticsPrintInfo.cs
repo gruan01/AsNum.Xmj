@@ -27,9 +27,8 @@ namespace AsNum.Xmj.API.Methods {
         }
 
         public override string GetResult(Auth auth) {
-            var url = auth.GetApiUrl(this.APIName);
-
             var dic = ParamHelper.GetParams(this);
+            var url = auth.GetApiUrl(this.APIName, dic);
 
             var tmp = this.LogisticsNOs.Select(s => new {
                 internationalLogisticsId = s
