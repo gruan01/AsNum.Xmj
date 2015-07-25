@@ -28,13 +28,13 @@ namespace AsNum.Xmj.API.Methods {
 
         public override string GetResult(Auth auth) {
             var dic = ParamHelper.GetParams(this);
-            var url = auth.GetApiUrl(this.APIName, dic);
 
             var tmp = this.LogisticsNOs.Select(s => new {
                 internationalLogisticsId = s
             });
             dic.Add("warehouseOrderQueryDTOs", JsonConvert.SerializeObject(tmp));
 
+            var url = auth.GetApiUrl(this.APIName, dic);
             var rh = new RequestHelper(auth.CookieContainer);
             this.ResultString = rh.Post(url, dic);
             return this.ResultString;
