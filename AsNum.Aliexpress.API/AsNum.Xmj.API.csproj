@@ -125,6 +125,8 @@
     <Compile Include="Entity\Customer.cs" />
     <Compile Include="Entity\FreightTemplateListResult.cs" />
     <Compile Include="Entity\FrightTemplate.cs" />
+    <Compile Include="Entity\Issue.cs" />
+    <Compile Include="Entity\IssueStatus.cs" />
     <Compile Include="Entity\LocalLogisticsCompany.cs" />
     <Compile Include="Entity\LogisticsServiceResult.cs" />
     <Compile Include="Entity\LogisticsTypes.cs" />
@@ -170,6 +172,7 @@
     </Compile>
     <Compile Include="MethodBase.cs" />
     <Compile Include="Methods\FreightTemplateList.cs" />
+    <Compile Include="Methods\InssueQuery.cs" />
     <Compile Include="Methods\LogisticsCreateOnlineLogisticsNO.cs" />
     <Compile Include="Methods\LogisticsGetLocalCompanies.cs" />
     <Compile Include="Methods\LogisticsGetOnlineLogisticsInfo.cs" />

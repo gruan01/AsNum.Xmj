@@ -148,16 +148,21 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         }
 
         public void SearchWS() {
-            this.Cond.IncludeStatus = new List<OrderStatus>() { OrderStatus.WAIT_SELLER_SEND_GOODS, OrderStatus.SELLER_PART_SEND_GOODS };
+            this.Cond.IncludeStatus = new List<OrderStatus>() {
+                OrderStatus.WAIT_SELLER_SEND_GOODS,
+                OrderStatus.SELLER_PART_SEND_GOODS,
+                OrderStatus.IN_CANCEL
+            };
             this.PaginationVM.Reset();
             this.Search(this.Cond);
         }
 
         public void SearchWSR() {
-            this.Cond.IncludeStatus = new List<OrderStatus>() { 
+            this.Cond.IncludeStatus = new List<OrderStatus>() {
                     OrderStatus.WAIT_SELLER_SEND_GOODS,
                     OrderStatus.SELLER_PART_SEND_GOODS,
-                    OrderStatus.RISK_CONTROL
+                    OrderStatus.RISK_CONTROL,
+                    OrderStatus.IN_CANCEL
                 };
             this.PaginationVM.Reset();
             this.Search(this.Cond);
