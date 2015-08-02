@@ -8,6 +8,7 @@
              xmlns:l="clr-namespace:AsNum.Xmj.OnlineLogistics"
              xmlns:a="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
              xmlns:ac="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF"
+             xmlns:cal="http://www.caliburnproject.org"
              d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
@@ -18,11 +19,11 @@
 
         <DataTemplate x:Key="ServiceTpl" DataTemplate.DataType="ComboBoxItem">
             <StackPanel>
-                <!--<StackPanel Orientation="Horizontal" ac:UniPadding.Padding="2">
+                <StackPanel Orientation="Horizontal" ac:UniPadding.Padding="2">
                     <TextBlock FontWeight="Bold" Text="{Binding ServiceName}" />
                     <TextBlock Text="{Binding Fee}" />
-                </StackPanel>-->
-                <TextBlock FontWeight="Bold" Text="{Binding ServiceName}" />
+                </StackPanel>
+                <!--<TextBlock FontWeight="Bold" Text="{Binding ServiceName}" />-->
                 <ContentControl Content="{Binding DeliveryAddress}">
                     <ContentControl.ContentTemplateSelector>
                         <l:LocSelector>
@@ -64,7 +65,15 @@
             <RowDefinition />
             <RowDefinition RowDefinition.Height="auto" />
         </Grid.RowDefinitions>
-        <DataGrid DataGrid.Name="Datas" Grid.Row="0" DataGrid.AutoGenerateColumns="False" DataGrid.SelectionUnit="CellOrRowHeader" DataGrid.FrozenColumnCount="6">
+        <DataGrid DataGrid.Name="Datas" 
+                  Grid.Row="0" DataGrid.AutoGenerateColumns="False" 
+                  DataGrid.SelectionUnit="CellOrRowHeader" 
+                  DataGrid.FrozenColumnCount="7"
+                  cal:Message.Attach="
+                  [Event SelectionChanged] = [Action SetSelectedOrder($eventArgs)];
+                  [Event SelectedCellsChanged] = [Action SetSelectedOrder2($eventArgs)]
+                  "                  
+                  >
             <DataGrid.RowStyle>
                 <Style Style.TargetType="{x:Type DataGridRow}">
                     <Setter Setter.Property="DataGridRow.DetailsVisibility" Setter.Value="{Binding IsSummary,Mode=OneWay,Converter={StaticResource boolToVisibility}}" />
@@ -112,6 +121,7 @@
 
                 <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货人姓名" DataGridBoundColumn.Binding="{Binding Receiver.Name}" />
                 <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货国家" DataGridBoundColumn.Binding="{Binding Receiver.CountryCode}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货国家" DataGridBoundColumn.Binding="{Binding Receiver.CountryName}" />
                 <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货人州省" DataGridBoundColumn.Binding="{Binding Receiver.Province}" />
                 <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货人城市" DataGridBoundColumn.Binding="{Binding Receiver.City}" />
                 <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource ReceiverInfo}" DataGridColumn.Header="收货人地址" DataGridBoundColumn.Binding="{Binding Receiver.Address}" />
@@ -164,6 +174,12 @@
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
 
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="查看选中的订单" cal:Message.Attach="ViewOrder()" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            
             <i:Interaction.Behaviors>
                 <ab:DataGridRowIndexBehavior xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF" />
                 <ab:DataGridPasteBehavior xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF" />
@@ -177,6 +193,7 @@
                 <Button Button.Name="Apply" ContentControl.Content="申请线上发货" Control.Background="#FFFF0000" />
                 <Button Button.Name="Refresh" ContentControl.Content="刷新申请单" />
                 <Button Button.Name="Download" ContentControl.Content="下载" />
+                <Button Name="SendShipment" Content="批量发货" />
             </StackPanel>
         </DockPanel>
     </Grid>

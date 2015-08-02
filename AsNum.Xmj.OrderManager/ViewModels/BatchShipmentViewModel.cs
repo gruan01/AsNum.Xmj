@@ -5,18 +5,22 @@ using AsNum.Xmj.API;
 using AsNum.Xmj.API.Entity;
 using AsNum.Xmj.API.Methods;
 using AsNum.Xmj.Common;
+using AsNum.Xmj.Common.Interfaces;
 using AsNum.Xmj.Entity;
 using AsNum.Xmj.IBiz;
 using Caliburn.Micro;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
 using APIE = AsNum.Xmj.API.Entity;
 
 namespace AsNum.Xmj.OrderManager.ViewModels {
-    public class BatchShipmentViewModel : VMScreenBase {
+
+    [Export(typeof(IBatchShipment)), PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
+    public class BatchShipmentViewModel : VMScreenBase, IBatchShipment {
         public override string Title {
             get {
                 return "批量发货";
@@ -204,6 +208,23 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
             //Thread.Sleep(1000);
             return result.Success;
+        }
+
+        public void SendShipment(IEnumerable<BizEntity.Models.ShipmentItem> items) {
+            foreach (var i in items) {
+                var item = new ShipmentItem() {
+                    Account = i.Account,
+                    OrderNO = i.OrderNO,
+                    TrackNO = i.TrackNO
+                };
+                this.Items.Add(item);
+                item.NotifyOfPropertyChange("OrderNO");
+            }
+        }
+
+
+        public void Show() {
+            GlobalData.GetInstance<ISheel>().Show(this);
         }
     }
 

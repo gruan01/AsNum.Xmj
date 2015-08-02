@@ -4,7 +4,10 @@ using AsNum.Xmj.AliSync;
 using AsNum.Xmj.API;
 using AsNum.Xmj.API.Entity;
 using AsNum.Xmj.API.Methods;
+using AsNum.Xmj.BizEntity.Conditions;
+using AsNum.Xmj.BizEntity.Models;
 using AsNum.Xmj.Common;
+using AsNum.Xmj.Common.Interfaces;
 using AsNum.Xmj.Entity;
 using AsNum.Xmj.IBiz;
 using Caliburn.Micro;
@@ -15,6 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Forms;
 
 namespace AsNum.Xmj.OnlineLogistics.ViewModels {
@@ -65,11 +69,12 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
                 if (order != null) {
                     item.Account = order.Account;
                     item.Status = order.Status;
-                    item.OrderNote = (order.Note ?? new OrderNote() ).Note;
+                    item.OrderNote = (order.Note ?? new OrderNote()).Note;
                     item.LogisticType = string.Join(",", order.Details.Select(s => EnumHelper.GetDescription(s.LogisticsType.ToEnum<AsNum.Xmj.Entity.LogisticsTypes>())));
 
                     item.Receiver = new Xmj.API.Entity.OnlineLogisticsContacts();
                     item.Receiver.CountryCode = order.Receiver.CountryCode;
+                    item.Receiver.CountryName = order.Receiver.Country.ZhName;
                     item.Receiver.Address = order.Receiver.Address;
                     item.Receiver.City = order.Receiver.City;
                     item.Receiver.Mobile = order.Receiver.Mobi;
@@ -173,6 +178,8 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
                 item.NotifyOfPropertyChange(() => item.LogisticsCompanies);
             }
         }
+
+        private List<string> SelectedOrders = new List<string>();
 
         public void Remove() {
             if (this.Datas != null) {
@@ -287,6 +294,43 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
             .ContinueWith((t) => {
                 System.Windows.MessageBox.Show(string.Format("账户 {0} , 下载失败", account));
             }, TaskContinuationOptions.OnlyOnFaulted);
+        }
+
+        public void SendShipment() {
+            var items = this.Datas.Select(d => new ShipmentItem() {
+                Account = d.Account,
+                TrackNO = d.ExistsLogisticInfos != null ? string.Join(" , ", d.ExistsLogisticInfos.Select(e => e.TrackNO)) : "",
+                OrderNO = d.OrderNO
+            });
+            var bs = GlobalData.GetInstance<IBatchShipment>();
+            bs.SendShipment(items);
+            bs.Show();
+        }
+
+
+        public void SetSelectedOrder(SelectionChangedEventArgs e) {
+            var adds = e.AddedItems.Cast<ApplyItem>().Select(i => i.OrderNO);
+            var rms = e.RemovedItems.Cast<ApplyItem>().Select(i => i.OrderNO);
+            this.SelectedOrders = this.SelectedOrders.Except(rms).Distinct().ToList();
+            this.SelectedOrders.AddRange(adds);
+        }
+
+        public void SetSelectedOrder2(SelectedCellsChangedEventArgs e) {
+            var adds = e.AddedCells.Where(i => i.Item.GetType().Equals(typeof(ApplyItem))).Select(i => (i.Item as ApplyItem).OrderNO);
+            var rms = e.RemovedCells.Where(i => i.Item.GetType().Equals(typeof(ApplyItem))).Select(i => (i.Item as ApplyItem).OrderNO);
+            this.SelectedOrders = this.SelectedOrders.Except(rms).Distinct().ToList();
+            this.SelectedOrders.AddRange(adds);
+        }
+
+        public void ViewOrder() {
+            if (this.SelectedOrders.Count > 0) {
+                var searcher = GlobalData.GetInstance<IOrderSearcher>();
+                var cond = new OrderSearchCondition() {
+                    SpecifyOrders = this.SelectedOrders
+                };
+                searcher.Show();
+                searcher.Search(cond);
+            }
         }
     }
 }

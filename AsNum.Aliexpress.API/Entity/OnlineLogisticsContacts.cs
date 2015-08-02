@@ -20,6 +20,11 @@ namespace AsNum.Xmj.API.Entity {
         [Param("country", Required = true)]
         public string CountryCode { get; set; }
 
+        /// <summary>
+        /// 只用来显示
+        /// </summary>
+        public string CountryName { get; set; }
+
         [Param("fax")]
         public string Fax { get; set; }
 

@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conditions\OrderSearchCondition.cs" />
+    <Compile Include="Models\ShipmentItem.cs" />
     <Compile Include="Models\TurnoverByAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -117,6 +117,10 @@
       <Project>{eb1eebf5-782e-4841-b433-54ceba9a1659}</Project>
       <Name>AsNum.Xmj.AliSync</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AsNum.Xmj.BizEntity\AsNum.Xmj.BizEntity.csproj">
+      <Project>{c75373f8-d631-4fcf-bb1b-7b7dfd475c3c}</Project>
+      <Name>AsNum.Xmj.BizEntity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AsNum.Xmj.IBiz\AsNum.Xmj.IBiz.csproj">
       <Project>{3af977d1-79e3-4fa0-b1b1-9fb2c5e90a35}</Project>
       <Name>AsNum.Xmj.IBiz</Name>
