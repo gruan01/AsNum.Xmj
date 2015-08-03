@@ -309,8 +309,8 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
 
 
         public void SetSelectedOrder(SelectionChangedEventArgs e) {
-            var adds = e.AddedItems.Cast<ApplyItem>().Select(i => i.OrderNO);
-            var rms = e.RemovedItems.Cast<ApplyItem>().Select(i => i.OrderNO);
+            var adds = e.AddedItems.OfType<ApplyItem>().Cast<ApplyItem>().Select(i => i.OrderNO);
+            var rms = e.RemovedItems.OfType<ApplyItem>().Cast<ApplyItem>().Select(i => i.OrderNO);
             this.SelectedOrders = this.SelectedOrders.Except(rms).Distinct().ToList();
             this.SelectedOrders.AddRange(adds);
         }
