@@ -123,6 +123,7 @@
     <Compile Include="Menus\OrderQueryMenu.cs" />
     <Compile Include="Menus\RemindersMenu.cs" />
     <Compile Include="Menus\ShamDeliveryUpdateMenu.cs" />
+    <Compile Include="Menus\ShamShippingQuery.cs" />
     <Compile Include="Menus\ShipmentMenu.cs" />
     <Compile Include="MessageTemplateSelector.cs" />
     <Compile Include="OrderMessageEx.cs" />
