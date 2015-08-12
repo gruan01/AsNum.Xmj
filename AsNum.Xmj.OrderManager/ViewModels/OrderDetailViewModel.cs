@@ -1,11 +1,16 @@
 ﻿using AsNum.Common.Extends;
+using AsNum.Xmj.AliSync;
 using AsNum.Xmj.BizEntity.Conditions;
 using AsNum.Xmj.Common;
 using AsNum.Xmj.Common.Interfaces;
 using AsNum.Xmj.Entity;
+using AsNum.Xmj.IBiz;
+using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace AsNum.Xmj.OrderManager.ViewModels {
     //[PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
@@ -52,6 +57,8 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             }
         }
 
+        public string Level { get; private set; }
+
         public string LogisticsType {
             get {
                 var ds = this.Order.Details.Select(d => {
@@ -66,6 +73,28 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
         public OrderDetailViewModel(Order order) {
             this.Order = order;
+            var level = order.Buyer.Level;
+            //一天更新一次
+            if (level == null || level.UpdateOn.AddDays(1) < DateTime.Now) {
+                Task.Factory.StartNew(() => this.UpdateLevel());
+            } else {
+                this.Level = level.Level;
+            }
+        }
+
+        private void UpdateLevel() {
+            var method = new API.Methods.BuyerLevel() {
+                BuyerID = this.Order.BuyerID
+            };
+            var api = AccountHelper.GetAccount(this.Order.Account);
+            var client = new API.APIClient(api.User, api.Pwd);
+            var level = client.Execute(method);
+
+            var biz = GlobalData.GetInstance<IBuyer>();
+            biz.UpdateLevel(this.Order.BuyerID, level);
+            this.Level = level;
+            
+            this.NotifyOfPropertyChange(() => this.Level);
         }
 
         public void OpenOrder() {

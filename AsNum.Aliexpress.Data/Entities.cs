@@ -31,6 +31,9 @@ namespace AsNum.Xmj.Data {
             get;
             set;
         }
+
+        public DbSet<BuyerLevel> BuyerLevels { get; set; }
+
         public DbSet<Receiver> Receivers {
             get;
             set;

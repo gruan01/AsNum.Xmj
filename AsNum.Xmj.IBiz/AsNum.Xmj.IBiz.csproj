@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="IAccount.cs" />
     <Compile Include="IBaseBiz.cs" />
+    <Compile Include="IBuyer.cs" />
     <Compile Include="ICountry.cs" />
     <Compile Include="ILogisticFee.cs" />
     <Compile Include="IOrder.cs" />

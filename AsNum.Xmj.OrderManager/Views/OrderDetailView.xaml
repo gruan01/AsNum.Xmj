@@ -52,7 +52,7 @@
                                 <StackPanel>
                                     <Image  Source="pack://application:,,,/AsNum.Xmj.OrderManager;Component/imgs/msg.png" Stretch="Uniform" />
                                 </StackPanel>
-                            </Button>                            
+                            </Button>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="3">
@@ -68,6 +68,10 @@
                         <StackPanel Orientation="Horizontal" Margin="3">
                             <TextBlock Text="客人:" VerticalAlignment="Center" />
                             <TextBox Text="{Binding Order.Buyer.Name}" IsReadOnly="True" Style="{StaticResource SelectableTextBlock}" />
+
+                            <Border CornerRadius="5" Background="Red" Padding="2,0">
+                                <TextBlock Text="{Binding Level}" Foreground="White" />
+                            </Border>
                         </StackPanel>
 
                     </StackPanel>

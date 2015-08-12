@@ -86,6 +86,14 @@
     <Compile Include="Migrations\201505031411139_OrderMessageIDToLong.Designer.cs">
       <DependentUpon>201505031411139_OrderMessageIDToLong.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508121415125_BuyerLevel.cs" />
+    <Compile Include="Migrations\201508121415125_BuyerLevel.Designer.cs">
+      <DependentUpon>201508121415125_BuyerLevel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508121433050_BuyerLevel1.cs" />
+    <Compile Include="Migrations\201508121433050_BuyerLevel1.Designer.cs">
+      <DependentUpon>201508121433050_BuyerLevel1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -112,6 +120,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505031411139_OrderMessageIDToLong.resx">
       <DependentUpon>201505031411139_OrderMessageIDToLong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508121415125_BuyerLevel.resx">
+      <DependentUpon>201508121415125_BuyerLevel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508121433050_BuyerLevel1.resx">
+      <DependentUpon>201508121433050_BuyerLevel1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

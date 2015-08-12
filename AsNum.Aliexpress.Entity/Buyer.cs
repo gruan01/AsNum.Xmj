@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace AsNum.Xmj.Entity {
     public class Buyer {
@@ -21,9 +22,11 @@ namespace AsNum.Xmj.Entity {
         /// 国家代码, 这里获取的有非标准的代码，长度也不是标准的2,所以不能做为外键
         /// </summary>
         [StringLength(5), Required]
-        public string CountryCode{ get; set; }
+        public string CountryCode { get; set; }
 
         //[ForeignKey("CountryCode")]
         //public Country Country { get; set; }
+
+        public virtual BuyerLevel Level { get; set; }
     }
 }

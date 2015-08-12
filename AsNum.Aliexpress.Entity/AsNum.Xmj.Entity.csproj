@@ -63,6 +63,7 @@
     <Compile Include="AccountTypes.cs" />
     <Compile Include="AdjReceiver.cs" />
     <Compile Include="Buyer.cs" />
+    <Compile Include="BuyerLevel.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="EUBShipper.cs" />
     <Compile Include="FreightPartitionCountry.cs" />

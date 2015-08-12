@@ -18,7 +18,7 @@ namespace AsNum.Xmj.Biz {
         private IQueryable<Order> Search(Entities db, OrderSearchCondition cond) {
             var datas = db.Orders.Include(p => p.AccountOf)
                 .Include(p => p.AdjReceiver.Country)
-                .Include(p => p.Buyer)
+                .Include(p => p.Buyer.Level)
                 .Include(p => p.Details.Select(d => d.Attrs))
                 .Include(p => p.Logistics)
                 .Include(p => p.Messages)
@@ -123,7 +123,7 @@ namespace AsNum.Xmj.Biz {
                 if (include)
                     datas = db.Orders.Include(p => p.AccountOf)
                         .Include(p => p.AdjReceiver.Country)
-                        .Include(p => p.Buyer)
+                        .Include(p => p.Buyer.Level)
                         .Include(p => p.Details)
                         .Include(p => p.Logistics)
                         .Include(p => p.Messages)

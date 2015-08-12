@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="AccountBiz.cs" />
     <Compile Include="BaseBiz.cs" />
+    <Compile Include="BuyerBiz.cs" />
     <Compile Include="CountryBiz.cs" />
     <Compile Include="LogisticFeeBiz.cs" />
     <Compile Include="OrderBiz.cs" />
