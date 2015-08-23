@@ -175,16 +175,20 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Caliburn.Micro">
-      <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\wp8\Caliburn.Micro.dll</HintPath>
+    <Reference Include="Caliburn.Micro, Version=2.0.2.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.Core.2.0.2\lib\portable-net45+win8+wp8+wpa81\Caliburn.Micro.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Caliburn.Micro.Extensions">
-      <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\wp8\Caliburn.Micro.Extensions.dll</HintPath>
+    <Reference Include="Caliburn.Micro.Extensions, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.2.0.2\lib\wp8\Caliburn.Micro.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform, Version=2.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.2.0.2\lib\wp8\Caliburn.Micro.Platform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Expression.Drawing, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\wp8\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=3.9.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="zxing.wp8.0, Version=0.14.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ZXing.Net.0.14.0.1\lib\wp8\zxing.wp8.0.dll</HintPath>
       <Private>True</Private>

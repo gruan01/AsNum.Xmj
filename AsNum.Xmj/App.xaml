@@ -8,7 +8,6 @@
                 <ResourceDictionary>
                     <local:AppBootstrapper x:Key="bootstrapper" />
                 </ResourceDictionary>
-                <!--<ResourceDictionary Source="./Themes/WhistlerBlue.xaml" />-->
                 <ResourceDictionary Source="./Style.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

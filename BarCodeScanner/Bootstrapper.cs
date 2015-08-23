@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace BarCodeScanner {
-    public class Bootstrapper : PhoneBootstrapper {
+    public class Bootstrapper : PhoneBootstrapperBase {
 
         private PhoneContainer Container;
         protected override void StartRuntime() {

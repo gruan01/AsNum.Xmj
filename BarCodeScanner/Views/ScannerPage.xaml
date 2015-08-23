@@ -38,9 +38,9 @@
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar>
             <!--<shell:ApplicationBarIconButton x:Name="Home" IconUri="/Imgs/home.png" Text="主页" />-->
-            <cal:AppBarButton x:Name="Home" Message="Home()" IconUri="/Imgs/home.png" Text="主页" />
+            <!--<cal:AppBarButton x:Name="Home" Message="Home()" IconUri="/Imgs/home.png" Text="主页" />-->
             <!--<shell:ApplicationBarIconButton x:Name="Flash" IconUri="/Imgs/flash.png" Text="闪光灯" Click="Flash_Click" />-->
-            <cal:AppBarButton x:Name="Flash" Message="SwitchFlash()" IconUri="/Imgs/flash.png" Text="闪光灯" />
+            <!--<cal:AppBarButton x:Name="Flash" Message="SwitchFlash()" IconUri="/Imgs/flash.png" Text="闪光灯" />-->
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 

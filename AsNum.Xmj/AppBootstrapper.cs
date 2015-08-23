@@ -12,9 +12,15 @@ using System.Linq;
 using System.Reflection;
 
 namespace AsNum.Xmj {
-    public class AppBootstrapper : Bootstrapper<ISheel> {
+    public class AppBootstrapper : BootstrapperBase {
 
-        //private CompositionContainer Container = null;
+        public AppBootstrapper() {
+            this.Initialize();
+        }
+
+        protected override void OnStartup(object sender, System.Windows.StartupEventArgs e) {
+            this.DisplayRootViewFor<ISheel>();
+        }
 
         protected override void StartRuntime() {
             base.StartRuntime();
@@ -35,10 +41,6 @@ namespace AsNum.Xmj {
             }
         }
 
-        ////主屏幕启动后才会执行这个方法，所以 AssemblySource 的操作不能放到这里
-        //protected override void OnStartup(object sender, System.Windows.StartupEventArgs e) {
-        //    base.OnStartup(sender, e);
-        //}
 
         protected override void Configure() {
 
@@ -73,12 +75,11 @@ namespace AsNum.Xmj {
         protected override object GetInstance(Type service, string key) {
             string contract = string.IsNullOrEmpty(key) ? AttributedModelServices.GetContractName(service) : key;
             var exports = GlobalData.MefContainer.GetExportedValues<Object>(contract);
-            var a = GlobalData.MefContainer.GetExportedValues<Object>();
             if (exports.Count() > 0)
                 return exports.First();
 
-            //throw new Exception(string.Format("Could not locate any instances of contract {0}.", contract));
-            return null;
+            throw new Exception(string.Format("Could not locate any instances of contract {0}.", contract));
+            //return null;
         }
 
         protected override IEnumerable<object> GetAllInstances(Type serviceType) {
