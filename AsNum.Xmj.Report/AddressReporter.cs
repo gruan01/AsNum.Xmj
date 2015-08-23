@@ -40,12 +40,12 @@ namespace AsNum.Xmj.Report {
 
             HSSFWorkbook book = new HSSFWorkbook();
             var topBorderStyle = book.CreateCellStyle();
-            topBorderStyle.BorderTop = BorderStyle.DASH_DOT;
+            topBorderStyle.BorderTop = BorderStyle.DashDot;
 
             var noteBorderStyle = book.CreateCellStyle();
-            noteBorderStyle.BorderTop = BorderStyle.DASH_DOT;
-            noteBorderStyle.TopBorderColor = HSSFColor.GREY_25_PERCENT.index;
-            noteBorderStyle.BorderBottom = BorderStyle.DASH_DOT;
+            noteBorderStyle.BorderTop = BorderStyle.DashDot;
+            noteBorderStyle.TopBorderColor = HSSFColor.Grey25Percent.Index;
+            noteBorderStyle.BorderBottom = BorderStyle.DashDot;
 
 
             foreach (var ra in receiversByAccounts) {
