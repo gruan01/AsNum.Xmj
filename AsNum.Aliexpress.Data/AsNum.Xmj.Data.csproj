@@ -94,6 +94,10 @@
     <Compile Include="Migrations\201508121433050_BuyerLevel1.Designer.cs">
       <DependentUpon>201508121433050_BuyerLevel1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508231042405_PaymentTypeLength.cs" />
+    <Compile Include="Migrations\201508231042405_PaymentTypeLength.Designer.cs">
+      <DependentUpon>201508231042405_PaymentTypeLength.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -126,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201508121433050_BuyerLevel1.resx">
       <DependentUpon>201508121433050_BuyerLevel1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508231042405_PaymentTypeLength.resx">
+      <DependentUpon>201508231042405_PaymentTypeLength.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

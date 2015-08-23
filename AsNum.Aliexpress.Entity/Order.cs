@@ -82,7 +82,7 @@ namespace AsNum.Xmj.Entity {
         /// <summary>
         /// 付款类型
         /// </summary>
-        [StringLength(10)]
+        [StringLength(20)]
         public string PaymentType {
             get;
             set;
