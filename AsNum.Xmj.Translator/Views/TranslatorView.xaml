@@ -17,8 +17,20 @@
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
                  />
         <StackPanel Orientation="Horizontal" Grid.Row="1" ac:UniPadding.Padding="2">
-            <ComboBox />
-            <Button x:Name="Translate" Content="翻译" />
+            <ComboBox ItemsSource="{Binding Langs}" SelectedValuePath="Key" SelectedValue="{Binding Target}">
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <!--<StackPanel Orientation="Horizontal" />-->
+                        <UniformGrid ac:UniPadding.Padding="2" />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Value}" Width="150" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button x:Name="Translate" Content="    翻译    " />
         </StackPanel>
         <TextBox x:Name="Result" Grid.Row="2" HorizontalAlignment="Stretch"
                  TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto"
