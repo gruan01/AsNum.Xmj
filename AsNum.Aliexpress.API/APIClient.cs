@@ -7,7 +7,9 @@ namespace AsNum.Xmj.API {
         static APIClient() {
             IConfigurationSource configurationSource = ConfigurationSourceFactory.Create();
             var injector = new PolicyInjector(configurationSource);
-            PolicyInjection.SetPolicyInjector(injector);
+            try {
+                PolicyInjection.SetPolicyInjector(injector);
+            } catch { }
         }
 
         private Auth Auth = null;

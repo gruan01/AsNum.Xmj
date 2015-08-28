@@ -19,6 +19,9 @@ namespace AsNum.Xmj.Common {
         Sync,
 
         [Description("报表"), Order(2)]
-        Report
+        Report,
+
+        [Description("工具"), Order(3)]
+        Tools
     }
 }
