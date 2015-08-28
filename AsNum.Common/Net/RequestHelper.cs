@@ -54,7 +54,7 @@ namespace AsNum.Common.Net {
                     this.url = "http://" + url;
                 if (this.url.StartsWith("https", true, null)) {
                     ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
-                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
                 }
             }
         }
