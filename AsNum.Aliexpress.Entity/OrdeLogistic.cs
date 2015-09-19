@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace AsNum.Xmj.Entity {
     public class OrdeLogistic {
 
-        [Key, Column(Order = 0), StringLength(20)]
+        [Key, Column(Order = 0), StringLength(30)]
         public string TrackNO {
             get;
             set;
