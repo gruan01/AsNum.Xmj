@@ -106,6 +106,10 @@
     <Compile Include="Migrations\201509190243297_AddLogisticService.Designer.cs">
       <DependentUpon>201509190243297_AddLogisticService.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509201150097_LogisticServiceCheckRegexLength.cs" />
+    <Compile Include="Migrations\201509201150097_LogisticServiceCheckRegexLength.Designer.cs">
+      <DependentUpon>201509201150097_LogisticServiceCheckRegexLength.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -147,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509190243297_AddLogisticService.resx">
       <DependentUpon>201509190243297_AddLogisticService.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509201150097_LogisticServiceCheckRegexLength.resx">
+      <DependentUpon>201509201150097_LogisticServiceCheckRegexLength.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

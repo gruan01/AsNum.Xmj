@@ -137,7 +137,8 @@
     <Compile Include="Entity\Issue.cs" />
     <Compile Include="Entity\IssueStatus.cs" />
     <Compile Include="Entity\LocalLogisticsCompany.cs" />
-    <Compile Include="Entity\LogisticsServiceResult.cs" />
+    <Compile Include="Entity\SupportOnlineLogisticsService.cs" />
+    <Compile Include="Entity\SupportLogisticsServices.cs" />
     <Compile Include="Entity\LogisticsTypes.cs" />
     <Compile Include="Entity\Message.cs" />
     <Compile Include="Entity\Message2.cs" />

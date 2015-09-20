@@ -8,7 +8,7 @@ namespace AsNum.Xmj.API.Methods {
     /// <summary>
     /// 根据订单号查询支持的线上发货服务
     /// </summary>
-    public class LogisticsServiceByOrderID : MethodBase<List<LogisticsServiceResult>> {
+    public class LogisticsServiceByOrderID : MethodBase<List<SupportOnlineLogisticsService>> {
 
         protected override string APIName {
             get {
@@ -32,10 +32,10 @@ namespace AsNum.Xmj.API.Methods {
         public int Length { get; set; }
 
 
-        public override List<LogisticsServiceResult> Execute(Auth auth) {
+        public override List<SupportOnlineLogisticsService> Execute(Auth auth) {
             var str = this.GetResult(auth);
             var o = new {
-                result = new List<LogisticsServiceResult>(),
+                result = new List<SupportOnlineLogisticsService>(),
                 success = false
             };
             o = JsonConvert.DeserializeAnonymousType(str, o);

@@ -63,6 +63,7 @@
     <Compile Include="IBuyer.cs" />
     <Compile Include="ICountry.cs" />
     <Compile Include="ILogisticFee.cs" />
+    <Compile Include="ILogisticsService.cs" />
     <Compile Include="IOrder.cs" />
     <Compile Include="IReceiver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace AsNum.Xmj.Entity {
         /// <summary>
         ///  物流追踪号码校验规则
         /// </summary>
-        [StringLength(50)]
+        [StringLength(200)]
         public string CheckRegex { get; set; }
 
         /// <summary>
@@ -57,5 +58,12 @@ namespace AsNum.Xmj.Entity {
         /// 是否常用
         /// </summary>
         public bool IsUsual { get; set; }
+
+        [NotMapped]
+        public string Display {
+            get {
+                return !string.IsNullOrWhiteSpace(this.NameCn) ? this.NameCn : this.NameEn;
+            }
+        }
     }
 }

@@ -43,7 +43,7 @@ namespace AsNum.Xmj.OnlineLogistics {
 
         public string Account { get; set; }
 
-        public List<LogisticsServiceResult> Services { get; set; }
+        public List<SupportOnlineLogisticsService> Services { get; set; }
 
         public List<LocalLogisticsCompany> LogisticsCompanies { get; set; }
 

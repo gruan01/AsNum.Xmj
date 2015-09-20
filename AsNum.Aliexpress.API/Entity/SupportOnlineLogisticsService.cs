@@ -1,7 +1,10 @@
 ﻿using Newtonsoft.Json;
 
 namespace AsNum.Xmj.API.Entity {
-    public class LogisticsServiceResult {
+    /// <summary>
+    /// 支持的线上发货服务
+    /// </summary>
+    public class SupportOnlineLogisticsService {
 
         [JsonProperty("logisticsServiceName")]
         public string ServiceName { get; set; }

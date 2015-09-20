@@ -15,7 +15,10 @@ using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using APIE = AsNum.Xmj.API.Entity;
+using System;
+using System.Globalization;
 
 namespace AsNum.Xmj.OrderManager.ViewModels {
 
@@ -44,7 +47,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             set;
         }
 
-        public static List<string> LogisticsTypes {
+        public static List<LogisticServices> LogisticsTypes {
             get;
             private set;
         }
@@ -62,9 +65,15 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         public IOrder OrderBiz { get; set; }
         public ILogisticFee LogisticFeeBiz { get; set; }
 
+        public static ListCollectionView LSV {
+            get; set;
+        }
+
         static BatchShipmentViewModel() {
             SendTypes = EnumHelper.GetDescriptions<ShipmentSendTypes>().Values.ToList();
-            LogisticsTypes = EnumHelper.GetDescriptions<AsNum.Xmj.API.Entity.LogisticsTypes>().Values.ToList();
+            LogisticsTypes = GlobalData.GetInstance<ILogisticsService>().GetAll().ToList();// EnumHelper.GetDescriptions<AsNum.Xmj.API.Entity.LogisticsTypes>().Values.ToList();
+            LSV = new ListCollectionView(LogisticsTypes);
+            LSV.GroupDescriptions.Add(new PropertyGroupDescription("IsUsual", new UsualGroupConverter()));
         }
         public BatchShipmentViewModel() {
             this.OrderBiz = GlobalData.MefContainer.GetExportedValue<IOrder>();
@@ -190,7 +199,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         private bool Shipment(ShipmentItem item, Account acc) {
             var api = new APIClient(acc.User, acc.Pwd);
             var method = new OrderShipment() {
-                LogisticsType = item.LogisticsType,
+                LogisticsType = item.LogisticsType.Code,
                 OrderNO = item.OrderNO.Trim(),//如果有空格， StackTrace会为 []]
                 SendType = item.SendType,
                 TrackingNO = item.TrackNO.Trim()
@@ -262,8 +271,8 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             }
         }
 
-        private APIE.LogisticsTypes logisticsType = APIE.LogisticsTypes.CPAM;
-        public APIE.LogisticsTypes LogisticsType {
+        private LogisticServices logisticsType = null;
+        public LogisticServices LogisticsType {
             get {
                 return this.logisticsType;
             }
@@ -316,6 +325,17 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         public string Info {
             get;
             set;
+        }
+    }
+
+    public class UsualGroupConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+            var isUsual = (bool)value;
+            return isUsual ? "常用" : "不常用";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+            throw new NotImplementedException();
         }
     }
 }

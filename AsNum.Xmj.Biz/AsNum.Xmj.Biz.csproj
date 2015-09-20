@@ -75,6 +75,7 @@
     <Compile Include="BuyerBiz.cs" />
     <Compile Include="CountryBiz.cs" />
     <Compile Include="LogisticFeeBiz.cs" />
+    <Compile Include="LogisticsServiceBiz.cs" />
     <Compile Include="OrderBiz.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReceiverBiz.cs" />

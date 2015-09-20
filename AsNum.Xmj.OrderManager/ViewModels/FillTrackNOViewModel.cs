@@ -32,12 +32,12 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         private Order Order;
 
 
-        public List<AE.LogisticsTypes> DeliveryTypes {
-            get;
-            set;
-        }
+        //public List<LogisticServices> DeliveryTypes {
+        //    get;
+        //    set;
+        //}
 
-        public AE.LogisticsTypes SelectedDeliveryType {
+        public LogisticServices SelectedDeliveryType {
             get;
             set;
         }
@@ -78,10 +78,16 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
         public IOrder OrderBiz { get; set; }
 
+        public static readonly IEnumerable<LogisticServices> Services = Enumerable.Empty<LogisticServices>();
+
+        static FillTrackNOViewModel() {
+            Services = GlobalData.GetInstance<ILogisticsService>().GetAll();
+        }
+
         public FillTrackNOViewModel(string orderNO) {
             this.OrderBiz = GlobalData.MefContainer.GetExportedValue<IOrder>();
-            this.DeliveryTypes = Enum.GetValues(typeof(AE.LogisticsTypes)).Cast<AE.LogisticsTypes>().ToList();
-            this.SelectedDeliveryType = AE.LogisticsTypes.CPAM;
+            //this.DeliveryTypes = Services.ToList();// Enum.GetValues(typeof(AE.LogisticsTypes)).Cast<AE.LogisticsTypes>().ToList();
+            this.SelectedDeliveryType = Services.FirstOrDefault();
 
             this.OrderNO = orderNO;
             this.Order = this.OrderBiz.GetOrder(orderNO);
@@ -106,7 +112,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
                     TrackingWebSite = this.TrackWebSite,
                     SendType = this.IsFullShiped ? AE.ShipmentSendTypes.Full : AE.ShipmentSendTypes.Part,
                     Description = this.Note,
-                    LogisticsType = this.SelectedDeliveryType
+                    LogisticsType = this.SelectedDeliveryType.Code
                 };
 
                 var api = new APIClient(account.User, account.Pwd);

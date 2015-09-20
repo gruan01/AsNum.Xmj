@@ -63,7 +63,8 @@ namespace AsNum.Xmj.AliSync {
                     OrderID = orderNO
                 };
                 var result = api.Execute(method);
-                msgs.AddRange(result.Results);
+                if (result.Results != null)
+                    msgs.AddRange(result.Results);
             }
             return msgs;
         }

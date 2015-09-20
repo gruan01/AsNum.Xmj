@@ -5,13 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ac="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
              xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
+             xmlns:aw="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF"
              xmlns:acc="clr-namespace:AsNum.WPF.Controls;assembly=AsNum.WPF.Controls"
+             xmlns:vm="clr-namespace:AsNum.Xmj.OrderManager.ViewModels"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ac:SerialNumberConverter x:Key="SN" />
         <ac:EnumDescriptionConverter x:Key="EnumDesc" />
+
+        <CollectionViewSource x:Key="lsv" Source="{x:Static vm:FillTrackNOViewModel.Services}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="IsUsual">
+                    <PropertyGroupDescription.Converter>
+                        <vm:UsualGroupConverter />
+                    </PropertyGroupDescription.Converter>
+                </PropertyGroupDescription>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+
     </UserControl.Resources>
     <Grid acc:Busy.MaskType="Adorned" acc:Busy.Text="{Binding BusyString}" acc:Busy.Show="{Binding IsBusy}">
         <Grid.RowDefinitions>
@@ -23,29 +36,50 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        
+
         <i:Interaction.Behaviors>
             <ab:UnifiedPaddingBeahavior Padding="2" />
         </i:Interaction.Behaviors>
-        
+
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="订单号码 : " />
             <TextBlock Text="{Binding OrderNO, Converter={StaticResource SN}}" />
         </StackPanel>
-        
+
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <TextBlock Text="物流方式 : " />
-            <ComboBox x:Name="DeliveryTypes" Grid.Row="1" ItemsSource="{Binding DeliveryTypes}" 
-                      SelectedValue="{Binding SelectedDeliveryType}"
+            <ComboBox Grid.Row="1" 
+                      ItemsSource="{Binding Source={StaticResource lsv}}" 
+                      SelectedItem="{Binding SelectedDeliveryType}"
                       Width="200">
+                <ComboBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" aw:UniPadding.Padding="5">
+                                        <Rectangle Width="10" Height="10" Fill="Green" />
+                                        <TextBlock Text="{Binding Name}" />
+                                    </StackPanel>
+                                    <Separator />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ComboBox.GroupStyle>
+                <ComboBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="5" aw:UniPadding.Padding="5" />
+                    </ItemsPanelTemplate>
+                </ComboBox.ItemsPanel>
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding . , Converter={StaticResource EnumDesc}}" />
+                        <TextBlock Text="{Binding Display}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
-        
+
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <StackPanel.Style>
                 <Style TargetType="StackPanel">
@@ -69,7 +103,7 @@
         <StackPanel Grid.Row="4" Orientation="Horizontal">
             <CheckBox x:Name="IsFullShiped" Content="已经全部发货" IsChecked="True" />
         </StackPanel>
-        
+
         <StackPanel Grid.Row="5">
             <TextBlock Text="备注" />
             <TextBox x:Name="Note" AcceptsReturn="True" Height="50" />

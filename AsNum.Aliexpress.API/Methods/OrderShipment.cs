@@ -16,10 +16,15 @@ namespace AsNum.Xmj.API.Methods {
             set;
         }
 
+        //[EnumNameParam("serviceName", Required = true)]
+        //public LogisticsTypes LogisticsType {
+        //    get;
+        //    set;
+        //}
+
         [EnumNameParam("serviceName", Required = true)]
-        public LogisticsTypes LogisticsType {
-            get;
-            set;
+        public string LogisticsType {
+            get; set;
         }
 
         [Param("logisticsNo", Required = true)]

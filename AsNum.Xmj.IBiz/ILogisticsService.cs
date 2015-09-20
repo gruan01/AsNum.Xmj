@@ -1,0 +1,15 @@
+﻿using AsNum.Xmj.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AsNum.Xmj.IBiz {
+    public interface ILogisticsService {
+
+        void Save(IEnumerable<LogisticServices> services);
+
+        IEnumerable<LogisticServices> GetAll();
+    }
+}
