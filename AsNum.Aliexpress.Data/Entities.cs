@@ -61,15 +61,15 @@ namespace AsNum.Xmj.Data {
             set;
         }
 
-        public DbSet<FreightPartition> FreightPartitions {
-            get;
-            set;
-        }
+        //public DbSet<FreightPartition> FreightPartitions {
+        //    get;
+        //    set;
+        //}
 
-        public DbSet<FreightPartitionCountry> FreightPartitionCountries {
-            get;
-            set;
-        }
+        //public DbSet<FreightPartitionCountry> FreightPartitionCountries {
+        //    get;
+        //    set;
+        //}
 
         public DbSet<LogisticFee> LogisticFees { get; set; }
 

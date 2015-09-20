@@ -63,7 +63,7 @@ namespace AsNum.Xmj.BizEntity.Conditions {
         /// </summary>
         public List<string> SpecifyAccounts { get; set; }
 
-        public LogisticsTypes? LogisticsType { get; set; }
+        public string LogisticsType { get; set; }
 
         public string ReceiverCountryCode { get; set; }
 

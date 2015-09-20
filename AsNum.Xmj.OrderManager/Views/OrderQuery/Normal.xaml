@@ -4,6 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+             xmlns:a="clr-namespace:AsNum.Xmj.Common;assembly=AsNum.Xmj.Common"
 			 xmlns:ac="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
 			 xmlns:acm="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF"
 			 xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
@@ -21,6 +22,7 @@
         <ac:EnumDescriptionConverter x:Key="EnumDesc" />
         <ac:SerialNumberConverter x:Key="SerialNumber" />
         <ac:OffTimeConverter x:Key="OffTime" />
+        <ac:LogisticServiceConverter x:Key="logistic" />
         <local:AttrConverter x:Key="Attrs" />
         <ac:CanNullConverter x:Key="CanNull" />
         <acm:BindingProxy x:Key="Proxy" Data="{Binding}" />
@@ -105,24 +107,20 @@
 
                 <TextBlock Grid.Column="4" Grid.Row="1" Text="发货方式" />
 
-                <!--<ComboBox Grid.Row="1" Grid.Column="5" ItemsSource="{Binding Source={x:Static model:OrderQueryViewModel.DeliveryTypes}}" SelectedItem="{Binding SelectedDeliveryType,Mode=TwoWay}">
-					<ComboBox.ItemTemplate>
-						<DataTemplate>
-								<TextBlock Text="{Binding . , Converter={StaticResource EnumDesc}, ConverterParameter='a'}" />
-						</DataTemplate>
-					</ComboBox.ItemTemplate>
-				</ComboBox>-->
-
-                <ComboBox Grid.Row="1" Grid.Column="5" SelectedItem="{Binding Cond.LogisticsType, Converter={StaticResource CanNull}}">
+                <!-- 复合源不支持分组 -->
+                <ComboBox Grid.Row="1" Grid.Column="5" 
+                          SelectedValue="{Binding Cond.LogisticsType}"
+                          SelectedValuePath="Code"
+                          >
                     <ComboBox.ItemsSource>
                         <CompositeCollection>
                             <ComboBoxItem Content="" />
-                            <CollectionContainer Collection="{Binding Source={x:Static model:OrderQueryViewModel.DeliveryTypes}}" />
+                            <CollectionContainer Collection="{x:Static a:GlobalData.LogisticService}" />
                         </CompositeCollection>
                     </ComboBox.ItemsSource>
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding . , Converter={StaticResource EnumDesc}, FallbackValue=''}" />
+                            <TextBlock Text="{Binding Display , Converter={StaticResource EnumDesc}, FallbackValue=''}" />
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
@@ -306,7 +304,7 @@
                         <DataGridTextColumn Header="单价" Binding="{Binding ProductPrice}" />
                         <DataGridTextColumn Header="产品名" Width="150" Binding="{Binding ProductName}" ElementStyle="{StaticResource allowWrap}" />
 
-                        <DataGridTextColumn Header="运送方式" Binding="{Binding LogisticsType, Converter={StaticResource EnumDesc}, ConverterParameter={x:Type Entity:LogisticsTypes}}" />
+                        <DataGridTextColumn Header="运送方式" Binding="{Binding LogisticsType, Converter={StaticResource logistic}}" />
                         <DataGridTemplateColumn Header="产品ID">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>

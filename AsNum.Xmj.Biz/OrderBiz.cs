@@ -66,12 +66,12 @@ namespace AsNum.Xmj.Biz {
                 datas = datas.Where(o => o.Note.Note.IndexOf(cond.Note) > -1);
             }
 
-            if (cond.LogisticsType.HasValue) {
+            if (!string.IsNullOrWhiteSpace(cond.LogisticsType)) {
                 var t = cond.LogisticsType.ToString();
                 //没有发货记录,取子订单里的客人选择的配送方式
                 datas = datas.Where(o => (o.Logistics.Count == 0 && o.Details.Any(d => d.LogisticsType == t))
-                    //有发货记录,取实际的配送方式
-                || (o.Logistics.Any(l => l.LogisticsType == cond.LogisticsType))
+                //有发货记录,取实际的配送方式
+                || (o.Logistics.Any(l => l.LogisticCode.Equals(cond.LogisticsType, StringComparison.OrdinalIgnoreCase)))
                 );
             }
 

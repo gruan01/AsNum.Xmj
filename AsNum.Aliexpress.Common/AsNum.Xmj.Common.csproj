@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="AppSettingBase.cs" />
     <Compile Include="Converters\CanNullConverter.cs" />
+    <Compile Include="Converters\LogisticServiceConverter.cs" />
     <Compile Include="Interfaces\IBatchShipment.cs" />
     <Compile Include="Interfaces\IOrderSync.cs" />
     <Compile Include="Controls\PaginationTemplateSelector.cs" />
@@ -95,7 +96,6 @@
     <Compile Include="Interfaces\ILog.cs" />
     <Compile Include="Interfaces\ILogObserverable.cs" />
     <Compile Include="Interfaces\IOrderSearcher.cs" />
-    <Compile Include="Interfaces\IQuickTrackButtonMetadata.cs" />
     <Compile Include="Interfaces\IScreenShoter.cs" />
     <Compile Include="Interfaces\IScreenShoterObserver.cs" />
     <Compile Include="Interfaces\ISettingEditor.cs" />
@@ -141,6 +141,10 @@
     <ProjectReference Include="..\AsNum.Xmj.BizEntity\AsNum.Xmj.BizEntity.csproj">
       <Project>{c75373f8-d631-4fcf-bb1b-7b7dfd475c3c}</Project>
       <Name>AsNum.Xmj.BizEntity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AsNum.Xmj.IBiz\AsNum.Xmj.IBiz.csproj">
+      <Project>{3af977d1-79e3-4fa0-b1b1-9fb2c5e90a35}</Project>
+      <Name>AsNum.Xmj.IBiz</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

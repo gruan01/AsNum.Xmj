@@ -47,10 +47,10 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             set;
         }
 
-        public static List<LogisticServices> LogisticsTypes {
-            get;
-            private set;
-        }
+        //public static List<LogisticServices> LogisticsTypes {
+        //    get;
+        //    private set;
+        //}
 
         public static List<string> SendTypes {
             get;
@@ -71,8 +71,8 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
         static BatchShipmentViewModel() {
             SendTypes = EnumHelper.GetDescriptions<ShipmentSendTypes>().Values.ToList();
-            LogisticsTypes = GlobalData.GetInstance<ILogisticsService>().GetAll().ToList();// EnumHelper.GetDescriptions<AsNum.Xmj.API.Entity.LogisticsTypes>().Values.ToList();
-            LSV = new ListCollectionView(LogisticsTypes);
+            //LogisticsTypes = GlobalData.GetInstance<ILogisticsService>().GetAll().ToList();// EnumHelper.GetDescriptions<AsNum.Xmj.API.Entity.LogisticsTypes>().Values.ToList();
+            LSV = new ListCollectionView(GlobalData.LogisticService.ToList());
             LSV.GroupDescriptions.Add(new PropertyGroupDescription("IsUsual", new UsualGroupConverter()));
         }
         public BatchShipmentViewModel() {

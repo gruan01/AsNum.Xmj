@@ -61,13 +61,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
         public string LogisticsType {
             get {
-                var ds = this.Order.Details.Select(d => {
-                    if (string.IsNullOrEmpty(d.LogisticsType))
-                        return "";
-                    var desc = EnumHelper.GetDescription(d.LogisticsType.ToEnum<LogisticsTypes>());
-                    return desc;
-                });
-                return string.Join(",", ds.Distinct());
+                return string.Join(",", this.Order.Details.Select(d => d.LogisticsType));
             }
         }
 
@@ -93,7 +87,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             var biz = GlobalData.GetInstance<IBuyer>();
             biz.UpdateLevel(this.Order.BuyerID, level);
             this.Level = level;
-            
+
             this.NotifyOfPropertyChange(() => this.Level);
         }
 

@@ -11,10 +11,15 @@ namespace AsNum.Xmj.Entity {
             set;
         }
 
+        //public int LogisticsType {
+        //    get;
+        //    set;
+        //}
+
         [Key, Column(Order = 1)]
-        public LogisticsTypes LogisticsType {
-            get;
-            set;
+        [StringLength(20)]
+        public string LogisticCode {
+            get; set;
         }
 
         [Key, Column(Order = 2), StringLength(20)]

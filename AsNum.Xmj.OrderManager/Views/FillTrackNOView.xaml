@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:a="clr-namespace:AsNum.Xmj.Common;assembly=AsNum.Xmj.Common"
              xmlns:ac="clr-namespace:AsNum.Xmj.Common.Converters;assembly=AsNum.Xmj.Common"
              xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF"
              xmlns:aw="clr-namespace:AsNum.Common.WPF;assembly=AsNum.Common.WPF"
@@ -15,7 +16,7 @@
         <ac:SerialNumberConverter x:Key="SN" />
         <ac:EnumDescriptionConverter x:Key="EnumDesc" />
 
-        <CollectionViewSource x:Key="lsv" Source="{x:Static vm:FillTrackNOViewModel.Services}">
+        <CollectionViewSource x:Key="lsv" Source="{x:Static a:GlobalData.LogisticService}">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="IsUsual">
                     <PropertyGroupDescription.Converter>

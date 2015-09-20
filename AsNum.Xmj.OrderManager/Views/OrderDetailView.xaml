@@ -11,6 +11,7 @@
     <UserControl.Resources>
         <ac:EnumDescriptionConverter x:Key="EnumDesc" />
         <ac:SerialNumberConverter x:Key="SerialNumber" />
+        <ac:LogisticServiceConverter x:Key="Logistic" />
     </UserControl.Resources>
     <Grid>
         <Border Margin="10" BorderThickness="3,0,3,3" BorderBrush="#FF00A2FF" Background="White" CornerRadius="5">
@@ -87,7 +88,7 @@
 
                         <StackPanel Orientation="Horizontal" Margin="3">
                             <TextBlock Text="配送方式:" VerticalAlignment="Center" />
-                            <TextBlock x:Name="LogisticsType" FontSize="18" Foreground="Red" />
+                            <TextBlock x:Name="LogisticsType" Text="{Binding LogisticsType, Converter={StaticResource Logistic}}" FontSize="18" Foreground="Red" />
                         </StackPanel>
                     </StackPanel>
                 </Grid>

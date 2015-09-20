@@ -32,10 +32,10 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             set;
         }
 
-        public static List<LogisticsTypes> DeliveryTypes {
-            get;
-            set;
-        }
+        //public static List<LogisticServices> DeliveryTypes {
+        //    get;
+        //    set;
+        //}
 
         public static List<AsNum.Xmj.BizEntity.Conditions.OrderSearchCondition.TimesTypes> TimesTypes { get; set; }
 
@@ -96,7 +96,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         private QueryEx<Order> QEX = new QueryEx<Order>();
 
         static OrderQueryViewModel() {
-            DeliveryTypes = Enum.GetValues(typeof(LogisticsTypes)).Cast<LogisticsTypes>().ToList();
+            //DeliveryTypes = GlobalData.GetInstance<ILogisticsService>().GetAll().ToList();// Enum.GetValues(typeof(LogisticsTypes)).Cast<LogisticsTypes>().ToList();
             TimesTypes = Enum.GetValues(typeof(AsNum.Xmj.BizEntity.Conditions.OrderSearchCondition.TimesTypes)).Cast<AsNum.Xmj.BizEntity.Conditions.OrderSearchCondition.TimesTypes>().ToList();
         }
         public OrderQueryViewModel() {

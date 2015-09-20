@@ -241,7 +241,8 @@ namespace AsNum.Xmj.AliSync {
             ao.Logistics = dOrder.LogisticInfos.Where(l => l.SendOn.HasValue).Select(l => new AE.OrdeLogistic() {
                 SendOn = l.SendOn,
                 TrackNO = l.TrackingNo,
-                LogisticsType = l.TypeCode.ToEnum<AE.LogisticsTypes>(),
+                //LogisticsType = l.TypeCode.ToEnum<AE.LogisticsTypes>(),
+                LogisticCode = l.TypeCode,
                 OrderNO = sOrder.OrderID
             }).ToList();
             #endregion

@@ -53,10 +53,10 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
 
 
-        public BindableCollection<IQuickTrackButton> TrackBtns {
-            get;
-            set;
-        }
+        //public BindableCollection<IQuickTrackButton> TrackBtns {
+        //    get;
+        //    set;
+        //}
 
         private string OrderNO;
 
@@ -91,14 +91,14 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             this.NotifyOfPropertyChange(() => this.CanFillTrackNO);
             this.NotifyOfPropertyChange(() => this.CanTrack);
 
-            this.TrackBtns = new BindableCollection<IQuickTrackButton>();
-            var exports = GlobalData.MefContainer.GetExports<IQuickTrackButton, IQuickTrackButtonMetadata>();
-            foreach (var e in exports) {
-                if (this.Logistics.Any(l => (l.LogisticsType & e.Metadata.Support) == l.LogisticsType)) {
-                    this.TrackBtns.Add(e.Value);
-                }
-            }
-            this.NotifyOfPropertyChange(() => this.TrackBtns);
+            //this.TrackBtns = new BindableCollection<IQuickTrackButton>();
+            //var exports = GlobalData.MefContainer.GetExports<IQuickTrackButton, IQuickTrackButtonMetadata>();
+            //foreach (var e in exports) {
+            //    if (this.Logistics.Any(l => (l.LogisticsType & e.Metadata.Support) == l.LogisticsType)) {
+            //        this.TrackBtns.Add(e.Value);
+            //    }
+            //}
+            //this.NotifyOfPropertyChange(() => this.TrackBtns);
         }
 
         public void Update() {

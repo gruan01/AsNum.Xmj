@@ -15,6 +15,7 @@
         <ac:EnumDescriptionConverter x:Key="Enum" />
         <ac:SerialNumberConverter x:Key="SerialNumber" />
         <ac:OffTimeConverter x:Key="OffTime" />
+        <ac:LogisticServiceConverter x:Key="logistic" />
         <local:AttrConverter x:Key="Attrs" />
     </UserControl.Resources>
     <Grid>
@@ -104,7 +105,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="运送方式" Binding="{Binding LogisticsType, Converter={StaticResource Enum}, ConverterParameter={x:Type Entity:LogisticsTypes}}" />
+                <DataGridTextColumn Header="运送方式" Binding="{Binding LogisticsType, Converter={StaticResource logistic}}" />
                 <DataGridTemplateColumn Header="产品ID">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

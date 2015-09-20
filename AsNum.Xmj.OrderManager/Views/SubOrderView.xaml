@@ -13,6 +13,7 @@
 
     <UserControl.Resources>
         <ac:EnumDescriptionConverter x:Key="EnumDesc" />
+        <ac:LogisticServiceConverter x:Key="Logistic" />
         <local:AttrConverter x:Key="Attrs" />
         <local:ProductImageConverter x:Key="ImgPath" />
 
@@ -65,7 +66,7 @@
             <DataGridTextColumn Header="单价" Binding="{Binding ProductPrice}" />
             <DataGridTextColumn Header="产品名" Width="150" Binding="{Binding ProductName}" ElementStyle="{StaticResource allowWrap}" />
 
-            <DataGridTextColumn Header="运送方式" Binding="{Binding LogisticsType, Converter={StaticResource EnumDesc}, ConverterParameter={x:Type Entity:LogisticsTypes}}" />
+            <DataGridTextColumn Header="运送方式" Binding="{Binding LogisticsType, Converter={StaticResource Logistic}}" />
             <DataGridTemplateColumn Header="产品ID">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>

@@ -110,6 +110,14 @@
     <Compile Include="Migrations\201509201150097_LogisticServiceCheckRegexLength.Designer.cs">
       <DependentUpon>201509201150097_LogisticServiceCheckRegexLength.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509201427381_OrderLogisticLogisticsCode.cs" />
+    <Compile Include="Migrations\201509201427381_OrderLogisticLogisticsCode.Designer.cs">
+      <DependentUpon>201509201427381_OrderLogisticLogisticsCode.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509201521431_RemoveLogisticType.cs" />
+    <Compile Include="Migrations\201509201521431_RemoveLogisticType.Designer.cs">
+      <DependentUpon>201509201521431_RemoveLogisticType.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -154,6 +162,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509201150097_LogisticServiceCheckRegexLength.resx">
       <DependentUpon>201509201150097_LogisticServiceCheckRegexLength.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509201427381_OrderLogisticLogisticsCode.resx">
+      <DependentUpon>201509201427381_OrderLogisticLogisticsCode.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509201521431_RemoveLogisticType.resx">
+      <DependentUpon>201509201521431_RemoveLogisticType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

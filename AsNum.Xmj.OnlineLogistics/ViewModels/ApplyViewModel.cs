@@ -70,7 +70,8 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
                     item.Account = order.Account;
                     item.Status = order.Status;
                     item.OrderNote = (order.Note ?? new OrderNote()).Note;
-                    item.LogisticType = string.Join(",", order.Details.Select(s => EnumHelper.GetDescription(s.LogisticsType.ToEnum<AsNum.Xmj.Entity.LogisticsTypes>())));
+                    //item.LogisticType = string.Join(",", order.Details.Select(s => EnumHelper.GetDescription(s.LogisticsType.ToEnum<AsNum.Xmj.Entity.LogisticsTypes>())));
+                    item.LogisticType = string.Join(",", order.Details.Select(s => s.LogisticsType));
 
                     item.Receiver = new Xmj.API.Entity.OnlineLogisticsContacts();
                     item.Receiver.CountryCode = order.Receiver.CountryCode;

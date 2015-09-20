@@ -78,16 +78,16 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
         public IOrder OrderBiz { get; set; }
 
-        public static readonly IEnumerable<LogisticServices> Services = Enumerable.Empty<LogisticServices>();
+        //public static readonly IEnumerable<LogisticServices> Services = Enumerable.Empty<LogisticServices>();
 
-        static FillTrackNOViewModel() {
-            Services = GlobalData.GetInstance<ILogisticsService>().GetAll();
-        }
+        //static FillTrackNOViewModel() {
+        //    Services = GlobalData.GetInstance<ILogisticsService>().GetAll();
+        //}
 
         public FillTrackNOViewModel(string orderNO) {
             this.OrderBiz = GlobalData.MefContainer.GetExportedValue<IOrder>();
             //this.DeliveryTypes = Services.ToList();// Enum.GetValues(typeof(AE.LogisticsTypes)).Cast<AE.LogisticsTypes>().ToList();
-            this.SelectedDeliveryType = Services.FirstOrDefault();
+            this.SelectedDeliveryType = GlobalData.LogisticService.FirstOrDefault() ;// Services.FirstOrDefault();
 
             this.OrderNO = orderNO;
             this.Order = this.OrderBiz.GetOrder(orderNO);

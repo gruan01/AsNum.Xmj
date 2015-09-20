@@ -130,8 +130,6 @@
     <Compile Include="OrderMessageEx.cs" />
     <Compile Include="ProductImageConverter.cs" />
     <Compile Include="ReminderOrder.cs" />
-    <Compile Include="Track17.cs" />
-    <Compile Include="USPS.cs" />
     <Compile Include="ViewModels\BatchShipmentViewModel.cs" />
     <Compile Include="ViewModels\BatchUpdateShamDeliveryOrderViewModel.cs" />
     <Compile Include="ViewModels\ExtendReceiveDaysViewModel.cs" />

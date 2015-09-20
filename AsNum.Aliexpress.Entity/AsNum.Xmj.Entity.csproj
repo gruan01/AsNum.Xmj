@@ -66,11 +66,8 @@
     <Compile Include="BuyerLevel.cs" />
     <Compile Include="Country.cs" />
     <Compile Include="EUBShipper.cs" />
-    <Compile Include="FreightPartitionCountry.cs" />
-    <Compile Include="FreightPartition.cs" />
     <Compile Include="LogisticFee.cs" />
     <Compile Include="LogisticServices.cs" />
-    <Compile Include="LogisticsTypes.cs" />
     <Compile Include="OrdeLogistic.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderDetail.cs" />

@@ -1,10 +1,25 @@
-﻿using System.ComponentModel;
+﻿using AsNum.Xmj.Entity;
+using AsNum.Xmj.IBiz;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.Composition.Hosting;
 
 namespace AsNum.Xmj.Common {
     public static class GlobalData {
 
         public static CompositionContainer MefContainer = null;
+
+        public static Lazy<IEnumerable<LogisticServices>> _logisticServices = new Lazy<IEnumerable<LogisticServices>>(() => {
+            var biz = GlobalData.GetInstance<ILogisticsService>();
+            return biz.GetAll();
+        });
+
+        public static IEnumerable<LogisticServices> LogisticService {
+            get {
+                return _logisticServices.Value;
+            }
+        }
 
         public static T GetInstance<T>() {
             return MefContainer.GetExportedValue<T>();
