@@ -77,6 +77,7 @@ namespace AsNum.Xmj.Data {
 
         public DbSet<OrdeLogistic> OrderLogistics { get; set; }
 
+        public DbSet<LogisticServices> LogisticServices { get; set; }
 
         static Entities() {
             Database.SetInitializer<Entities>(null);

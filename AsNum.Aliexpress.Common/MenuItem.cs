@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace AsNum.Xmj.Common {
     public class MenuItem : IMenuItem {
+
         public string Header {
             get;
             private set;
@@ -12,6 +13,18 @@ namespace AsNum.Xmj.Common {
         public ICollection<IMenuItem> SubItems {
             get;
             set;
+        }
+
+        public string Group {
+            get {
+                return "";
+            }
+        }
+
+        public bool IsSeparator {
+            get {
+                return false;
+            }
         }
 
         private Action executeAct = null;

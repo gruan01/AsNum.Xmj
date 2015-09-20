@@ -121,7 +121,6 @@
     <Compile Include="Loading.xaml.cs">
       <DependentUpon>Loading.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Menus\LostOrderMenu.cs" />
     <Compile Include="Menus\OrderQueryMenu.cs" />
     <Compile Include="Menus\RemindersMenu.cs" />
     <Compile Include="Menus\ShamDeliveryUpdateMenu.cs" />

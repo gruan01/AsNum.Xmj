@@ -11,11 +11,17 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace AsNum.Xmj.OrderManager.Menus {
-    [Export(typeof(IMenuItem)), ExportMetadata("TopMenuTag", TopMenuTags.DataMQ)]
+    [Export(typeof(IMenuItem)), ExportMetadata("TopMenuTag", TopMenuTags.OrderAndProduct)]
     public class ShamShippingMenu : MenuItemBase {
         public override string Header {
             get {
                 return "已填单未发货";
+            }
+        }
+
+        public override string Group {
+            get {
+                return "order";
             }
         }
 

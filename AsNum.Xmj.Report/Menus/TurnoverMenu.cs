@@ -5,7 +5,7 @@ using System.ComponentModel.Composition;
 
 namespace AsNum.Xmj.Report.Menus {
 
-    [Export(typeof(IMenuItem)), ExportMetadata("TopMenuTag", TopMenuTags.Report)]
+    [Export(typeof(IMenuItem)), ExportMetadata("TopMenuTag", TopMenuTags.DataAndReport)]
     public class TurnoverMenu : MenuItemBase {
 
         public override string Header {

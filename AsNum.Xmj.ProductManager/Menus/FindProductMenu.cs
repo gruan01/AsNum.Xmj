@@ -5,7 +5,7 @@ using System.ComponentModel.Composition;
 
 namespace AsNum.Xmj.ProductManager.Menus {
 
-    [Export(typeof(IMenuItem)), ExportMetadata("TopMenuTag", TopMenuTags.DataMQ)]
+    [Export(typeof(IMenuItem)), ExportMetadata("TopMenuTag", TopMenuTags.OrderAndProduct)]
     public class FindProductMenu : MenuItemBase {
         public override string Header {
             get {

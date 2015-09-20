@@ -20,6 +20,10 @@ namespace AsNum.Xmj {
             }
         }
 
+        public void SetSubItems(ICollection<IMenuItem> subItems) {
+            this.subItems = subItems;
+        }
+
         public TopMenuItem(string header, ICollection<IMenuItem> subs) {
             this.header = header;
             this.subItems = subs;

@@ -4,8 +4,15 @@ using AsNum.Xmj.OnlineLogistics.ViewModels;
 using System.ComponentModel.Composition;
 
 namespace AsNum.Xmj.OnlineLogistics {
-    [Export(typeof(IMenuItem)), ExportMetadata("TopMenuTag", TopMenuTags.DataMQ)]
+    [Export(typeof(IMenuItem)), ExportMetadata("TopMenuTag", TopMenuTags.OrderAndProduct)]
     public class Menu : MenuItemBase {
+
+        public override string Group {
+            get {
+                return "Logistic";
+            }
+        }
+
         public override string Header {
             get { return "申请线上发货"; }
         }

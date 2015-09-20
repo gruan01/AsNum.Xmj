@@ -55,12 +55,29 @@ namespace AsNum.Xmj {
                         .ToDictionary(g => g.Key, g => g.ToList())
                         .Select(g => {
                             var order = EnumHelper.GetAttribute<TopMenuTags, OrderAttribute>(g.Key);
-                            return new TopMenuItem(EnumHelper.GetDescription<TopMenuTags>(g.Key), g.Value.Select(gg => gg.Value).ToList()) {
+                            return new TopMenuItem(EnumHelper.GetDescription<TopMenuTags>(g.Key), g.Value.OrderBy(gg => gg.Value.Group).Select(gg => gg.Value).ToList()) {
                                 Order = order != null ? order.Order : 100
                             };
                         })
                         .OrderBy(o => o.Order)
                         .ToList();
+
+
+                    gms.ForEach(g => {
+                        var t = new List<IMenuItem>();
+                        var grp = g.SubItems.First().Group;
+                        foreach (var i in g.SubItems) {
+                            if (!grp.Equals(i.Group, StringComparison.OrdinalIgnoreCase)) {
+                                t.Add(new MenuSeparator());
+                                grp = i.Group;
+                            }
+                            t.Add(i);
+                        }
+
+                        g.SetSubItems(t);
+                    });
+
+
 
                     var gms2 = this.MenuItems.Where(m => m.Metadata.TopMenuTag == TopMenuTags.None)
                         .Select(m => new TopMenuItem(m.Value.Header, m.Value.SubItems));

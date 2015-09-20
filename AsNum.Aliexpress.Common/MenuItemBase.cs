@@ -2,6 +2,7 @@
 using Caliburn.Micro;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System;
 
 namespace AsNum.Xmj.Common {
     public abstract class MenuItemBase : IMenuItem {
@@ -16,6 +17,8 @@ namespace AsNum.Xmj.Common {
             get;
         }
 
+
+
         public virtual void Execute(object obj) {
 
         }
@@ -25,6 +28,17 @@ namespace AsNum.Xmj.Common {
             get {
                 return null;
             }
+        }
+
+        public bool IsSeparator {
+            get {
+                return false;
+            }
+        }
+
+
+        public virtual string Group {
+            get { return ""; }
         }
     }
 }

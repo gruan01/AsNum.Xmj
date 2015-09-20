@@ -10,11 +10,17 @@ using System.Threading.Tasks;
 
 namespace AsNum.Xmj.OrderManager.Menus {
 
-    [Export(typeof(IMenuItem)), ExportMetadata("TopMenuTag", TopMenuTags.DataMQ)]
+    [Export(typeof(IMenuItem)), ExportMetadata("TopMenuTag", TopMenuTags.OrderAndProduct)]
     public class RemindersMenu : MenuItemBase {
 
         public override string Header {
             get { return "未付款订单催单"; }
+        }
+
+        public override string Group {
+            get {
+                return "order";
+            }
         }
 
         public override void Execute(object obj) {

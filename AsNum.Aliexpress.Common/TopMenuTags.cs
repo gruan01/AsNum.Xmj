@@ -12,14 +12,14 @@ namespace AsNum.Xmj.Common {
         /// <summary>
         /// 
         /// </summary>
-        [Description("维护与查询"), Order(1)]
-        DataMQ,
+        [Description("订单&产品"), Order(1)]
+        OrderAndProduct,
 
         [Description("数据同步")]
         Sync,
 
-        [Description("报表"), Order(2)]
-        Report,
+        [Description("数据&报表"), Order(2)]
+        DataAndReport,
 
         [Description("工具"), Order(3)]
         Tools

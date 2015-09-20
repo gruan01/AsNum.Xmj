@@ -45,6 +45,17 @@
                         <Setter Property="Header" Value="{Binding Header}" />
                         <Setter Property="ItemsSource" Value="{Binding SubItems}" />
                         <Setter Property="cm:Message.Attach" Value="Execute($view)" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSeparator}" Value="True">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Separator />
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
                     </Style>
                 </Menu.ItemContainerStyle>
             </Menu>

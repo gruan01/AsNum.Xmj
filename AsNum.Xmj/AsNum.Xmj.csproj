@@ -166,8 +166,8 @@
     </Compile>
     <Compile Include="AppBootstrapper.cs" />
     <Compile Include="AutobinderTemplateSelector.cs" />
-    <Compile Include="MenuItemTemplateSelector.cs" />
     <Compile Include="Menus\StartUpMenu.cs" />
+    <Compile Include="MenuTemplateSelector.cs" />
     <Compile Include="Settings\CommonSettingGroup.cs" />
     <Compile Include="Settings\NetworkGroupSetting.cs" />
     <Compile Include="SheelViewModel.cs" />
