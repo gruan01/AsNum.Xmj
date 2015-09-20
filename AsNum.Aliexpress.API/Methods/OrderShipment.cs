@@ -22,7 +22,7 @@ namespace AsNum.Xmj.API.Methods {
         //    set;
         //}
 
-        [EnumNameParam("serviceName", Required = true)]
+        [Param("serviceName", Required = true)]
         public string LogisticsType {
             get; set;
         }
