@@ -20,7 +20,7 @@ namespace AsNum.Xmj.API.Methods {
         [Param("buyerName")]
         public string BuyerName { get; set; }
 
-        [EnumNameParam("issueStatus", Required = true)]
+        [EnumParam("issueStatus", EnumUseNameOrValue.Name, Required = true)]
         public IssueStatus? Status { get; set; }
 
         [Param("currentPage", Required = true)]

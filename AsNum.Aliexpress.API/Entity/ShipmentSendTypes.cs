@@ -4,11 +4,11 @@ using System.ComponentModel;
 namespace AsNum.Xmj.API.Entity {
     public enum ShipmentSendTypes {
         [Description("全部发货")]
-        [SpecifyValue("all")]
+        [SpecifyNameValue(Name = "all")]
         Full,
 
         [Description("部分发货")]
-        [SpecifyValue("part")]
+        [SpecifyNameValue(Name = "part")]
         Part
     }
 }

@@ -11,7 +11,7 @@ namespace AsNum.Xmj.API.Methods {
             }
         }
 
-        [EnumNameParam("productStatusType", Required = true)]
+        [EnumParam("productStatusType", EnumUseNameOrValue.Name, Required = true)]
         public ProductStatus Status {
             get;
             set;
@@ -29,7 +29,7 @@ namespace AsNum.Xmj.API.Methods {
             set;
         }
 
-        [EnumNameParam("wsDisplay")]
+        [EnumParam("wsDisplay", EnumUseNameOrValue.Name)]
         public ProductOfflineReasons? OfflineReason {
             get;
             set;

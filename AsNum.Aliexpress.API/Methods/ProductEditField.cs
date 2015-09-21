@@ -16,7 +16,7 @@ namespace AsNum.Xmj.API.Methods {
             set;
         }
 
-        [EnumNameParam("fiedName")]
+        [EnumParam("fiedName", EnumUseNameOrValue.Name)]
         public ProductBatchEditFields Field {
             get;
             set;

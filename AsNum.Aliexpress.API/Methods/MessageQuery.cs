@@ -8,6 +8,7 @@ namespace AsNum.Xmj.API.Methods {
     /// <summary>
     /// 查询站内信
     /// </summary>
+    [Obsolete]
     public class MessageQuery : MethodBase<Paged<Message2>> {
         protected override string APIName {
             get {

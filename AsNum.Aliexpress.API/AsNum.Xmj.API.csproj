@@ -107,11 +107,13 @@
     <Compile Include="APIClient.cs" />
     <Compile Include="Attributes\DateTimeParam.cs" />
     <Compile Include="Attributes\AliDateTimeParamFormatter.cs" />
+    <Compile Include="Attributes\EnumAttribute.cs" />
     <Compile Include="Attributes\EnumNameParamAttribute.cs" />
     <Compile Include="Attributes\EnumValueParamAttribute.cs" />
     <Compile Include="Attributes\FlattenParamAttribute.cs" />
     <Compile Include="Attributes\JsonParam.cs" />
     <Compile Include="Attributes\ParamFormaterAttribute.cs" />
+    <Compile Include="Attributes\SpecifyNameValueAttribute.cs" />
     <Compile Include="Attributes\SpecifyValueAttribute.cs" />
     <Compile Include="Auth.cs" />
     <Compile Include="Attributes\NeedAuthAttribute.cs" />
@@ -137,6 +139,7 @@
     <Compile Include="Entity\Issue.cs" />
     <Compile Include="Entity\IssueStatus.cs" />
     <Compile Include="Entity\LocalLogisticsCompany.cs" />
+    <Compile Include="Entity\MessageTypes.cs" />
     <Compile Include="Entity\SupportOnlineLogisticsService.cs" />
     <Compile Include="Entity\SupportLogisticsServices.cs" />
     <Compile Include="Entity\LogisticsTypes.cs" />
@@ -190,7 +193,10 @@
     <Compile Include="Methods\LogisticsOnlineLogisticsPrintInfo.cs" />
     <Compile Include="Methods\LogisticsServiceByOrderID.cs" />
     <Compile Include="Methods\LogisticsServiceList.cs" />
+    <Compile Include="Methods\MessageAdd.cs" />
+    <Compile Include="Methods\MessageDetailList.cs" />
     <Compile Include="Methods\MessageQuery.cs" />
+    <Compile Include="Methods\MessageRelations.cs" />
     <Compile Include="Methods\OrderEvaluate.cs" />
     <Compile Include="Methods\OrderExtendReceiveTime.cs" />
     <Compile Include="Methods\OrderMsgList.cs" />

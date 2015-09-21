@@ -81,6 +81,7 @@
     <Compile Include="ApplyItem.cs" />
     <Compile Include="BoolToVisibilityConverter.cs" />
     <Compile Include="ExistsLogisticInfoConverter.cs" />
+    <Compile Include="GroupSourceConverter.cs" />
     <Compile Include="LocSelector.cs" />
     <Compile Include="Menus\ApplyMenu.cs" />
     <Compile Include="Menus\ServiceMenu.cs" />

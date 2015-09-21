@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 
 namespace AsNum.Xmj.API.Methods {
+
+    [Obsolete]
     public class OrderMsgList : MethodBase<Paged<Message>> {
 
         protected override string APIName {

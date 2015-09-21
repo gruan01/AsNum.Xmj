@@ -19,7 +19,16 @@ namespace AsNum.Xmj.OnlineLogistics {
 
         public string OrderNote { get; set; }
 
-        public string Service { get; set; }
+
+        private SupportOnlineLogisticsService _service = null;
+        public SupportOnlineLogisticsService Service {
+            get {
+                return this._service;
+            }
+            set {
+                this._service = value;
+            }
+        }
 
         public string LocalLogisticCompany { get; set; }
 

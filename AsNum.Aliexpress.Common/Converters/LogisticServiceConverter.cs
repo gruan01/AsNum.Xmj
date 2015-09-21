@@ -9,7 +9,9 @@ using System.Windows.Data;
 namespace AsNum.Xmj.Common.Converters {
     public class LogisticServiceConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-            var codes = ((string)value).Split(',').Where(c => !string.IsNullOrWhiteSpace(c)).ToList();
+            if (value == null)
+                return "";
+            var codes = ((string)value).Split(',').Where(c => !string.IsNullOrWhiteSpace(c)).Distinct().ToList();
             codes = codes.Where(c => !string.IsNullOrWhiteSpace(c))
                 .Select(c => {
                     var lo = GlobalData.LogisticService.FirstOrDefault(l => l.Code.Equals(c));

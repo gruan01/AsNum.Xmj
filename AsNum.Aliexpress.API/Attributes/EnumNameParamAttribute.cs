@@ -2,6 +2,7 @@
 using System.Linq;
 
 namespace AsNum.Xmj.API.Attributes {
+    [System.Obsolete("", true)]
     public class EnumNameParamAttribute : ParamAttribute {
 
         public EnumNameParamAttribute(string name)

@@ -28,7 +28,7 @@ namespace AsNum.Xmj.API.Methods {
         [Param("chinaLogisticsId")]
         public string LocalTrackNO { get; set; }
 
-        [EnumNameParam("logisticsStatus")]
+        [EnumParam("logisticsStatus", EnumUseNameOrValue.Name)]
         public OnlineLogisticStatus? Status { get; set; }
 
         [Param("gmtCreateStartStr")]

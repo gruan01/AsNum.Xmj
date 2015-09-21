@@ -11,40 +11,40 @@ namespace AsNum.Xmj.API.Entity {
     public enum ProductBatchEditFields {
 
         [Description("备货期")]
-        [SpecifyValue("deliveryTime")]
+        [SpecifyNameValue(Name = "deliveryTime")]
         DeliveryTime,
 
-        [Description("一口价"), SpecifyValue("productPrice")]
+        [Description("一口价"), SpecifyNameValue(Name = "productPrice")]
         ProductPrice,
 
-        [Description("运费模板"), SpecifyValue("freightTemplateId")]
+        [Description("运费模板"), SpecifyNameValue(Name = "freightTemplateId")]
         FreightTemplateID,
 
-        [Description("包裹长度"), SpecifyValue("packageLength")]
+        [Description("包裹长度"), SpecifyNameValue(Name = "packageLength")]
         PackageLength,
 
-        [Description("包裹宽度"), SpecifyValue("packageWidth")]
+        [Description("包裹宽度"), SpecifyNameValue(Name = "packageWidth")]
         PackageWidth,
 
-        [Description("包裹高度"), SpecifyValue("packageHeight")]
+        [Description("包裹高度"), SpecifyNameValue(Name = "packageHeight")]
         PackageHeight,
 
-        [Description("毛重"), SpecifyValue("grossWeight")]
+        [Description("毛重"), SpecifyNameValue(Name = "grossWeight")]
         GrossWeight,
 
-        [Description("商品有效天数"), SpecifyValue("wsValidNum")]
+        [Description("商品有效天数"), SpecifyNameValue(Name = "wsValidNum")]
         ValidDay,
 
-        [Description("批发最小数量"), SpecifyValue("bulkOrder")]
+        [Description("批发最小数量"), SpecifyNameValue(Name = "bulkOrder")]
         MOQ,
 
-        [Description("批发折扣"), SpecifyValue("bulkDiscount")]
+        [Description("批发折扣"), SpecifyNameValue(Name = "bulkDiscount")]
         BulkDiscount,
 
-        [Description("产品标题"), SpecifyValue("subject")]
+        [Description("产品标题"), SpecifyNameValue(Name = "subject")]
         Subject,
 
-        [Description("详情"), SpecifyValue("detail")]
+        [Description("详情"), SpecifyNameValue(Name = "detail")]
         Detail
     }
 }

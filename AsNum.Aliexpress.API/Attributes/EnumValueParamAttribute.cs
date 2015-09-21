@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 
 namespace AsNum.Xmj.API.Attributes {
+
+    [System.Obsolete("", true)]
     public class EnumValueParamAttribute : ParamAttribute {
 
         public EnumValueParamAttribute(string name)
@@ -10,11 +12,11 @@ namespace AsNum.Xmj.API.Attributes {
         public override Dictionary<string, string> GetParams(object obj, System.Reflection.PropertyInfo p) {
 
             var value = p.GetValue(obj, null);
-            if(value == null && this.Required)
+            if (value == null && this.Required)
                 return new Dictionary<string, string>(){
                     {this.Name, ""}
                 };
-            else if(value == null && !this.Required)
+            else if (value == null && !this.Required)
                 return null;
             else
                 return new Dictionary<string, string>(){

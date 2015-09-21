@@ -14,6 +14,7 @@
     <UserControl.Resources>
         <ac:EnumDescriptionConverter x:Key="Enum" />
         <a:BindingProxy x:Key="Proxy" Data="{Binding}" />
+        <ac:LogisticServiceConverter x:Key="logistic" />
     </UserControl.Resources>
 
     <Grid>
@@ -87,7 +88,7 @@
         <DataGrid Grid.Row="1" x:Name="Logistics" IsReadOnly="True" AutoGenerateColumns="False" SelectionUnit="CellOrRowHeader">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="运单号" Binding="{Binding TrackNO}" />
-                <DataGridTextColumn Header="发货方式" Binding="{Binding LogisticsType, Converter={StaticResource Enum}}" />
+                <DataGridTextColumn Header="发货方式" Binding="{Binding LogisticCode, Converter={StaticResource logistic}}" />
                 <DataGridTextColumn Header="发货时间" Binding="{Binding SendOn}" />
             </DataGrid.Columns>
         </DataGrid>

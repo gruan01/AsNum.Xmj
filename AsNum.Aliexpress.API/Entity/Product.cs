@@ -46,7 +46,7 @@ namespace AsNum.Xmj.API.Entity {
         [Param("productPrice"), JsonProperty("productPrice")]
         public decimal Price { get; set; }
 
-        [EnumValueParam("productUnit"), JsonProperty("productUnit")]
+        [EnumParam("productUnit", EnumUseNameOrValue.Name), JsonProperty("productUnit")]
         public ProductUnit Unit { get; set; }
 
         /// <summary>

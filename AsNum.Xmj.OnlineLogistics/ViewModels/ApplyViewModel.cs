@@ -230,7 +230,7 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
                             Pickup = i.NeedPickup ? i.Pickup : null,
                             Receiver = i.Receiver,
                             Remark = "WHAT IS REMARK",
-                            Service = i.Service,
+                            Service = i.Service.ServiceID,
                             Sender = i.Sender
                         };
                         var api = new APIClient(acc.User, acc.Pwd);

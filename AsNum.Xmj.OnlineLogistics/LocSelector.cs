@@ -9,7 +9,7 @@ namespace AsNum.Xmj.OnlineLogistics {
         public DataTemplate DefaultTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container) {
-            var str = (string)item;
+            var str = ((string)item) ?? "";
             if (str.Contains("深圳"))
                 return this.NearLocTemplate;
             else

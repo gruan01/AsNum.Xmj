@@ -1,6 +1,8 @@
 ﻿using AsNum.Xmj.API.Attributes;
 
 namespace AsNum.Xmj.API.Methods {
+
+    [System.Obsolete]
     public class MessageSend : MethodBase<object> {
         protected override string APIName {
             get {
@@ -8,13 +10,13 @@ namespace AsNum.Xmj.API.Methods {
             }
         }
 
-        [Param("buyerId", Required=true)]
+        [Param("buyerId", Required = true)]
         public string BuyerID {
             get;
             set;
         }
 
-        [Param("content", Required=true)]
+        [Param("content", Required = true)]
         public string Ctx {
             get;
             set;

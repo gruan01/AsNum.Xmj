@@ -4,19 +4,19 @@ using System.ComponentModel;
 namespace AsNum.Xmj.API.Entity {
     public enum ProductStatus {
         [Description("销售中")]
-        [SpecifyValue("onSelling")]
+        [SpecifyNameValue(Name = "onSelling")]
         OnSelling,
 
         [Description("下架")]
-        [SpecifyValue("offline")]
+        [SpecifyNameValue(Name = "offline")]
         Offline,
 
         [Description("审核中")]
-        [SpecifyValue("auditing")]
+        [SpecifyNameValue(Name = "auditing")]
         Auditing,
 
         [Description("审核不通过")]
-        [SpecifyValue("editingRequired")]
+        [SpecifyNameValue(Name = "editingRequired")]
         EditingRequired
     }
 }

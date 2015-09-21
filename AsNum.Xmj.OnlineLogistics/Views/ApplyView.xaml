@@ -16,6 +16,8 @@
         <l:ExistsLogisticInfoConverter x:Key="Exists" />
         <l:BoolToVisibilityConverter x:Key="boolToVisibility" />
         <a:EnumDescriptionConverter x:Key="Enum" />
+        <l:GroupSourceConverter x:Key="Group" />
+        <a:LogisticServiceConverter x:Key="Logistic" />
 
         <DataTemplate x:Key="ServiceTpl" DataTemplate.DataType="ComboBoxItem">
             <StackPanel>
@@ -85,12 +87,12 @@
                 <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="账户" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding Account}" />
                 <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="订单备注" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding OrderNote}" />
                 <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="Log" DataGridColumn.IsReadOnly="True" DataGridColumn.MaxWidth="200" DataGridBoundColumn.Binding="{Binding Info}" />
-                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="配送方式" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding LogisticType}" />
+                <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="配送方式" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding LogisticType, Converter={StaticResource Logistic}}" />
                 <DataGridTextColumn DataGridColumn.CellStyle="{StaticResource OrderInfo}" DataGridColumn.Header="已申请单号" DataGridColumn.IsReadOnly="True" DataGridBoundColumn.Binding="{Binding ExistsLogisticInfos,Converter={StaticResource Exists}}" />
-                <DataGridComboBoxColumn DataGridComboBoxColumn.SelectedValuePath="ServiceID" DataGridColumn.Header="发货方式/仓库" DataGridComboBoxColumn.SelectedValueBinding="{Binding Service}">
+                <!--<DataGridComboBoxColumn DataGridComboBoxColumn.SelectedValuePath="ServiceID" DataGridColumn.Header="发货方式/仓库" DataGridComboBoxColumn.SelectedValueBinding="{Binding Service}">
                     <DataGridComboBoxColumn.EditingElementStyle>
                         <Style Style.TargetType="{x:Type ComboBox}">
-                            <Setter Setter.Property="ItemsControl.ItemsSource" Setter.Value="{Binding Path=Services}" />
+                            <Setter Setter.Property="ItemsControl.ItemsSource" Setter.Value="{Binding Path=Services, Converter={StaticResource Group}}" />
                             <Setter Setter.Property="ItemsControl.DisplayMemberPath" Setter.Value="ServiceName" />
                             <Setter Setter.Property="ItemsControl.ItemTemplate" Setter.Value="{StaticResource ServiceTpl}" />
                         </Style>
@@ -102,7 +104,46 @@
                             <Setter Setter.Property="ItemsControl.ItemTemplate" Setter.Value="{StaticResource ServiceTpl}" />
                         </Style>
                     </DataGridComboBoxColumn.ElementStyle>
-                </DataGridComboBoxColumn>
+                </DataGridComboBoxColumn>-->
+
+                <DataGridTemplateColumn Header="收货仓库">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Service.ServiceName}" />
+                                <TextBlock Text="{Binding Service.DeliveryAddress}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox 
+                                ItemsSource="{Binding Services, Converter={StaticResource Group}}"
+                                ItemTemplate="{StaticResource ServiceTpl}"
+                                SelectedItem="{Binding Service, UpdateSourceTrigger=PropertyChanged}"
+                                >
+
+                                <ComboBox.GroupStyle>
+                                    <GroupStyle>
+                                        <GroupStyle.HeaderTemplate>
+                                            <DataTemplate>
+                                                <StackPanel ac:UniPadding.Padding="10" >
+                                                    <StackPanel Orientation="Horizontal" ac:UniPadding.Padding="2">
+                                                        <Rectangle Width="10" Height="10" Fill="Green" />
+                                                        <TextBlock Text="{Binding Name}" />
+                                                    </StackPanel>
+                                                    <Separator Background="Green" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GroupStyle.HeaderTemplate>
+                                    </GroupStyle>
+                                </ComboBox.GroupStyle>
+
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
                 <DataGridComboBoxColumn DataGridComboBoxColumn.SelectedValuePath="ID" DataGridColumn.Header="国内快递公司" DataGridComboBoxColumn.SelectedValueBinding="{Binding LocalLogisticCompany}">
                     <DataGridComboBoxColumn.EditingElementStyle>
                         <Style Style.TargetType="{x:Type ComboBox}">
@@ -179,7 +220,7 @@
                     <MenuItem Header="查看选中的订单" cal:Message.Attach="ViewOrder()" />
                 </ContextMenu>
             </DataGrid.ContextMenu>
-            
+
             <i:Interaction.Behaviors>
                 <ab:DataGridRowIndexBehavior xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF" />
                 <ab:DataGridPasteBehavior xmlns:ab="clr-namespace:AsNum.Common.WPF.Behaviors;assembly=AsNum.Common.WPF" />

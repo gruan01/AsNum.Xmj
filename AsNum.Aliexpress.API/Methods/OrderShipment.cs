@@ -33,7 +33,7 @@ namespace AsNum.Xmj.API.Methods {
             set;
         }
 
-        [EnumNameParam("sendType")]
+        [EnumParam("sendType", EnumUseNameOrValue.Name)]
         public ShipmentSendTypes SendType {
             get;
             set;

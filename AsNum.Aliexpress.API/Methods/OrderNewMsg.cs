@@ -1,6 +1,8 @@
 ﻿using AsNum.Xmj.API.Attributes;
 
 namespace AsNum.Xmj.API.Methods {
+
+    [System.Obsolete]
     public class OrderNewMsg : MethodBase<string> {
         protected override string APIName {
             get {
