@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -169,26 +170,28 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         }
 
         public void Search(OrderSearchCondition cond) {
-            this.IsBusy = true;
-            this.NotifyOfPropertyChange(() => this.IsBusy);
-            DispatcherHelper.DoEvents();
+            Task.Factory.StartNew(() => {
+                this.IsBusy = true;
+                this.NotifyOfPropertyChange(() => this.IsBusy);
+                DispatcherHelper.DoEvents();
 
-            cond.Pager.Page = this.PaginationVM.CurrPage - 1;
-            cond.Pager.PageSize = this.PaginationVM.PageSize;
-            var results = this.OrderBiz.Search(cond);
-            this.PaginationVM.Total = cond.Pager.Count;
+                cond.Pager.Page = this.PaginationVM.CurrPage - 1;
+                cond.Pager.PageSize = this.PaginationVM.PageSize;
+                var results = this.OrderBiz.Search(cond);
+                this.PaginationVM.Total = cond.Pager.Count;
 
-            this.QueryResult = new BindableCollection<Order>(results);
+                this.QueryResult = new BindableCollection<Order>(results);
 
-            this.NotifyOfPropertyChange("QueryResult");
-            if (this.QueryResult.Count > 0)
-                this.CurrOrder = this.QueryResult.First();
-            else
-                this.CurrOrder = null;
+                this.NotifyOfPropertyChange("QueryResult");
+                if (this.QueryResult.Count > 0)
+                    this.CurrOrder = this.QueryResult.First();
+                else
+                    this.CurrOrder = null;
 
-            this.NotifyOfPropertyChange(() => this.CurrOrder);
-            this.IsBusy = false;
-            this.NotifyOfPropertyChange(() => this.IsBusy);
+                this.NotifyOfPropertyChange(() => this.CurrOrder);
+                this.IsBusy = false;
+                this.NotifyOfPropertyChange(() => this.IsBusy);
+            });
         }
 
         private Order currOrder = null;

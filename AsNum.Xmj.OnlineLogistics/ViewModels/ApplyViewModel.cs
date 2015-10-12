@@ -274,24 +274,24 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
             }
         }
 
-        public async Task Download(string account, IEnumerable<OnlineLogisticsInfo> infos, string path) {
+        public void Download(string account, IEnumerable<OnlineLogisticsInfo> infos, string path) {
             var fileName = string.Format("{0}_{1}.pdf", DateTime.Now.ToString("yyyyMMddHHmm"), Regex.Replace(account.Split('@')[0], @"[^\w]", "_", RegexOptions.IgnoreCase));
             fileName = Path.Combine(path, fileName);
-            //Task.Factory.StartNew(() => {
-            using (var fs = new FileStream(fileName, FileMode.Create)) {
-                var acc = AccountHelper.GetAccount(account);
-                var method = new LogisticsOnlineLogisticsPrintInfo() {
-                    LogisticsNOs = infos.Select(i => i.TrackNO).ToList()
-                };
-                var api = new APIClient(acc.User, acc.Pwd);
-                var bytes = await api.Execute(method);
-                fs.Write(bytes, 0, bytes.Length);
-            }
-            Process.Start(fileName);
-            //})
-            //.ContinueWith((t) => {
-            System.Windows.MessageBox.Show(string.Format("账户 {0} , 下载失败", account));
-            //}, TaskContinuationOptions.OnlyOnFaulted);
+            Task.Factory.StartNew(async () => {
+                using (var fs = new FileStream(fileName, FileMode.Create)) {
+                    var acc = AccountHelper.GetAccount(account);
+                    var method = new LogisticsOnlineLogisticsPrintInfo() {
+                        LogisticsNOs = infos.Select(i => i.TrackNO).ToList()
+                    };
+                    var api = new APIClient(acc.User, acc.Pwd);
+                    var bytes = await api.Execute(method);
+                    fs.Write(bytes, 0, bytes.Length);
+                }
+                Process.Start(fileName);
+            })
+            .ContinueWith((t) => {
+                System.Windows.MessageBox.Show(string.Format("账户 {0} , 下载失败", account));
+            }, TaskContinuationOptions.OnlyOnFaulted);
         }
 
         public void SendShipment() {

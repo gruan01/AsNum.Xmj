@@ -125,8 +125,8 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
                 OrderNO = msg.ChannelID
             };
 
-            vm.Search(cond);
             vm.Show();
+            vm.Search(cond);
         }
 
         public void ViewHistory(AE.MessageRelation msg) {
