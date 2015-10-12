@@ -149,11 +149,11 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         public void WriteMsg() {
             this.IsShowWriteDialog = true;
             this.MsgVM = new WriteMsgViewModel();
-            this.MsgVM.OnSuccess = (orderNo, account) => {
+            this.MsgVM.OnSuccess = async (orderNo, account) => {
                 this.IsShowWriteDialog = false;
                 this.NotifyOfPropertyChange(() => this.IsShowWriteDialog);
                 DispatcherHelper.DoEvents();
-                this.Sync();
+                await this.Sync();
             };
             this.MsgVM.Build(this.Order);
             this.NotifyOfPropertyChange(() => this.MsgVM);

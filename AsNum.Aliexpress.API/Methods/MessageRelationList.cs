@@ -62,7 +62,7 @@ namespace AsNum.Xmj.API.Methods {
             o = JsonConvert.DeserializeAnonymousType(result, o);
             if (o.result != null)
                 o.result.ForEach(d => d.Account = auth.User);
-            return o.result;
+            return o.result ?? Enumerable.Empty<MessageRelation>();
         }
     }
 }

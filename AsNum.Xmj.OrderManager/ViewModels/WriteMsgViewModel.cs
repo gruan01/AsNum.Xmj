@@ -4,6 +4,7 @@ using AsNum.Xmj.Common;
 using AsNum.Xmj.Common.Interfaces;
 using AsNum.Xmj.Entity;
 using System;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.OrderManager.ViewModels {
     //[Export(typeof(IOrderDealSubView)), PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
@@ -32,12 +33,12 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
         public Action<string, string> OnSuccess;
 
-        public void SendOrderMessage() {
+        public async Task SendOrderMessage() {
             this.IsBusy = true;
             this.NotifyOfPropertyChange(() => this.IsBusy);
             DispatcherHelper.DoEvents();
 
-            MessageSync.WriteOrderMessage(this.Order.Account, this.Order.OrderNO, this.Ctx);
+            await MessageSync.WriteOrderMessage(this.Order.Account, this.Order.BuyerID, this.Order.OrderNO, this.Ctx);
 
             this.IsBusy = false;
             this.NotifyOfPropertyChange(() => this.IsBusy);
@@ -46,11 +47,11 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
                 this.OnSuccess(this.Order.OrderNO, this.Order.Account);
         }
 
-        public void SendMessage() {
+        public async Task SendMessage() {
             this.IsBusy = true;
             this.NotifyOfPropertyChange(() => this.IsBusy);
             DispatcherHelper.DoEvents();
-            MessageSync.SendMessage(this.Order.Account, this.Order.BuyerID, this.Ctx);
+            await MessageSync.SendMessage(this.Order.Account, this.Order.BuyerID, this.Ctx);
 
             this.IsBusy = false;
             this.NotifyOfPropertyChange(() => this.IsBusy);

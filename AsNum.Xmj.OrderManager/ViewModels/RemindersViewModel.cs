@@ -143,8 +143,8 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
                 this.NotifyOfPropertyChange(() => this.BusyText);
 
                 foreach (var o in this.Orders.Where(oo => !oo.IsRemindered)) {
-                    Task.Factory.StartNew(() => {
-                        this.Send(o);
+                    Task.Factory.StartNew(async () => {
+                        await this.Send(o);
                     }, TaskCreationOptions.AttachedToParent)
                     .ContinueWith(t => {
                         t.Dispose();
@@ -163,8 +163,8 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             });
         }
 
-        public void Send(ReminderOrder order) {
-            MessageSync.WriteOrderMessage(order.Account, order.OrderNO, order.Msg);
+        public async Task Send(ReminderOrder order) {
+            await MessageSync.WriteOrderMessage(order.Account, order.BuyerID, order.OrderNO, order.Msg);
         }
     }
 }

@@ -39,16 +39,22 @@ namespace AsNum.Xmj.AliSync {
         /// <param name="acc"></param>
         /// <param name="orderNO"></param>
         /// <param name="ctx"></param>
-        public static void WriteOrderMessage(string acc, string orderNO, string ctx) {
+        public async static Task WriteOrderMessage(string acc, string buyerID, string orderNO, string ctx) {
             var ast = new AccountSetting();
             var ac = ast.Value.FirstOrDefault(a => a.User == acc);
             if (ac != null) {
                 var api = new APIClient(ac.User, ac.Pwd);
-                var method = new OrderNewMsg() {
-                    OrderID = orderNO,
-                    Content = ctx
+                //var method = new OrderNewMsg() {
+                //    OrderID = orderNO,
+                //    Content = ctx
+                //};
+                var method = new MessageAdd() {
+                    ChannelID = orderNO,
+                    Ctx = ctx,
+                    Type = MessageTypes.Order,
+                    BuyerID = buyerID
                 };
-                var a = api.Execute(method);
+                var a = await api.Execute(method);
             }
         }
 
@@ -58,16 +64,21 @@ namespace AsNum.Xmj.AliSync {
         /// <param name="acc"></param>
         /// <param name="buyerID"></param>
         /// <param name="ctx"></param>
-        public static void SendMessage(string acc, string buyerID, string ctx) {
+        public async static Task SendMessage(string acc, string buyerID, string ctx) {
             var ast = new AccountSetting();
             var ac = ast.Value.FirstOrDefault(a => a.User == acc);
             if (ac != null) {
                 var api = new APIClient(ac.User, ac.Pwd);
-                var method = new MessageSend() {
+                //var method = new MessageSend() {
+                //    BuyerID = buyerID,
+                //    Ctx = ctx
+                //};
+                var method = new MessageAdd() {
                     BuyerID = buyerID,
-                    Ctx = ctx
+                    Ctx = ctx,
+                    Type = MessageTypes.MessageCenter
                 };
-                var a = api.Execute(method);
+                var a = await api.Execute(method);
             }
         }
 
