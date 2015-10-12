@@ -37,7 +37,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             this.Order = this.OrderBiz.GetOrder(this.OrderNO);
         }
 
-        public void Extend() {
+        public async Task Extend() {
 
             this.IsBusy = true;
             this.BusyString = "请稍候...";
@@ -54,7 +54,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
                     Days = this.Days < 0 ? 0 : this.Days
                 };
                 var api = new APIClient(account.User, account.Pwd);
-                var o = api.Execute(method);
+                var o = await api.Execute(method);
                 success = o.Success;
                 this.BusyString = success ? "成功" : "失败";
             } else {

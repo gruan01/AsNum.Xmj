@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
 
@@ -35,14 +36,15 @@ namespace AsNum.Xmj.API.Methods {
         public byte[] UploadData { get; set; }
 
         [NeedAuth]
-        public override string GetResult(Auth auth) {
+        public async override Task<string> GetResult(Auth auth) {
             var url = auth.GetApiUrl(this.APIName, new Dictionary<string, string>() { 
                 {"srcFileName",this.FileName}
             });
 
             using (var client = new WebClient()) {
                 try {
-                    var result = client.UploadData(url, this.UploadData);
+                    //var result = client.UploadData(url, this.UploadData);
+                    var result = await client.UploadDataTaskAsync(url, this.UploadData);
                     return Encoding.UTF8.GetString(result);
                 } catch (WebException ex) {
                     return Encoding.UTF8.GetString(ex.Response.GetResponseStream().GetBytes());

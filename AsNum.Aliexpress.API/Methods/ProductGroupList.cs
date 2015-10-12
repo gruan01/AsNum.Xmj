@@ -1,6 +1,7 @@
 ﻿using AsNum.Xmj.API.Entity;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     public class ProductGroupList : MethodBase<List<ProductGroup2>> {
@@ -10,8 +11,8 @@ namespace AsNum.Xmj.API.Methods {
             }
         }
 
-        public override List<ProductGroup2> Execute(Auth auth) {
-            var str = this.GetResult(auth);
+        public async override Task<List<ProductGroup2>> Execute(Auth auth) {
+            var str = await this.GetResult(auth);
             var o = new {
                 target = new List<ProductGroup2>()
             };

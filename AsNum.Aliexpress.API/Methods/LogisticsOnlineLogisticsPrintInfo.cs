@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     /// <summary>
@@ -26,7 +27,7 @@ namespace AsNum.Xmj.API.Methods {
             this.LogisticsNOs = new List<string>();
         }
 
-        public override string GetResult(Auth auth) {
+        public async override Task<string> GetResult(Auth auth) {
             var dic = ParamHelper.GetParams(this);
 
             var tmp = this.LogisticsNOs.Select(s => new {
@@ -37,12 +38,12 @@ namespace AsNum.Xmj.API.Methods {
             var url = auth.GetApiUrl(this.APIName, dic);
             var rh = new RequestHelper(auth.CookieContainer);
             this.ResultString = rh.Post(url, dic);
-            return this.ResultString;
+            return await Task.FromResult(this.ResultString);
         }
 
-        public override byte[] Execute(Auth auth) {
+        public async override Task<byte[]> Execute(Auth auth) {
             var o = new { StatusCode = "0", body = "" };
-            var str = this.GetResult(auth);
+            var str = await this.GetResult(auth);
             o = JsonConvert.DeserializeAnonymousType(str, o);
             if (o.StatusCode == "200") {
                 return Convert.FromBase64String(o.body);

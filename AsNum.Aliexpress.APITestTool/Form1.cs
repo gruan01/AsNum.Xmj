@@ -23,7 +23,7 @@ namespace AsNum.Xmj.APITestTool {
             var type = (Type)this.cmbMethods.SelectedValue;
             var method = Activator.CreateInstance(type);
             this.propGrid.SelectedObject = method;
-            
+
             this.propGrid.ExpandAllGridItems();
         }
 
@@ -50,7 +50,7 @@ namespace AsNum.Xmj.APITestTool {
             var type = this.cmbMethods.SelectedValue as Type;
             var method = this.propGrid.SelectedObject as AsNum.Xmj.API.MethodBase;
             //this.txtResult.Text = api.GetResult(method);
-            this.jsonViewer1.Json = api.GetResult(method);
+            this.jsonViewer1.Json = api.GetResult(method).Result;
         }
 
         private void 设置ToolStripMenuItem_Click(object sender, EventArgs e) {

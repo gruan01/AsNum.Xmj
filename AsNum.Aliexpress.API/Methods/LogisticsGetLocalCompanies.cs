@@ -1,6 +1,7 @@
 ﻿using AsNum.Xmj.API.Entity;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     /// <summary>
@@ -11,8 +12,8 @@ namespace AsNum.Xmj.API.Methods {
             get { return "api.qureyWlbDomesticLogisticsCompany"; }
         }
 
-        public override List<LocalLogisticsCompany> Execute(Auth auth) {
-            var str = base.GetResult(auth);
+        public async override Task<List<LocalLogisticsCompany>> Execute(Auth auth) {
+            var str = await base.GetResult(auth);
             var o = new {
                 result = new List<LocalLogisticsCompany>(),
                 success = false

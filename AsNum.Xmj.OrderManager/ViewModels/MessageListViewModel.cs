@@ -64,14 +64,14 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             this.Load();
         }
 
-        public void Load() {
+        public async Task Load() {
             this.BusyText = "正在加载...";
             this.IsBusy = true;
             this.NotifyOfPropertyChange(() => this.IsBusy);
             this.NotifyOfPropertyChange(() => this.BusyText);
             DispatcherHelper.DoEvents();
 
-            Task.Factory.StartNew(() => {
+            await Task.Factory.StartNew(async() => {
                 var s = new AccountSetting();
                 var acc = s.Value.FirstOrDefault(a => a.User.Equals(this.Account, StringComparison.OrdinalIgnoreCase));
                 if (acc != null) {
@@ -80,7 +80,8 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
                         BuyerID = this.BuyerID,
                         PageSize = 50
                     };
-                    this.Msgs = new BindableCollection<Message2>(api.Execute(method).Results);
+                    var datas = await api.Execute(method);
+                    this.Msgs = new BindableCollection<Message2>(datas.Results);
                     this.NotifyOfPropertyChange(() => this.Msgs);
 
                     this.IsBusy = false;

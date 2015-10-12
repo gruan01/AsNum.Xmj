@@ -2,6 +2,7 @@
 using AsNum.Xmj.API.Entity;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     public class ProductQuery : MethodBase<Paged<SuccinctProduct>> {
@@ -66,15 +67,15 @@ namespace AsNum.Xmj.API.Methods {
         }
 
         [NeedAuth]
-        public override Paged<SuccinctProduct> Execute(Auth auth) {
-            this.ResultString = this.GetResult(auth);
+        public async override Task<Paged<SuccinctProduct>> Execute(Auth auth) {
+            this.ResultString = await this.GetResult(auth);
             var o = new {
                 productCount = 0,
                 currPage = 1,
                 aeopAEProductDisplayDTOList = new List<SuccinctProduct>()
             };
             o = JsonConvert.DeserializeAnonymousType(this.ResultString, o);
-            
+
             if (o.aeopAEProductDisplayDTOList != null)
                 o.aeopAEProductDisplayDTOList.ForEach(a => {
                     a.Account = auth.User;

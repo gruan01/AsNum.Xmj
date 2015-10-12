@@ -3,6 +3,7 @@ using AsNum.Xmj.API.Entity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     /// <summary>
@@ -47,8 +48,8 @@ namespace AsNum.Xmj.API.Methods {
         }
 
         [NeedAuth]
-        public override Paged<Message2> Execute(Auth auth) {
-            var str = this.GetResult(auth);
+        public async override Task<Paged<Message2>> Execute(Auth auth) {
+            var str = await this.GetResult(auth);
             var o = new {
                 total = 0,
                 msgList = new List<Message2>()

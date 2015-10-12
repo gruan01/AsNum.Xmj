@@ -1,4 +1,5 @@
-﻿namespace CopyProduct {
+﻿using System.Threading.Tasks;
+namespace CopyProduct {
     partial class EditAccountForm {
         /// <summary>
         /// Required designer variable.

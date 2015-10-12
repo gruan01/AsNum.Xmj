@@ -26,13 +26,13 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
             this.LoadFromDb();
         }
 
-        public void LoadFromWeb() {
+        public async Task LoadFromWeb() {
             var account = AccountHelper.LoadAccounts().FirstOrDefault();
             if (account == null)
                 return;
             var client = new API.APIClient(account.User, account.Pwd);
             var method = new LogisticsServiceList();
-            var lst = client.Execute(method);
+            var lst = await client.Execute(method);
 
             lst.ForEach(l => {
                 var item = this.Datas.FirstOrDefault(d => d.Code.Equals(l.Code, StringComparison.OrdinalIgnoreCase));

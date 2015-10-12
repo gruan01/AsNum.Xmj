@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using ZXing;
 using AE = AsNum.Xmj.API.Entity;
@@ -87,7 +88,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         public FillTrackNOViewModel(string orderNO) {
             this.OrderBiz = GlobalData.MefContainer.GetExportedValue<IOrder>();
             //this.DeliveryTypes = Services.ToList();// Enum.GetValues(typeof(AE.LogisticsTypes)).Cast<AE.LogisticsTypes>().ToList();
-            this.SelectedDeliveryType = GlobalData.LogisticService.FirstOrDefault() ;// Services.FirstOrDefault();
+            this.SelectedDeliveryType = GlobalData.LogisticService.FirstOrDefault();// Services.FirstOrDefault();
 
             this.OrderNO = orderNO;
             this.Order = this.OrderBiz.GetOrder(orderNO);
@@ -95,7 +96,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             //this.Shoter = GlobalData.GetInstance<IScreenShoter>();
         }
 
-        public void Confirm() {
+        public async Task Confirm() {
             this.IsBusy = true;
             this.BusyString = "请稍候...";
             this.NotifyOfPropertyChange(() => this.IsBusy);
@@ -116,7 +117,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
                 };
 
                 var api = new APIClient(account.User, account.Pwd);
-                var o = api.Execute(method);
+                var o = await api.Execute(method);
                 //var o = new AE.NormalResult() {
                 //    Success = true
                 //};

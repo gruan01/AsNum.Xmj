@@ -138,42 +138,39 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
             }
         }
 
-        public void LoadLogisticsInfo(ApplyItem item) {
-            Task.Factory.StartNew(() => {
+        public async Task LoadLogisticsInfo(ApplyItem item) {
+            await Task.Factory.StartNew(async () => {
                 var acc = AccountHelper.GetAccount(item.Account);
                 var api = new APIClient(acc.User, acc.Pwd);
                 var method = new LogisticsGetOnlineLogisticsInfo() {
                     OrderID = item.OrderNO
                 };
                 //排除取消的
-                item.ExistsLogisticInfos = api.Execute(method).Where(i => i.Status != OnlineLogisticStatus.Closed).ToList();
+                var datas = await api.Execute(method);
+                item.ExistsLogisticInfos = datas.Where(i => i.Status != OnlineLogisticStatus.Closed).ToList();
                 item.NotifyOfPropertyChange(() => item.ExistsLogisticInfos);
             });
         }
 
-        private void LoadServices(ApplyItem item) {
-            Task.Factory.StartNew(() => {
-                var acc = AccountHelper.GetAccount(item.Account);
-                var api = new APIClient(acc.User, acc.Pwd);
-                var method = new LogisticsServiceByOrderID() {
-                    OrderID = item.OrderNO
-                };
-                item.Services = api.Execute(method);
-                item.NotifyOfPropertyChange(() => item.Services);
-            });
+        private async Task LoadServices(ApplyItem item) {
+            var acc = AccountHelper.GetAccount(item.Account);
+            var api = new APIClient(acc.User, acc.Pwd);
+            var method = new LogisticsServiceByOrderID() {
+                OrderID = item.OrderNO
+            };
+            item.Services = await api.Execute(method);
+            item.NotifyOfPropertyChange(() => item.Services);
         }
 
-        private void SetLocalLogisticCompany(ApplyItem item) {
+        private async Task SetLocalLogisticCompany(ApplyItem item) {
             if (this.LocalLogisticsCompany == null) {
-                Task.Factory.StartNew(() => {
-                    var acc = AccountHelper.GetAccount(item.Account);
-                    var api = new APIClient(acc.User, acc.Pwd);
-                    var method = new LogisticsGetLocalCompanies();
-                    this.LocalLogisticsCompany = api.Execute(method);
+                var acc = AccountHelper.GetAccount(item.Account);
+                var api = new APIClient(acc.User, acc.Pwd);
+                var method = new LogisticsGetLocalCompanies();
+                this.LocalLogisticsCompany = await api.Execute(method);
 
-                    item.LogisticsCompanies = this.LocalLogisticsCompany;
-                    item.NotifyOfPropertyChange(() => item.LogisticsCompanies);
-                });
+                item.LogisticsCompanies = this.LocalLogisticsCompany;
+                item.NotifyOfPropertyChange(() => item.LogisticsCompanies);
             } else {
                 item.LogisticsCompanies = this.LocalLogisticsCompany;
                 item.NotifyOfPropertyChange(() => item.LogisticsCompanies);
@@ -200,7 +197,7 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
             }
         }
 
-        public void Apply() {
+        public async Task Apply() {
             this.RemoveRepeated();
 
             if (this.Datas != null) {
@@ -217,39 +214,39 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
                 this.NotifyOfPropertyChange(() => this.BusyText);
                 DispatcherHelper.DoEvents();
 
-                Task.Factory.StartNew(() => {
-                    willApply.ForEach(i => {
-                        var acc = AccountHelper.GetAccount(i.Account);
-                        var method = new LogisticsCreateOnlineLogisticsNO() {
-                            Declares = i.IsSummary ? new List<OnlineLogisticsDeclareInfo>() { i.Declares[0] } : i.Declares.ToList(),
-                            LocalLogisticCompanyID = i.LocalLogisticCompany,
-                            //LocalLogisticCompanyName,
-                            LocalTrackingNO = i.LocalTrackNO,
-                            OrderFrom = "ESCROW",
-                            OrderID = i.OrderNO,
-                            Pickup = i.NeedPickup ? i.Pickup : null,
-                            Receiver = i.Receiver,
-                            Remark = "WHAT IS REMARK",
-                            Service = i.Service.ServiceID,
-                            Sender = i.Sender
-                        };
-                        var api = new APIClient(acc.User, acc.Pwd);
-                        var result = api.Execute(method);
-                        i.Created = result.Success;
-                        i.Info = i.Created ? "申请成功" : result.ErrorInfo;
+                //Task.Factory.StartNew(() => {
+                willApply.ForEach(async i => {
+                    var acc = AccountHelper.GetAccount(i.Account);
+                    var method = new LogisticsCreateOnlineLogisticsNO() {
+                        Declares = i.IsSummary ? new List<OnlineLogisticsDeclareInfo>() { i.Declares[0] } : i.Declares.ToList(),
+                        LocalLogisticCompanyID = i.LocalLogisticCompany,
+                        //LocalLogisticCompanyName,
+                        LocalTrackingNO = i.LocalTrackNO,
+                        OrderFrom = "ESCROW",
+                        OrderID = i.OrderNO,
+                        Pickup = i.NeedPickup ? i.Pickup : null,
+                        Receiver = i.Receiver,
+                        Remark = "WHAT IS REMARK",
+                        Service = i.Service.ServiceID,
+                        Sender = i.Sender
+                    };
+                    var api = new APIClient(acc.User, acc.Pwd);
+                    var result = await api.Execute(method);
+                    i.Created = result.Success;
+                    i.Info = i.Created ? "申请成功" : result.ErrorInfo;
 
-                        i.NotifyOfPropertyChange(() => i.Created);
-                        i.NotifyOfPropertyChange(() => i.Info);
-                    });
-                }).ContinueWith((O) => {
-                    this.IsShowBusy = false;
-                    this.NotifyOfPropertyChange(() => this.IsShowBusy);
-                    DispatcherHelper.DoEvents();
+                    i.NotifyOfPropertyChange(() => i.Created);
+                    i.NotifyOfPropertyChange(() => i.Info);
                 });
+                //}).ContinueWith((O) => {
+                this.IsShowBusy = false;
+                this.NotifyOfPropertyChange(() => this.IsShowBusy);
+                DispatcherHelper.DoEvents();
+                //});
             }
         }
 
-        public void Refresh() {
+        public async void Refresh() {
             if (this.Datas == null)
                 return;
 
@@ -259,7 +256,7 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
 
 
             foreach (var item in this.Datas) {
-                this.LoadLogisticsInfo(item);
+                await this.LoadLogisticsInfo(item);
             }
         }
 
@@ -277,24 +274,24 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
             }
         }
 
-        public void Download(string account, IEnumerable<OnlineLogisticsInfo> infos, string path) {
+        public async Task Download(string account, IEnumerable<OnlineLogisticsInfo> infos, string path) {
             var fileName = string.Format("{0}_{1}.pdf", DateTime.Now.ToString("yyyyMMddHHmm"), Regex.Replace(account.Split('@')[0], @"[^\w]", "_", RegexOptions.IgnoreCase));
             fileName = Path.Combine(path, fileName);
-            Task.Factory.StartNew(() => {
-                using (var fs = new FileStream(fileName, FileMode.Create)) {
-                    var acc = AccountHelper.GetAccount(account);
-                    var method = new LogisticsOnlineLogisticsPrintInfo() {
-                        LogisticsNOs = infos.Select(i => i.TrackNO).ToList()
-                    };
-                    var api = new APIClient(acc.User, acc.Pwd);
-                    var bytes = api.Execute(method);
-                    fs.Write(bytes, 0, bytes.Length);
-                }
-                Process.Start(fileName);
-            })
-            .ContinueWith((t) => {
-                System.Windows.MessageBox.Show(string.Format("账户 {0} , 下载失败", account));
-            }, TaskContinuationOptions.OnlyOnFaulted);
+            //Task.Factory.StartNew(() => {
+            using (var fs = new FileStream(fileName, FileMode.Create)) {
+                var acc = AccountHelper.GetAccount(account);
+                var method = new LogisticsOnlineLogisticsPrintInfo() {
+                    LogisticsNOs = infos.Select(i => i.TrackNO).ToList()
+                };
+                var api = new APIClient(acc.User, acc.Pwd);
+                var bytes = await api.Execute(method);
+                fs.Write(bytes, 0, bytes.Length);
+            }
+            Process.Start(fileName);
+            //})
+            //.ContinueWith((t) => {
+            System.Windows.MessageBox.Show(string.Format("账户 {0} , 下载失败", account));
+            //}, TaskContinuationOptions.OnlyOnFaulted);
         }
 
         public void SendShipment() {

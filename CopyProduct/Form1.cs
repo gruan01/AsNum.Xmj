@@ -138,37 +138,37 @@ namespace CopyProduct {
             }
         }
 
-        private string UploadImage(APIClient api, string file) {
+        private async Task<string> UploadImage(APIClient api, string file) {
             this.Log("上传图片 {0} 到账户 {1}", file, api.AuthUser);
             var method = new PhotoBankUploadImage() {
                 FilePath = file
             };
-            var result = api.Execute(method);
+            var result = await api.Execute(method);
             if (result.Success) {
                 return result.Url;
             } else
                 return null;
         }
 
-        private string UploadImage2(APIClient api, string file) {
+        private async Task<string> UploadImage2(APIClient api, string file) {
             this.Log("上传临时图片 {0} 到账户 {1}", file, api.AuthUser);
             var method = new PhotoBankUploadTempImage() {
                 FilePath = file
             };
-            var result = api.Execute(method);
+            var result = await api.Execute(method);
             if (result.Success)
                 return result.Url;
             else
                 return null;
         }
 
-        private void ReplaceImage(APIClient api, Product product) {
+        private async Task ReplaceImage(APIClient api, Product product) {
             List<string> uimgs = new List<string>();
             //产品图片
             var imgs = ((Product)this.ppgProduct.SelectedObject).ImageUrls.Split(';');
             foreach (var img in imgs) {
                 var file = this.GetSavePath(img);
-                var t = this.UploadImage(api, file);
+                var t = await this.UploadImage(api, file);
                 if (t != null) {
                     uimgs.Add(t);
                 }
@@ -179,9 +179,9 @@ namespace CopyProduct {
             //只能用api.uploadTempImage 接口返回的图片,造
             foreach (var s in product.SKUs) {
                 s.Property.Where(p => !string.IsNullOrEmpty(p.SkuImage)).ToList()
-                    .ForEach(p => {
+                    .ForEach(async p => {
                         this.DownloadPic(p.SkuImage);
-                        var result = this.UploadImage2(api, this.GetSavePath(p.SkuImage));
+                        var result = await this.UploadImage2(api, this.GetSavePath(p.SkuImage));
                         p.SkuImage = result;
                     });
             }
@@ -198,7 +198,7 @@ namespace CopyProduct {
             var dic = new Dictionary<string, string>();
             foreach (var img in imgs2) {
                 this.DownloadPic(img);
-                var newUrl = this.UploadImage(api, this.GetSavePath(img));
+                var newUrl = await this.UploadImage(api, this.GetSavePath(img));
                 dic[img] = newUrl;
             }
 
@@ -207,11 +207,11 @@ namespace CopyProduct {
             }
         }
 
-        private void Publish(DestAccount account) {
+        private async Task Publish(DestAccount account) {
             this.Log("偿试发布到账户:{0}", account.User);
             var api = new APIClient(account.User, account.Pwd);
             var product = (this.ppgProduct.SelectedObject as Product).SerializeCopy();
-            this.ReplaceImage(api, product);
+            await this.ReplaceImage(api, product);
 
             //替换产品组和运费模板
             product.ProductGroup = account.ProductGroup.ID;
@@ -221,7 +221,7 @@ namespace CopyProduct {
                 ProductDetail = product
             };
 
-            var result = api.Execute(method);
+            var result = await api.Execute(method);
             if (result.Success) {
                 MessageBox.Show(string.Format("Copy 到 {0} 成功", account.User));
             } else {

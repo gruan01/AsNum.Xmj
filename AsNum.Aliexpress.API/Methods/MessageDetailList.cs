@@ -1,5 +1,6 @@
 ﻿using AsNum.Xmj.API.Attributes;
 using AsNum.Xmj.API.Entity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace AsNum.Xmj.API.Methods {
     /// <summary>
     /// 站内信/订单留言查询详情列表
     /// </summary>
-    public class MessageDetailList : MethodBase<object> {
+    public class MessageDetailList : MethodBase<IEnumerable<MessageDetail>> {
         protected override string APIName {
             get {
                 return "api.queryMsgDetailList";
@@ -29,5 +30,20 @@ namespace AsNum.Xmj.API.Methods {
 
         [EnumParam("msgSources", EnumUseNameOrValue.Name, Required = true)]
         public MessageTypes Type { get; set; }
+
+        public MessageDetailList() {
+            this.PageSize = 50;
+        }
+
+        public async override Task<IEnumerable<MessageDetail>> Execute(Auth auth) {
+            var result = await this.GetResult(auth);
+
+            var o = new {
+                result = new List<MessageDetail>()
+            };
+
+            o = JsonConvert.DeserializeAnonymousType(result, o);
+            return o.result;
+        }
     }
 }

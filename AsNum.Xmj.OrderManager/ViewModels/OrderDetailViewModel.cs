@@ -76,13 +76,13 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             }
         }
 
-        private void UpdateLevel() {
+        private async Task UpdateLevel() {
             var method = new API.Methods.BuyerLevel() {
                 BuyerID = this.Order.BuyerID
             };
             var api = AccountHelper.GetAccount(this.Order.Account);
             var client = new API.APIClient(api.User, api.Pwd);
-            var level = client.Execute(method);
+            var level = await client.Execute(method);
 
             var biz = GlobalData.GetInstance<IBuyer>();
             biz.UpdateLevel(this.Order.BuyerID, level);

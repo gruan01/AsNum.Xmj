@@ -1,6 +1,7 @@
 ﻿using AsNum.Xmj.API.Attributes;
 using AsNum.Xmj.API.Entity;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     public class ProductEditField : MethodBase<NormalResult> {
@@ -28,8 +29,8 @@ namespace AsNum.Xmj.API.Methods {
             set;
         }
 
-        public override NormalResult Execute(Auth auth) {
-            var str = this.GetResult(auth);
+        public async override Task<NormalResult> Execute(Auth auth) {
+            var str = await this.GetResult(auth);
             var o = new {
                 success = true
             };

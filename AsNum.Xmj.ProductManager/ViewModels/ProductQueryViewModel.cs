@@ -110,23 +110,24 @@ namespace AsNum.Xmj.ProductManager.ViewModels {
             this.NotifyOfPropertyChange(() => this.IsBusy);
             this.NotifyOfPropertyChange(() => this.BusyText);
 
-            Task.Factory.StartNew(() => {
-                this.Groups = ProductSync.QueryGroups();
+            Task.Factory.StartNew(async () => {
+                this.Groups = await ProductSync.QueryGroups();
 
                 this.IsBusy = false;
                 this.NotifyOfPropertyChange(() => this.IsBusy);
             });
         }
 
-        private void Query(int? expiryDays) {
+        private async Task Query(int? expiryDays) {
             this.IsBusy = true;
             this.BusyText = "正在查询，请稍候...";
             this.NotifyOfPropertyChange(() => this.IsBusy);
             this.NotifyOfPropertyChange(() => this.BusyText);
 
-            Task.Factory.StartNew(() => {
+            await Task.Factory.StartNew(async () => {
+                var datas = await ProductSync.Query(this.Subject, this.SelectedStatus, this.SelectedAccount, this.SelectedGroup, expiryDays);
                 this.Products = new BindableCollection<CheckableSuccinctProduct>(
-                    ProductSync.Query(this.Subject, this.SelectedStatus, this.SelectedAccount, this.SelectedGroup, expiryDays)
+                    datas
                     .Select(p => new CheckableSuccinctProduct(p)));
 
                 this.NotifyOfPropertyChange(() => this.Products);
@@ -136,12 +137,12 @@ namespace AsNum.Xmj.ProductManager.ViewModels {
             });
         }
 
-        public void Query() {
-            this.Query(null);
+        public async Task Query() {
+            await this.Query(null);
         }
 
-        public void WillExpiry() {
-            this.Query(3);
+        public async Task WillExpiry() {
+            await this.Query(3);
         }
 
         public void OfflineSelected() {

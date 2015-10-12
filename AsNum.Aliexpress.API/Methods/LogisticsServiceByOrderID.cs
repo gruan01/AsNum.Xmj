@@ -3,6 +3,7 @@ using AsNum.Xmj.API.Entity;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     /// <summary>
@@ -32,8 +33,8 @@ namespace AsNum.Xmj.API.Methods {
         public int Length { get; set; }
 
 
-        public override List<SupportOnlineLogisticsService> Execute(Auth auth) {
-            var str = this.GetResult(auth);
+        public async override Task<List<SupportOnlineLogisticsService>> Execute(Auth auth) {
+            var str = await this.GetResult(auth);
             var o = new {
                 result = new List<SupportOnlineLogisticsService>(),
                 success = false

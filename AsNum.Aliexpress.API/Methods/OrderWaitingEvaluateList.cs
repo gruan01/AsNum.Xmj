@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     public class OrderWaitingEvaluateList : MethodBase<List<string>> {
@@ -10,8 +11,8 @@ namespace AsNum.Xmj.API.Methods {
             }
         }
 
-        public override List<string> Execute(Auth auth) {
-            var str = this.GetResult(auth);
+        public async override Task<List<string>> Execute(Auth auth) {
+            var str = await this.GetResult(auth);
             Regex rx = new Regex(@"{""orderId"":(?<oid>\d+)}");
             return rx.Matches(str).Cast<Match>().Select(m => m.Groups["oid"].Value).ToList();
         }

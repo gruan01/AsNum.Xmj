@@ -117,8 +117,8 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             });
         }
 
-        private void Sync(ReminderOrder order) {
-            var msgs = MessageSync.SyncByOrderNO(order.OrderNO, order.Account);
+        private async Task Sync(ReminderOrder order) {
+            var msgs = await MessageSync.SyncByOrderNO(order.OrderNO, order.Account);
             var msgs1 = msgs.Select(m => new OrderMessage {
                 ID = m.ID,
                 Content = m.Content,

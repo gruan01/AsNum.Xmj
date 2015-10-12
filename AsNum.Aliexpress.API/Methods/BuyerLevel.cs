@@ -24,8 +24,8 @@ namespace AsNum.Xmj.API.Methods {
             set;
         }
 
-        public override string Execute(Auth auth) {
-            var str = this.GetResult(auth);
+        public async override Task<string> Execute(Auth auth) {
+            var str = await this.GetResult(auth);
             var o = new { level = "", success = false };
             o = JsonConvert.DeserializeAnonymousType(str, o);
             return o.success ? o.level : "";

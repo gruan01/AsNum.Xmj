@@ -1,6 +1,7 @@
 ﻿using AsNum.Xmj.API.Attributes;
 using AsNum.Xmj.API.Entity;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     public class OrderShipment : MethodBase<NormalResult> {
@@ -24,7 +25,8 @@ namespace AsNum.Xmj.API.Methods {
 
         [Param("serviceName", Required = true)]
         public string LogisticsType {
-            get; set;
+            get;
+            set;
         }
 
         [Param("logisticsNo", Required = true)]
@@ -52,8 +54,8 @@ namespace AsNum.Xmj.API.Methods {
         }
 
         [NeedAuth]
-        public override NormalResult Execute(Auth auth) {
-            var str = this.GetResult(auth);
+        public async override Task<NormalResult> Execute(Auth auth) {
+            var str = await this.GetResult(auth);
 
             var o = new {
                 success = true,

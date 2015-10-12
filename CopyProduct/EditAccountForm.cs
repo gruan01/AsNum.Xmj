@@ -4,6 +4,7 @@ using AsNum.Xmj.API.Methods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CopyProduct {
@@ -54,7 +55,7 @@ namespace CopyProduct {
         private void button1_Click(object sender, EventArgs e) {
             var api = new APIClient(this.txtUser.Text, this.txtPwd.Text);
             var method = new FreightTemplateList();
-            var result = api.Execute(method);
+            var result = api.Execute(method).Result;
             this.Templates = result.List.OrderByDescending(l => l.IsDefault).ToList();
             this.drpFrightTemplate.DataSource = this.Templates;
             this.drpFrightTemplate.DisplayMember = "Name";
@@ -62,7 +63,7 @@ namespace CopyProduct {
 
             //var result2 = api.Execute(new ProductGetProductGroup());
 
-            var gs = api.Execute(new ProductGroupList());
+            var gs = api.Execute(new ProductGroupList()).Result;
             var subs = gs.Where(g => g.Children != null).SelectMany(g => g.Children).ToList();
             gs.AddRange(subs);
             gs.RemoveAll(g => !g.CanChoice);

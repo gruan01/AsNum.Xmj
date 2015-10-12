@@ -8,6 +8,7 @@ using AsNum.Xmj.IBiz;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.OrderManager.ViewModels {
     [Export(typeof(IOrderDealSubView)), PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
@@ -98,7 +99,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         //    return mes;
         //}
 
-        public void Sync() {
+        public async Task Sync() {
 
             this.IsBusy = true;
             this.BusyText = "正在同步订单留言...";
@@ -107,7 +108,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
             DispatcherHelper.DoEvents();
 
-            var msgs = MessageSync.SyncByOrderNO(this.OrderNO, this.Account);
+            var msgs = await MessageSync.SyncByOrderNO(this.OrderNO, this.Account);
             var msgs1 = msgs.Select(m => new OrderMessage {
                 ID = m.ID,
                 Content = m.Content,

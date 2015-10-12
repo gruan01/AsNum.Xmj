@@ -9,7 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Width="400">
         <TabControl>
-            <TabItem Header="72小时内订单留言">
+            <TabItem Header="订单留言">
                 <ScrollViewer>
                     <ItemsControl x:Name="OrderMsgs" AlternationCount="2"
                                   ac:Busy.MaskType="None"
@@ -28,9 +28,9 @@
                                     <!--</Border>-->
                                     <Border x:Name="Panel" BorderThickness="1" BorderBrush="Transparent" Padding="5" Panel.ZIndex="0" CornerRadius="5">
                                         <StackPanel>
-                                            <TextBlock Text="{Binding Sender}" Foreground="Green" />
-                                            <TextBlock Text="{Binding CreateOn, StringFormat='yyyy/MM/dd HH:mm:ss'}" FontSize="10" Foreground="#999999" />
-                                            <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding Content}" />
+                                            <TextBlock Text="{Binding Customer}" Foreground="Green" />
+                                            <TextBlock Text="{Binding LastMessageCreateOn, StringFormat='yyyy/MM/dd HH:mm:ss'}" FontSize="10" Foreground="#999999" />
+                                            <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding LastMessageContent}" />
                                         </StackPanel>
                                     </Border>
                                 </Grid>
@@ -48,9 +48,9 @@
                     </ItemsControl>
                 </ScrollViewer>
             </TabItem>
-            
-            
-            <TabItem Header="72小时内站内信">
+
+
+            <TabItem Header="站内信">
                 <ScrollViewer>
                     <ItemsControl x:Name="Msgs" AlternationCount="2">
                         <ItemsControl.ItemsPanel>
@@ -64,13 +64,13 @@
                                     <StackPanel x:Name="aa" Orientation="Horizontal" Panel.ZIndex="1" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Collapsed">
                                         <Button x:Name="btnHistory" Content="详细" cal:Message.Attach="ViewHistory($this)" Visibility="Visible" />
                                     </StackPanel>
-                                    
+
                                     <Border x:Name="Panel" BorderThickness="1" BorderBrush="Transparent" Padding="5" Panel.ZIndex="0" CornerRadius="5">
                                         <StackPanel>
-                                            <TextBlock Text="{Binding Sender}" Foreground="Green" />
-                                            <TextBlock Text="{Binding CreateOn, StringFormat='yyyy/MM/dd HH:mm:ss'}" FontSize="10" Foreground="#999999" />
-                                            <TextBlock Text="{Binding ProductName}" FontSize="10" Foreground="Blue" TextWrapping="WrapWithOverflow" />
-                                            <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding Content}" />
+                                            <TextBlock Text="{Binding Customer}" Foreground="Green" />
+                                            <TextBlock Text="{Binding LastMessageCreateOn, StringFormat='yyyy/MM/dd HH:mm:ss'}" FontSize="10" Foreground="#999999" />
+                                            <!--<TextBlock Text="{Binding ProductName}" FontSize="10" Foreground="Blue" TextWrapping="WrapWithOverflow" />-->
+                                            <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding LastMessageContent}" />
                                         </StackPanel>
                                     </Border>
                                 </Grid>

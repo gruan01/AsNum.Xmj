@@ -18,16 +18,16 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
 
         public override string Title {
             get {
-                return "72小时消息汇总";
+                return "最近的消息";
             }
         }
 
-        public BindableCollection<AE.Message> OrderMsgs {
+        public BindableCollection<AE.MessageRelation> OrderMsgs {
             get;
             set;
         }
 
-        public BindableCollection<AE.Message2> Msgs {
+        public BindableCollection<AE.MessageRelation> Msgs {
             get;
             set;
         }
@@ -42,63 +42,76 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             set;
         }
 
-        public void Load() {
-            this.LoadOrderMsgs();
-            this.LoadMsgs();
-        }
-
-        private void LoadOrderMsgs() {
-            this.IsWaitingLoadOrderMsgs = true;
-            this.NotifyOfPropertyChange(() => this.IsWaitingLoadOrderMsgs);
-            DispatcherHelper.DoEvents();
-
-            Task.Factory.StartNew(() => {
-                var startTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddDays(-3), TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
-                List<AE.Message> msgs = MessageSync.QueryOrderMsg(startTime, null, null);
-                this.OrderMsgs = new BindableCollection<AE.Message>(
-                    msgs.Where(m => !m.SenderID.StartsWith("cn", StringComparison.OrdinalIgnoreCase))
-                    .ToLookup(o => o.OrderNO)
-                    .Select(l => l.OrderByDescending(ll => ll.CreateOn).FirstOrDefault())
-                    .OrderByDescending(m => m.CreateOn)
-                    );
-                this.NotifyOfPropertyChange(() => this.OrderMsgs);
-
-                this.IsWaitingLoadOrderMsgs = false;
-                this.NotifyOfPropertyChange(() => this.IsWaitingLoadOrderMsgs);
-                DispatcherHelper.DoEvents();
+        public async void Load() {
+            await Task.Factory.StartNew(async () => {
+                await this.LoadOrderMessages();
+                await this.LoadMessages();
             });
         }
 
-        private void LoadMsgs() {
+        //private void LoadOrderMsgs() {
+        //    this.IsWaitingLoadOrderMsgs = true;
+        //    this.NotifyOfPropertyChange(() => this.IsWaitingLoadOrderMsgs);
+        //    DispatcherHelper.DoEvents();
+
+        //    Task.Factory.StartNew(() => {
+        //        var startTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddDays(-3), TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+        //        List<AE.Message> msgs = MessageSync.QueryOrderMsg(startTime, null, null);
+        //        this.OrderMsgs = new BindableCollection<AE.Message>(
+        //            msgs.Where(m => !m.SenderID.StartsWith("cn", StringComparison.OrdinalIgnoreCase))
+        //            .ToLookup(o => o.OrderNO)
+        //            .Select(l => l.OrderByDescending(ll => ll.CreateOn).FirstOrDefault())
+        //            .OrderByDescending(m => m.CreateOn)
+        //            );
+        //        this.NotifyOfPropertyChange(() => this.OrderMsgs);
+
+        //        this.IsWaitingLoadOrderMsgs = false;
+        //        this.NotifyOfPropertyChange(() => this.IsWaitingLoadOrderMsgs);
+        //        DispatcherHelper.DoEvents();
+        //    });
+        //}
+
+        private async Task LoadOrderMessages() {
             this.IsWaitingLoadOrderMsgs = true;
             this.NotifyOfPropertyChange(() => this.IsWaitingLoadOrderMsgs);
             DispatcherHelper.DoEvents();
+            var datas = await this.LoadMsgs(AE.MessageTypes.Order, 10);
+            this.OrderMsgs = new BindableCollection<AE.MessageRelation>(datas);
+            this.NotifyOfPropertyChange(() => this.OrderMsgs);
+            this.IsWaitingLoadOrderMsgs = false;
+            this.NotifyOfPropertyChange(() => this.IsWaitingLoadOrderMsgs);
+            DispatcherHelper.DoEvents();
+        }
 
-            Task.Factory.StartNew(() => {
-                var startTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddDays(-3), TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
-                List<AE.Message2> msgs = MessageSync.QueryMsg(startTime, null, null);
-                this.Msgs = new BindableCollection<AE.Message2>(
-                    msgs.Where(m => !m.SenderID.StartsWith("cn", StringComparison.OrdinalIgnoreCase))
-                    .ToLookup(o => o.Sender)
-                    .Select(l => l.OrderByDescending(ll => ll.CreateOn).FirstOrDefault())
-                    .OrderByDescending(m => m.CreateOn)
-                    );
-                this.NotifyOfPropertyChange(() => this.Msgs);
+        private async Task LoadMessages() {
+            this.IsWaitingLoadMsgs = true;
+            this.NotifyOfPropertyChange(() => this.IsWaitingLoadMsgs);
+            DispatcherHelper.DoEvents();
+            var datas = await this.LoadMsgs(AE.MessageTypes.MessageCenter, 10);
+            this.Msgs = new BindableCollection<AE.MessageRelation>(datas);
+            this.NotifyOfPropertyChange(() => this.Msgs);
+            this.IsWaitingLoadMsgs = false;
+            this.NotifyOfPropertyChange(() => this.IsWaitingLoadMsgs);
+            DispatcherHelper.DoEvents();
+        }
 
-                this.IsWaitingLoadMsgs = false;
-                this.NotifyOfPropertyChange(() => this.IsWaitingLoadMsgs);
-                DispatcherHelper.DoEvents();
-            });
+        private async Task<BindableCollection<AE.MessageRelation>> LoadMsgs(AE.MessageTypes msgType, int perCount) {
+            var msgs = await MessageSync.QueryRelations(msgType, perCount, true);
+            var datas = new BindableCollection<AE.MessageRelation>(
+                msgs.Where(m => !m.LastMessageIsOwn).OrderByDescending(m => m.LastMessageCreateOn)
+                );
+
+            return datas;
         }
 
         public void ReLoad() {
 
         }
 
-        public void ViewOrder(AE.Message msg) {
+        public void ViewOrder(AE.MessageRelation msg) {
             var vm = GlobalData.GetInstance<IOrderSearcher>();
             var cond = new OrderSearchCondition() {
-                OrderNO = msg.OrderNO
+                OrderNO = msg.ChannelID
             };
 
             vm.Search(cond);
@@ -106,18 +119,18 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         }
 
         //CM 的attach 不能识别重载
-        public void ViewOrder2(AE.Message2 msg) {
+        public void ViewOrder2(AE.MessageRelation msg) {
             var vm = GlobalData.GetInstance<IOrderSearcher>();
             var cond = new OrderSearchCondition() {
-                OrderNO = msg.OrderNO
+                OrderNO = msg.ChannelID
             };
 
             vm.Search(cond);
             vm.Show();
         }
 
-        public void ViewHistory(AE.Message2 msg) {
-            var vm = new MessageListViewModel(msg.Account, msg.SenderID);
+        public void ViewHistory(AE.MessageRelation msg) {
+            var vm = new MessageListViewModel(msg.Account, msg.CustomerID);
             GlobalData.GetInstance<ISheel>().Show(vm);
         }
 

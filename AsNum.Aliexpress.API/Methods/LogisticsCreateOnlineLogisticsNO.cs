@@ -2,6 +2,7 @@
 using AsNum.Xmj.API.Entity;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     /// <summary>
@@ -81,8 +82,8 @@ namespace AsNum.Xmj.API.Methods {
         /// </summary>
         /// <param name="auth"></param>
         /// <returns></returns>
-        public override NormalResult Execute(Auth auth) {
-            var str = this.GetResult(auth);
+        public async override Task<NormalResult> Execute(Auth auth) {
+            var str = await this.GetResult(auth);
 
             //{"result":{"warehouseOrderId":38339973,"tradeOrderId":65150272717171,"errorCode":1,"tradeOrderFrom":"ESCROW","success":true,"outOrderId":30573162247},"success":true}
 

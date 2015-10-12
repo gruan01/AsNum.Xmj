@@ -1,6 +1,7 @@
 ﻿using AsNum.Xmj.API.Attributes;
 using AsNum.Xmj.API.Entity;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     public class OrderEvaluate : MethodBase<Result> {
@@ -28,8 +29,8 @@ namespace AsNum.Xmj.API.Methods {
             set;
         }
 
-        public override Result Execute(Auth auth) {
-            var str = base.GetResult(auth);
+        public async override Task<Result> Execute(Auth auth) {
+            var str = await base.GetResult(auth);
             dynamic obj = JObject.Parse(str);
 
             if (obj.success == false) {

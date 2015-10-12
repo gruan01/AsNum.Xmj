@@ -3,6 +3,7 @@ using AsNum.Xmj.API.Entity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     /// <summary>
@@ -43,8 +44,8 @@ namespace AsNum.Xmj.API.Methods {
         [Param("pageSize")]
         public int? PageSize { get; set; }
 
-        public override List<OnlineLogisticsInfo> Execute(Auth auth) {
-            var str = this.GetResult(auth);
+        public async override Task<List<OnlineLogisticsInfo>> Execute(Auth auth) {
+            var str = await this.GetResult(auth);
             var o = new {
                 currentPage = 1,
                 success = true,

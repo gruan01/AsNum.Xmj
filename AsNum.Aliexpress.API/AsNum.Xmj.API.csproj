@@ -129,7 +129,9 @@
     <Compile Include="ConstValue.cs" />
     <Compile Include="Converter\AliChildOrderAttributesConverter.cs" />
     <Compile Include="Converter\AliDateTimeConverter.cs" />
+    <Compile Include="Converter\BoolConverter.cs" />
     <Compile Include="Converter\IssueConverter.cs" />
+    <Compile Include="Converter\UnixTimeStampToDateTimeConverter.cs" />
     <Compile Include="Entity\Amount.cs" />
     <Compile Include="Entity\ChildOrderDetail.cs" />
     <Compile Include="Entity\Currency.cs" />
@@ -139,6 +141,8 @@
     <Compile Include="Entity\Issue.cs" />
     <Compile Include="Entity\IssueStatus.cs" />
     <Compile Include="Entity\LocalLogisticsCompany.cs" />
+    <Compile Include="Entity\MessageDetail.cs" />
+    <Compile Include="Entity\MessageRelation.cs" />
     <Compile Include="Entity\MessageTypes.cs" />
     <Compile Include="Entity\SupportOnlineLogisticsService.cs" />
     <Compile Include="Entity\SupportLogisticsServices.cs" />
@@ -196,7 +200,7 @@
     <Compile Include="Methods\MessageAdd.cs" />
     <Compile Include="Methods\MessageDetailList.cs" />
     <Compile Include="Methods\MessageQuery.cs" />
-    <Compile Include="Methods\MessageRelations.cs" />
+    <Compile Include="Methods\MessageRelationList.cs" />
     <Compile Include="Methods\OrderEvaluate.cs" />
     <Compile Include="Methods\OrderExtendReceiveTime.cs" />
     <Compile Include="Methods\OrderMsgList.cs" />

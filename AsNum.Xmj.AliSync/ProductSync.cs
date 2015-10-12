@@ -4,27 +4,29 @@ using AsNum.Xmj.API.Methods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.AliSync {
     public static class ProductSync {
 
-        public static List<SuccinctProduct> Query(string subject, ProductStatus status = ProductStatus.OnSelling, string account = "", int? group = null, int? expiryDays = 3) {
+        public async static Task<List<SuccinctProduct>> Query(string subject, ProductStatus status = ProductStatus.OnSelling, string account = "", int? group = null, int? expiryDays = 3) {
             var products = new List<SuccinctProduct>();
 
             if (string.IsNullOrWhiteSpace(account)) {
                 var accs = AccountHelper.LoadAccounts();
                 foreach (var acc in accs) {
-                    products.AddRange(QueryByAccount(acc, subject, status, null, expiryDays));
+                    var datas = await QueryByAccount(acc, subject, status, null, expiryDays);
+                    products.AddRange(datas);
                 }
             } else {
                 var acc = AccountHelper.LoadAccounts().FirstOrDefault(a => a.User.Equals(account, StringComparison.OrdinalIgnoreCase));
                 if (acc != null)
-                    products = QueryByAccount(acc, subject, status, group, expiryDays);
+                    products = await QueryByAccount(acc, subject, status, group, expiryDays);
             }
             return products;
         }
 
-        private static List<SuccinctProduct> QueryByAccount(Account acc, string subject, ProductStatus status = ProductStatus.OnSelling, int? group = null, int? expiryDays = 3) {
+        private async static Task<List<SuccinctProduct>> QueryByAccount(Account acc, string subject, ProductStatus status = ProductStatus.OnSelling, int? group = null, int? expiryDays = 3) {
             var method = new ProductQuery() {
                 Subject = subject,
                 Status = status,
@@ -32,30 +34,31 @@ namespace AsNum.Xmj.AliSync {
                 ExpireDays = expiryDays
             };
             var api = new APIClient(acc.User, acc.Pwd);
-            var ps = api.Execute(method);
+            var ps = await api.Execute(method);
             return ps.Results;
         }
 
-        public static List<ProductGroup2> QueryGroups(string account = "") {
+        public async static Task<List<ProductGroup2>> QueryGroups(string account = "") {
             var groups = new List<ProductGroup2>();
             if (string.IsNullOrWhiteSpace(account)) {
                 var accs = AccountHelper.LoadAccounts();
                 foreach (var acc in accs) {
-                    groups.AddRange(QueryGroupsByAccount(acc));
+                    var datas = await QueryGroupsByAccount(acc);
+                    groups.AddRange(datas);
                 }
             } else {
                 var acc = AccountHelper.LoadAccounts().FirstOrDefault(a => a.User.Equals(account, StringComparison.OrdinalIgnoreCase));
                 if (acc != null)
-                    groups = QueryGroupsByAccount(acc);
+                    groups = await QueryGroupsByAccount(acc);
             }
 
             return groups;
         }
 
-        private static List<ProductGroup2> QueryGroupsByAccount(Account account) {
+        private async static Task<List<ProductGroup2>> QueryGroupsByAccount(Account account) {
             var api = new APIClient(account.User, account.Pwd);
             var method = new ProductGroupList();
-            return api.Execute(method);
+            return await api.Execute(method);
         }
 
         public static void OfflineProducts(string account, List<string> productIDs) {
@@ -69,7 +72,7 @@ namespace AsNum.Xmj.AliSync {
             }
         }
 
-        public static bool ExtendExpiryDate(string account, string productID) {
+        public async static Task<bool> ExtendExpiryDate(string account, string productID) {
             var acc = AccountHelper.GetAccount(account);
             if (acc != null) {
                 var api = new APIClient(acc.User, acc.Pwd);
@@ -79,7 +82,8 @@ namespace AsNum.Xmj.AliSync {
                     Value = "30"
                 };
 
-                return api.Execute(method).Success;
+                var result = await api.Execute(method);
+                return result.Success;
             }
             return false;
         }

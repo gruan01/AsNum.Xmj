@@ -145,7 +145,7 @@ namespace AsNum.Xmj.AliSync {
         /// </summary>
         /// <param name="order"></param>
         /// <param name="smart"></param>
-        private void DealOrder(SuccinctOrder order, AsNum.Xmj.Entity.Order eo, bool smart) {
+        private async Task DealOrder(SuccinctOrder order, AsNum.Xmj.Entity.Order eo, bool smart) {
             //var eo = biz.GetOrder(order.OrderID, false);
 
             if (!smart || (eo == null || (
@@ -153,7 +153,7 @@ namespace AsNum.Xmj.AliSync {
                 || eo.InIssue != order.InIssue
                 )) {
                 this.LogObserverable.Value.Notify(string.Format("更新订单 {0}", order.OrderID), true);
-                var od = this.GetOrderDetail(order.OrderID);
+                var od = await this.GetOrderDetail(order.OrderID);
                 //转换为数据库实体
                 var o = this.CombineOrderData(od, order);
 
@@ -274,10 +274,10 @@ namespace AsNum.Xmj.AliSync {
         /// </summary>
         /// <param name="orderID"></param>
         /// <returns></returns>
-        private DetailOrder GetOrderDetail(string orderID) {
+        private async Task<DetailOrder> GetOrderDetail(string orderID) {
             var method = new OrderFindByID();
             method.OrderID = orderID;
-            return this.Api.Execute(method);
+            return await this.Api.Execute(method);
         }
 
         /// <summary>
@@ -340,7 +340,7 @@ namespace AsNum.Xmj.AliSync {
             }
         }
 
-        private void SyncByStatus(OrderStatus status, bool smart, DateTime? start, DateTime? end, int page = 1, int? total = null) {
+        private async Task SyncByStatus(OrderStatus status, bool smart, DateTime? start, DateTime? end, int page = 1, int? total = null) {
 
             var method = new OrderQueryList();
             method.PageSize = 50;
@@ -354,7 +354,7 @@ namespace AsNum.Xmj.AliSync {
             if (end.HasValue)
                 method.CreateEnd = end;
 
-            var orderList = this.Api.Execute(method);
+            var orderList = await this.Api.Execute(method);
 
             if (this.OrderListReturned != null)
                 this.OrderListReturned.Invoke(this, new OrderListEventArgs() {
@@ -371,13 +371,15 @@ namespace AsNum.Xmj.AliSync {
             if (total > page * method.PageSize && page == 1) {
                 var totalPage = (int)Math.Ceiling((double)total / method.PageSize);
 
-                for (var i = 2; i <= totalPage; i++)
-                    Task.Factory.StartNew((p) => {
-                        this.SyncByStatus(status, smart, start, end, (int)p, orderList.Count);
+                for (var i = 2; i <= totalPage; i++) {
+                    await Task.Factory.StartNew(async (p) => {
+                        await this.SyncByStatus(status, smart, start, end, (int)p, orderList.Count);
                     }, i, TaskCreationOptions.AttachedToParent)
                     .ContinueWith(t => {
                         t.Dispose();
                     }, TaskContinuationOptions.AttachedToParent);
+                    //await this.SyncByStatus(status, smart, start, end, i, orderList.Count);
+                }
             }
         }
     }

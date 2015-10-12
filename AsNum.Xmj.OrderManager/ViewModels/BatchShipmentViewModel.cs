@@ -196,7 +196,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
         /// <param name="item"></param>
         /// <param name="acc"></param>
         /// <returns></returns>
-        private bool Shipment(ShipmentItem item, Account acc) {
+        private async Task<bool> Shipment(ShipmentItem item, Account acc) {
             var api = new APIClient(acc.User, acc.Pwd);
             var method = new OrderShipment() {
                 LogisticsType = item.LogisticsType.Code,
@@ -204,7 +204,7 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
                 SendType = item.SendType,
                 TrackingNO = item.TrackNO.Trim()
             };
-            var result = api.Execute(method);
+            var result = await api.Execute(method);
             //var result = new NormalResult() {
             //    Success = false,
             //    ErrorInfo = "TEST"

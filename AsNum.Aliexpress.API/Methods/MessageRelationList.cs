@@ -1,5 +1,6 @@
 ﻿using AsNum.Xmj.API.Attributes;
 using AsNum.Xmj.API.Entity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace AsNum.Xmj.API.Methods {
     /// <summary>
     /// 获取当前用户下与当前用户建立消息关系的列表
     /// </summary>
-    public class MessageRelations : MethodBase<object> {
+    public class MessageRelationList : MethodBase<IEnumerable<MessageRelation>> {
         protected override string APIName {
             get {
                 return "api.queryMsgRelationList";
@@ -42,5 +43,26 @@ namespace AsNum.Xmj.API.Methods {
 
         [EnumParam("msgSources", EnumUseNameOrValue.Name, Required = true)]
         public MessageTypes Type { get; set; }
+
+        [Param("filter")]
+        public string Filter { get; set; }
+
+        public bool UnReaded {
+            set {
+                this.Filter = value ? "dealStat/readStat/rank0/rank1/rank2/rank3/rank4/rank5" : null;
+            }
+        }
+
+        public async override Task<IEnumerable<MessageRelation>> Execute(Auth auth) {
+            var result = await this.GetResult(auth);
+            var o = new {
+                result = new List<MessageRelation>()
+            };
+
+            o = JsonConvert.DeserializeAnonymousType(result, o);
+            if (o.result != null)
+                o.result.ForEach(d => d.Account = auth.User);
+            return o.result;
+        }
     }
 }

@@ -3,6 +3,7 @@ using AsNum.Xmj.API.Attributes;
 using Microsoft.Practices.EnterpriseLibrary.PolicyInjection;
 using Newtonsoft.Json;
 using System;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API {
 
@@ -26,22 +27,22 @@ namespace AsNum.Xmj.API {
         }
 
         [NeedAuth]
-        public virtual string GetResult(Auth auth) {
+        public async virtual Task<string> GetResult(Auth auth) {
             var dic = ParamHelper.GetParams(this);
 
             var url = auth.GetApiUrl(this.APIName, dic);
 
             var rh = new RequestHelper(auth.CookieContainer);
             this.ResultString = rh.Post(url, dic);
-            return this.ResultString;
+            return await Task.FromResult(this.ResultString);
         }
     }
 
     public abstract class MethodBase<T> : MethodBase /*where T : class*/ {
 
         [NeedAuth]
-        public virtual T Execute(Auth auth) {
-            this.ResultString = this.GetResult(auth);
+        public async virtual Task<T> Execute(Auth auth) {
+            this.ResultString = await this.GetResult(auth);
             return JsonConvert.DeserializeObject<T>(this.ResultString);
         }
 

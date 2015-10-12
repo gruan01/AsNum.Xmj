@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     public class PhotoBankUploadImage : MethodBase<PhotoBankUploadResult> {
@@ -37,7 +38,7 @@ namespace AsNum.Xmj.API.Methods {
         public string GroupID { get; set; }
 
         [NeedAuth]
-        public override string GetResult(Auth auth) {
+        public async override Task<string> GetResult(Auth auth) {
             var url = auth.GetApiUrl(this.APIName, new Dictionary<string, string>() { 
                 {"groupId",this.GroupID},
                 {"fileName", this.FileName }
@@ -45,7 +46,8 @@ namespace AsNum.Xmj.API.Methods {
 
             using (var client = new WebClient()) {
                 try {
-                    var result = client.UploadData(url, this.UploadData);
+                    var result = await client.UploadDataTaskAsync(url, this.UploadData);
+                    //var result = client.UploadData(url, this.UploadData);
                     return Encoding.UTF8.GetString(result);
                 } catch (WebException ex) {
                     return Encoding.UTF8.GetString(ex.Response.GetResponseStream().GetBytes());

@@ -6,6 +6,7 @@ namespace AsNum.Xmj.API.Entity {
     /// <summary>
     /// 站内信
     /// </summary>
+    [Obsolete]
     public class Message2 {
 
         [JsonProperty("id")]

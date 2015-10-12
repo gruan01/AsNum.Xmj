@@ -5,27 +5,40 @@ using AsNum.Xmj.API.Methods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.AliSync {
     public static class MessageSync {
 
-        public static List<Message> SyncByOrderNO(string orderNO, string account) {
+        /// <summary>
+        /// 同步订单留言
+        /// </summary>
+        /// <param name="orderNO"></param>
+        /// <param name="account"></param>
+        /// <returns></returns>
+        public async static Task<List<MessageDetail>> SyncByOrderNO(string orderNO, string account) {
             var ast = new AccountSetting();
             var ac = ast.Value.FirstOrDefault(a => a.User == account);
             if (ac != null) {
                 var api = new API.APIClient(ac.User, ac.Pwd);
-                //var method = new OrderMsgListByOrderId() {
-                //    OrderID = orderNO
-                //};
-                var method = new OrderMsgList() {
-                    OrderID = orderNO
+                var method = new MessageDetailList() {
+                    ChannelID = orderNO,
+                    Type = MessageTypes.Order
                 };
-                return api.Execute(method).Results;
+                var result = await api.Execute(method);
+                return result.ToList();
             } else {
                 return null;
             }
         }
 
+
+        /// <summary>
+        /// 发送订单留言
+        /// </summary>
+        /// <param name="acc"></param>
+        /// <param name="orderNO"></param>
+        /// <param name="ctx"></param>
         public static void WriteOrderMessage(string acc, string orderNO, string ctx) {
             var ast = new AccountSetting();
             var ac = ast.Value.FirstOrDefault(a => a.User == acc);
@@ -39,6 +52,12 @@ namespace AsNum.Xmj.AliSync {
             }
         }
 
+        /// <summary>
+        /// 发送站内信
+        /// </summary>
+        /// <param name="acc"></param>
+        /// <param name="buyerID"></param>
+        /// <param name="ctx"></param>
         public static void SendMessage(string acc, string buyerID, string ctx) {
             var ast = new AccountSetting();
             var ac = ast.Value.FirstOrDefault(a => a.User == acc);
@@ -52,7 +71,15 @@ namespace AsNum.Xmj.AliSync {
             }
         }
 
-        public static List<Message> QueryOrderMsg(DateTime? begin, DateTime? end, string orderNO) {
+        /// <summary>
+        /// 订单留言列表
+        /// </summary>
+        /// <param name="begin"></param>
+        /// <param name="end"></param>
+        /// <param name="orderNO"></param>
+        /// <returns></returns>
+        [Obsolete]
+        public async static Task<List<Message>> QueryOrderMsg(DateTime? begin, DateTime? end, string orderNO) {
             List<Message> msgs = new List<Message>();
             var s = new AccountSetting();
             foreach (var acc in s.Value) {
@@ -62,14 +89,25 @@ namespace AsNum.Xmj.AliSync {
                     EndTime = end,
                     OrderID = orderNO
                 };
-                var result = api.Execute(method);
+                var result = await api.Execute(method);
                 if (result.Results != null)
                     msgs.AddRange(result.Results);
             }
             return msgs;
         }
 
-        public static List<Message2> QueryMsg(DateTime? begin, DateTime? end, string buyerID) {
+
+
+
+        /// <summary>
+        /// 站点内信列表
+        /// </summary>
+        /// <param name="begin"></param>
+        /// <param name="end"></param>
+        /// <param name="buyerID"></param>
+        /// <returns></returns>
+        [Obsolete]
+        public async static Task<List<Message2>> QueryMsg(DateTime? begin, DateTime? end, string buyerID) {
             List<Message2> msgs = new List<Message2>();
             var s = new AccountSetting();
             foreach (var acc in s.Value) {
@@ -79,8 +117,24 @@ namespace AsNum.Xmj.AliSync {
                     EndTime = end,
                     BuyerID = buyerID
                 };
-                var result = api.Execute(method);
+                var result = await api.Execute(method);
                 msgs.AddRange(result.Results);
+            }
+            return msgs;
+        }
+
+        public static async Task<List<MessageRelation>> QueryRelations(MessageTypes msgType, int perCount = 10, bool unReaded = false) {
+            List<MessageRelation> msgs = new List<MessageRelation>();
+            var s = new AccountSetting();
+            foreach (var acc in s.Value) {
+                var api = new APIClient(acc.User, acc.Pwd);
+                var method = new MessageRelationList() {
+                    PageSize = perCount,
+                    Type = msgType,
+                    UnReaded = unReaded
+                };
+                var result = await api.Execute(method);
+                msgs.AddRange(result);
             }
             return msgs;
         }

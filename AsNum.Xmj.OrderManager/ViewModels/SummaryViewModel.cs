@@ -144,17 +144,18 @@ namespace AsNum.Xmj.OrderManager.ViewModels {
             });
             this.SetItem(SummaryTitles.ShamShipping, cnt, true);
 
-            Task.Factory.StartNew(() => {
-                this.LoadWaitEvaluateOrder();
+            Task.Factory.StartNew(async () => {
+                await this.LoadWaitEvaluateOrder();
             });
         }
 
-        private void LoadWaitEvaluateOrder() {
+        private async Task LoadWaitEvaluateOrder() {
             this.WaitEvaluateOrders = new List<string>();
             var acsetting = new AccountSetting();
             foreach (var acc in acsetting.Value) {
                 var api = new APIClient(acc.User, acc.Pwd);
-                this.WaitEvaluateOrders.AddRange(api.Execute(new OrderWaitingEvaluateList()));
+                var datas = await api.Execute(new OrderWaitingEvaluateList());
+                this.WaitEvaluateOrders.AddRange(datas);
             }
 
             this.SetItem(SummaryTitles.WaitEvaluate, this.WaitEvaluateOrders.Count, true);

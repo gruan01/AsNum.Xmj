@@ -1,5 +1,6 @@
 ﻿using Microsoft.Practices.EnterpriseLibrary.Common.Configuration;
 using Microsoft.Practices.EnterpriseLibrary.PolicyInjection;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API {
     public class APIClient {
@@ -59,19 +60,19 @@ namespace AsNum.Xmj.API {
             return auth;
         }
 
-        public string GetResult<T>(T method) where T : MethodBase {
+        public async Task<string> GetResult<T>(T method) where T : MethodBase {
             var m = PolicyInjection.Wrap<T>(method);
-            return m.GetResult(this.Auth);
+            return await m.GetResult(this.Auth);
         }
 
-        public string GetResult(MethodBase method) {
+        public async Task<string> GetResult(MethodBase method) {
             var m = (MethodBase)PolicyInjection.Wrap(method.GetType(), method);
-            return m.GetResult(this.Auth);
+            return await m.GetResult(this.Auth);
         }
 
-        public T Execute<T>(MethodBase<T> method) where T : class {
+        public async Task<T> Execute<T>(MethodBase<T> method) where T : class {
             var m = (MethodBase<T>)PolicyInjection.Wrap(method.GetType(), method);
-            return m.Execute(this.Auth);
+            return await m.Execute(this.Auth);
         }
     }
 }

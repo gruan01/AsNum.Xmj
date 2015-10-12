@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AsNum.Xmj.API.Methods {
     public class LogisticsServiceList : MethodBase<List<SupportLogisticsServices>> {
@@ -11,8 +12,8 @@ namespace AsNum.Xmj.API.Methods {
             }
         }
 
-        public override List<SupportLogisticsServices> Execute(Auth auth) {
-            var str = this.GetResult(auth);
+        public async override Task<List<SupportLogisticsServices>> Execute(Auth auth) {
+            var str = await this.GetResult(auth);
             var o = new {
                 result = new List<SupportLogisticsServices>(),
                 success = false
