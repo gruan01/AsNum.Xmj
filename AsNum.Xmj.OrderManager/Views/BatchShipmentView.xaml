@@ -79,7 +79,41 @@
                 <DataGridTextColumn Header="订单号" Width="200" Binding="{Binding OrderNO, UpdateSourceTrigger=LostFocus}" />
                 <DataGridComboBoxColumn Header="发货方式" SelectedItemBinding="{Binding SendType, Converter={StaticResource Enum}, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{x:Static vm:BatchShipmentViewModel.SendTypes}" />
                 <!--<DataGridComboBoxColumn Header="物流方式" SelectedItemBinding="{Binding LogisticsType, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Display" ItemsSource="{x:Static vm:BatchShipmentViewModel.LogisticsTypes}" />-->
-                <DataGridTemplateColumn Header="物流方式">
+
+                <acc:DataGridGroupingComboBoxColumn Header="物流方式"
+                                                    ItemsSource="{x:Static vm:BatchShipmentViewModel.LSV}"
+                                                    SelectedValueBinding="{Binding LogisticsType, UpdateSourceTrigger=PropertyChanged}"
+                                                    DisplayMemberPath="Display"
+                                                    >
+                    <acc:DataGridGroupingComboBoxColumn.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" aw:UniPadding.Padding="5">
+                                            <Rectangle Width="10" Height="10" Fill="Green" />
+                                            <TextBlock Text="{Binding Name}" />
+                                        </StackPanel>
+                                        <Separator />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </acc:DataGridGroupingComboBoxColumn.GroupStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsPanel">
+                                <Setter.Value>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="3" aw:UniPadding.Padding="2" />
+                                    </ItemsPanelTemplate>                                    
+                                </Setter.Value>
+                            </Setter>                          
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </acc:DataGridGroupingComboBoxColumn>
+
+                <!--<DataGridTemplateColumn Header="物流方式">
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <ComboBox 
@@ -110,12 +144,15 @@
                             </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
+
+
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding LogisticsType.Display}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTemplateColumn>-->
+                
                 <DataGridTextColumn Header="跟踪单号" Width="200" Binding="{Binding TrackNO, UpdateSourceTrigger=LostFocus}" />
                 <DataGridTextColumn Header="重量" Width="200" Binding="{Binding Weight}" />
                 <DataGridTextColumn Header="费用" Width="200" Binding="{Binding Fee}" />

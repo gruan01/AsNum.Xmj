@@ -83,6 +83,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataGridGroupingComboBoxColumn.cs" />
     <Compile Include="Themes\ResizerSource.cs" />
     <Page Include="Themes\BusyIndicator.xaml">
       <SubType>Designer</SubType>
