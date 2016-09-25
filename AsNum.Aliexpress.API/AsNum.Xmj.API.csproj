@@ -144,6 +144,7 @@
     <Compile Include="Entity\MessageDetail.cs" />
     <Compile Include="Entity\MessageRelation.cs" />
     <Compile Include="Entity\MessageTypes.cs" />
+    <Compile Include="Entity\SellerAddressResponse.cs" />
     <Compile Include="Entity\SupportOnlineLogisticsService.cs" />
     <Compile Include="Entity\SupportLogisticsServices.cs" />
     <Compile Include="Entity\LogisticsTypes.cs" />
@@ -181,6 +182,7 @@
     <Compile Include="Entity\Receiver.cs" />
     <Compile Include="Entity\SuccinctProduct.cs" />
     <Compile Include="Entity\Token.cs" />
+    <Compile Include="Entity\UndeliverableDecisions.cs" />
     <Compile Include="Handlers\NeedAuthHandler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -194,6 +196,7 @@
     <Compile Include="Methods\LogisticsCreateOnlineLogisticsNO.cs" />
     <Compile Include="Methods\LogisticsGetLocalCompanies.cs" />
     <Compile Include="Methods\LogisticsGetOnlineLogisticsInfo.cs" />
+    <Compile Include="Methods\LogisticsGetSellerAddresses.cs" />
     <Compile Include="Methods\LogisticsOnlineLogisticsPrintInfo.cs" />
     <Compile Include="Methods\LogisticsServiceByOrderID.cs" />
     <Compile Include="Methods\LogisticsServiceList.cs" />

@@ -15,8 +15,10 @@ namespace AsNum.Xmj.API {
 
         private Auth Auth = null;
 
-        public string AuthUser {
-            get {
+        public string AuthUser
+        {
+            get
+            {
                 if (this.Auth != null)
                     return this.Auth.User;
                 else
@@ -36,8 +38,12 @@ namespace AsNum.Xmj.API {
         //    }
         //}
 
-        public APIClient(string user, string pwd) {
+        public APIClient(string user, string pwd, string authCode = null) {
             this.Auth = APIClient.GetAuth(user, pwd);
+            if (!string.IsNullOrWhiteSpace(authCode)) {
+                this.Auth.Code = authCode;
+                this.Auth.GetAccessToken();
+            }
         }
 
         /// <summary>

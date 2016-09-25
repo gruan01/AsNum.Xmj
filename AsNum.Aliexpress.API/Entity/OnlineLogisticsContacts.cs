@@ -1,4 +1,5 @@
 ﻿using AsNum.Xmj.API.Attributes;
+using Newtonsoft.Json;
 
 namespace AsNum.Xmj.API.Entity {
 
@@ -43,10 +44,42 @@ namespace AsNum.Xmj.API.Entity {
         [Param("province", Required = true)]
         public string Province { get; set; }
 
+        [JsonProperty("StreetAddress")]
         [Param("streetAddress", Required = true)]
         public string Address {
             get;
             set;
+        }
+
+        [JsonProperty("addressId")]
+        [Param("addressId", Required = true)]
+        public long ID {
+            get; set;
+        }
+
+        public string Street { get; set; }
+
+        public string Postcode { get; set; }
+
+        public bool IsDefault { get; set; }
+
+        public string Email { get; set; }
+
+        public bool IsNeedToUpdate { get; set; }
+
+        public string Summary {
+            get {
+                return string.Format("{0}{1}; {2}{3}{4}{5}{6} {7}",
+                    this.Name,
+                    this.Phone,
+                    this.Province,
+                    this.City,
+                    this.County,
+                    this.Street,
+                    this.Address,
+                    this.Postcode
+                    );
+            }
         }
     }
 }

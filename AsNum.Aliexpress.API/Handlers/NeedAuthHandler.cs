@@ -7,9 +7,9 @@ namespace AsNum.Xmj.API.Handlers {
             //var auth = (input.Target as MethodBase).Auth;
             var auth = (Auth)input.Inputs["auth"];
 
-            if (auth.AuthToken == null || auth.AuthToken.IsInvalid)
-                AuthHelper.DoAuth(auth);
-            //auth.DoAuth( auth.User , auth.Pwd);
+            //if (auth.AuthToken == null || auth.AuthToken.IsInvalid)
+            //    AuthHelper.DoAuth(auth);
+            ////auth.DoAuth( auth.User , auth.Pwd);
 
             if (auth.AuthToken.HasExpiressed)
                 auth.RefreshAccessToken();

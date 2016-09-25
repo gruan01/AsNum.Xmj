@@ -82,7 +82,7 @@ namespace AsNum.Xmj.API {
             get {
                 return this.code;
             }
-            private set {
+            internal set {
                 var flag = this.code == value;
                 this.code = value;
                 if (!flag)
@@ -156,7 +156,7 @@ namespace AsNum.Xmj.API {
 
 
         public void DoAuth(string user, string pwd) {
-            this.Code = this.GetAuthCode(user, pwd);
+            //this.Code = this.GetAuthCode(user, pwd);
             //this.Code = this.GetAuthCode2(user, pwd);
 
             if (this.AuthToken == null || this.AuthToken.IsInvalid)
@@ -193,6 +193,17 @@ namespace AsNum.Xmj.API {
         //}
 
 
+        public static string AuthUrl {
+            get {
+                var url = "http://gw.api.alibaba.com/auth/authorize.htm?client_id=&site=aliexpress&redirect_uri=urn:ietf:wg:oauth:2.0:oob";
+                url = url.SetUrlKeyValue("client_id", AppKey);
+                //SIG必须要把前面所有参数一起计算
+                url = url.SetUrlKeyValue("_aop_signature", SIG(url));
+                return url;
+            }
+        }
+
+
         /// <summary>
         /// 获取授权临时码
         /// </summary>
@@ -202,10 +213,12 @@ namespace AsNum.Xmj.API {
         private string GetAuthCode(string user, string pwd) {
             this.User = user;
 
-            var url = "http://gw.api.alibaba.com/auth/authorize.htm?client_id=&site=aliexpress&redirect_uri=urn:ietf:wg:oauth:2.0:oob";
-            url = url.SetUrlKeyValue("client_id", AppKey);
-            //SIG必须要把前面所有参数一起计算
-            url = url.SetUrlKeyValue("_aop_signature", SIG(url));
+            //var url = "http://gw.api.alibaba.com/auth/authorize.htm?client_id=&site=aliexpress&redirect_uri=urn:ietf:wg:oauth:2.0:oob";
+            //url = url.SetUrlKeyValue("client_id", AppKey);
+            ////SIG必须要把前面所有参数一起计算
+            //url = url.SetUrlKeyValue("_aop_signature", SIG(url));
+
+            var url = AuthUrl;
 
             var rh = new RequestHelper(this.CookieContainer);
             //rh.RequestHeader = RequestHelper.CommonHeder;

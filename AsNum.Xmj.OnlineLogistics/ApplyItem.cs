@@ -48,6 +48,18 @@ namespace AsNum.Xmj.OnlineLogistics {
         }
         public OnlineLogisticsContacts Pickup { get; set; }
 
+
+        /// <summary>
+        /// 货物未送达时退回
+        /// </summary>
+        public bool WhenUndeliverReturn { get; set; } = true;
+
+        /// <summary>
+        /// 退货地址
+        /// </summary>
+        public OnlineLogisticsContacts Refund { get; set; }
+
+
         public BindableCollection<OnlineLogisticsDeclareInfo> Declares { get; set; }
 
         public string Account { get; set; }
@@ -55,6 +67,12 @@ namespace AsNum.Xmj.OnlineLogistics {
         public List<SupportOnlineLogisticsService> Services { get; set; }
 
         public List<LocalLogisticsCompany> LogisticsCompanies { get; set; }
+
+        public List<OnlineLogisticsContacts> Pickups { get; set; }
+
+        public List<OnlineLogisticsContacts> Senders { get; set; }
+
+        public List<OnlineLogisticsContacts> Refunds { get; set; }
 
         public string LogisticType { get; set; }
 

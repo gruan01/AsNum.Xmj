@@ -84,26 +84,26 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
                     item.Receiver.PostCode = order.Receiver.ZipCode;
                     item.Receiver.Province = order.Receiver.Province;
 
-                    item.Sender = new Xmj.API.Entity.OnlineLogisticsContacts();
-                    item.Sender.CountryCode = "CN";
-                    item.Sender.Address = order.AccountOf.SenderAddress;
-                    item.Sender.City = order.AccountOf.SenderCity;
-                    item.Sender.Mobile = order.AccountOf.SenderMobi;
-                    item.Sender.Name = order.AccountOf.SenderName;
-                    item.Sender.Phone = order.AccountOf.SenderPhone;
-                    item.Sender.PostCode = order.AccountOf.SenderPostCode;
-                    item.Sender.Province = order.AccountOf.SenderProvince;
+                    //item.Sender = new Xmj.API.Entity.OnlineLogisticsContacts();
+                    //item.Sender.CountryCode = "CN";
+                    //item.Sender.Address = order.AccountOf.SenderAddress;
+                    //item.Sender.City = order.AccountOf.SenderCity;
+                    //item.Sender.Mobile = order.AccountOf.SenderMobi;
+                    //item.Sender.Name = order.AccountOf.SenderName;
+                    //item.Sender.Phone = order.AccountOf.SenderPhone;
+                    //item.Sender.PostCode = order.AccountOf.SenderPostCode;
+                    //item.Sender.Province = order.AccountOf.SenderProvince;
 
-                    item.Pickup = new Xmj.API.Entity.OnlineLogisticsContacts();
-                    item.Pickup.CountryCode = "CN";
-                    item.Pickup.County = order.AccountOf.PickupCounty;
-                    item.Pickup.Address = order.AccountOf.PickupAddress;
-                    item.Pickup.City = order.AccountOf.PickupCity;
-                    item.Pickup.Mobile = order.AccountOf.PickupMobi;
-                    item.Pickup.Name = order.AccountOf.PickupName;
-                    item.Pickup.Phone = order.AccountOf.PickupPhone;
-                    item.Pickup.PostCode = order.AccountOf.PickupPostCode;
-                    item.Pickup.Province = order.AccountOf.PickupProvince;
+                    //item.Pickup = new Xmj.API.Entity.OnlineLogisticsContacts();
+                    //item.Pickup.CountryCode = "CN";
+                    //item.Pickup.County = order.AccountOf.PickupCounty;
+                    //item.Pickup.Address = order.AccountOf.PickupAddress;
+                    //item.Pickup.City = order.AccountOf.PickupCity;
+                    //item.Pickup.Mobile = order.AccountOf.PickupMobi;
+                    //item.Pickup.Name = order.AccountOf.PickupName;
+                    //item.Pickup.Phone = order.AccountOf.PickupPhone;
+                    //item.Pickup.PostCode = order.AccountOf.PickupPostCode;
+                    //item.Pickup.Province = order.AccountOf.PickupProvince;
 
                     item.LocalTrackNO = order.OrderNO;
 
@@ -134,8 +134,42 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
 
                     this.LoadServices(item);
                     this.LoadLogisticsInfo(item);
+                    this.LoadSenderAndPickupAddress(item);
                 }
             }
+        }
+
+        private async Task LoadSenderAndPickupAddress(ApplyItem item) {
+            await Task.Factory.StartNew(async () => {
+                var acc = AccountHelper.GetAccount(item.Account);
+                var api = new APIClient(acc.User, acc.Pwd);
+                var method = new LogisticsGetSellerAddresses();
+                method.Types.Add(LogisticsGetSellerAddresses.AddTypes.pickup);
+                method.Types.Add(LogisticsGetSellerAddresses.AddTypes.sender);
+                method.Types.Add(LogisticsGetSellerAddresses.AddTypes.refund);
+
+                var datas = await api.Execute(method);
+                item.Pickups = datas.PickupAdds;
+                item.Senders = datas.SenderAdds;
+                item.Refunds = datas.Refunds;
+
+                item.NotifyOfPropertyChange(() => item.Senders);
+                item.NotifyOfPropertyChange(() => item.Pickups);
+                item.NotifyOfPropertyChange(() => item.Refunds);
+
+                if (item.Senders != null) {
+                    item.Sender = item.Senders.FirstOrDefault(s => s.IsDefault);
+                    item.NotifyOfPropertyChange(() => item.Sender);
+                }
+                if (item.Pickups != null) {
+                    item.Pickup = item.Pickups.FirstOrDefault(s => s.IsDefault);
+                    item.NotifyOfPropertyChange(() => item.Pickup);
+                }
+                if (item.Refunds != null) {
+                    item.Refund = item.Refunds.FirstOrDefault(s => s.IsDefault);
+                    item.NotifyOfPropertyChange(() => item.Refund);
+                }
+            });
         }
 
         public async Task LoadLogisticsInfo(ApplyItem item) {
@@ -171,7 +205,8 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
 
                 item.LogisticsCompanies = this.LocalLogisticsCompany;
                 item.NotifyOfPropertyChange(() => item.LogisticsCompanies);
-            } else {
+            }
+            else {
                 item.LogisticsCompanies = this.LocalLogisticsCompany;
                 item.NotifyOfPropertyChange(() => item.LogisticsCompanies);
             }
@@ -228,7 +263,9 @@ namespace AsNum.Xmj.OnlineLogistics.ViewModels {
                         Receiver = i.Receiver,
                         Remark = "WHAT IS REMARK",
                         Service = i.Service.ServiceID,
-                        Sender = i.Sender
+                        Sender = i.Sender,
+                        Refund = i.Refund,
+                        UndeliverableDecision = i.WhenUndeliverReturn ? UndeliverableDecisions.Return : UndeliverableDecisions.Destory
                     };
                     var api = new APIClient(acc.User, acc.Pwd);
                     var result = await api.Execute(method);

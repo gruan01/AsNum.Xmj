@@ -56,13 +56,19 @@ namespace AsNum.Xmj.API.Methods {
 
         public OnlineLogisticsContacts Pickup { get; set; }
 
+        /// <summary>
+        /// 退货地址
+        /// </summary>
+        public OnlineLogisticsContacts Refund { get; set; }
+
         [JsonParam("addressDTOs", Required = true)]
         public object Addresses {
             get {
                 return new {
                     receiver = ParamHelper.GetParams(this.Receiver),
                     sender = ParamHelper.GetParams(this.Sender),
-                    pickup = ParamHelper.GetParams(this.Pickup)
+                    pickup = ParamHelper.GetParams(this.Pickup),
+                    refund = ParamHelper.GetParams(this.Refund)
                 };
             }
         }
@@ -75,6 +81,15 @@ namespace AsNum.Xmj.API.Methods {
             get {
                 return ParamHelper.GetParams(this.Declares);
             }
+        }
+
+        /// <summary>
+        /// 不可达处理(退回:0/销毁:1) 
+        /// </summary>
+        [EnumParam("undeliverableDecision", EnumUseNameOrValue.Value)]
+        public UndeliverableDecisions UndeliverableDecision {
+            get;
+            set;
         }
 
         /// <summary>

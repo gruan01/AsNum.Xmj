@@ -3,6 +3,7 @@ using AsNum.Xmj.API.Attributes;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace AsNum.Xmj.API {
     internal static class ParamHelper {
@@ -19,7 +20,9 @@ namespace AsNum.Xmj.API {
                 return null;
 
             var dic = new Dictionary<string, string>();
-            var props = obj.GetType().GetProperties().Where(p => p.GetCustomAttributes(typeof(ParamAttribute), true).Length > 0);
+            var props = obj.GetType()
+                        .GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                        .Where(p => p.GetCustomAttributes(typeof(ParamAttribute), true).Length > 0);
             foreach (var p in props) {
                 var pa = (ParamAttribute)p.GetCustomAttributes(typeof(ParamAttribute), true).First();
                 var pms = pa.GetParams(obj, p);
