@@ -13,7 +13,7 @@ namespace AsNum.Xmj.OnlineLogistics {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value == null)
                 return null;
-            var lst = ((List<SupportOnlineLogisticsService>)value).OrderBy(l => l.DeliveryAddress.Contains("深圳") ? 0 : 1).ToList();
+            var lst = ((List<SupportOnlineLogisticsService>)value).OrderBy(l => l.DeliveryAddress?.Contains("深圳") == true ? 0 : 1).ToList();
             var lsv = new ListCollectionView(lst);
             lsv.GroupDescriptions.Add(new PropertyGroupDescription("DeliveryAddress", new LocGroupConverter()));
             return lsv;

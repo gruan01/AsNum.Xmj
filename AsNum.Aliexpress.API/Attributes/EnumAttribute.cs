@@ -40,8 +40,9 @@ namespace AsNum.Xmj.API.Attributes {
 
                 if (skv != null) {
                     value = this.Use == EnumUseNameOrValue.Name ? (object)skv.Name : skv.Value;
-                } else {
-                    value = this.Use == EnumUseNameOrValue.Name ? Enum.GetName(obj.GetType(), obj) : value;
+                }
+                else {
+                    value = this.Use == EnumUseNameOrValue.Name ? Enum.GetName(value.GetType(), value) : Enum.Format(value.GetType(), value, "d");
                 }
             }
 
